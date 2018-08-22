@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="co.com.ceiba.estacionamiento.julian.henao.testUnitarioEntradaVehiculo.TestReglaCilindrajeMoto" tests="3" skipped="0" failures="0" errors="0" timestamp="2018-08-22T19:52:50" hostname="JULIAN-HENAO" time="0.02">
+  <properties/>
+  <testcase name="ReglaEntradaAutoCilindrajeCero" classname="co.com.ceiba.estacionamiento.julian.henao.testUnitarioEntradaVehiculo.TestReglaCilindrajeMoto" time="0.006"/>
+  <testcase name="ReglaEntradaMotoCilindrajeMayoraCero" classname="co.com.ceiba.estacionamiento.julian.henao.testUnitarioEntradaVehiculo.TestReglaCilindrajeMoto" time="0.006"/>
+  <testcase name="ReglaEntradaMotoCilindrajeCero" classname="co.com.ceiba.estacionamiento.julian.henao.testUnitarioEntradaVehiculo.TestReglaCilindrajeMoto" time="0.005"/>
+  <system-out><![CDATA[2018-08-22 14:52:47.133  INFO 7648 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [co.com.ceiba.estacionamiento.julian.henao.testUnitarioEntradaVehiculo.TestReglaCilindrajeMoto], using SpringBootContextLoader
+2018-08-22 14:52:47.135  INFO 7648 --- [    Test worker] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [co.com.ceiba.estacionamiento.julian.henao.testUnitarioEntradaVehiculo.TestReglaCilindrajeMoto]: no resource found for suffixes {-context.xml, Context.groovy}.
+2018-08-22 14:52:47.135  INFO 7648 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.com.ceiba.estacionamiento.julian.henao.testUnitarioEntradaVehiculo.TestReglaCilindrajeMoto]: TestReglaCilindrajeMoto does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2018-08-22 14:52:47.148  INFO 7648 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.com.ceiba.estacionamiento.julian.henao.AdnJulianHenaoApplication for test class co.com.ceiba.estacionamiento.julian.henao.testUnitarioEntradaVehiculo.TestReglaCilindrajeMoto
+2018-08-22 14:52:47.150  INFO 7648 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
+2018-08-22 14:52:47.151  INFO 7648 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@722c29, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@343fd05e, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@6a58a834, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@5af7d26e, org.springframework.test.context.support.DirtiesContextTestExecutionListener@4bf5ae7d, org.springframework.test.context.transaction.TransactionalTestExecutionListener@1023a7d, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@2eb42b61, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@4a34f87b, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@2c543106, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@3c952723, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@3375fcf3, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@5e6f3dc6]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::             (v2.1.0.M1)
+
+2018-08-22 14:52:47.210  INFO 7648 --- [    Test worker] c.c.c.e.j.h.t.TestReglaCilindrajeMoto    : Starting TestReglaCilindrajeMoto on JULIAN-HENAO with PID 7648 (started by julian.henao in C:\Users\julian.henao\workspace\adnjulianhenao)
+2018-08-22 14:52:47.213  INFO 7648 --- [    Test worker] c.c.c.e.j.h.t.TestReglaCilindrajeMoto    : No active profile set, falling back to default profiles: default
+2018-08-22 14:52:47.806  INFO 7648 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$9f750a15] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-08-22 14:52:47.832  INFO 7648 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$1ef55747] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-08-22 14:52:47.980  INFO 7648 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2018-08-22 14:52:48.061  INFO 7648 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2018-08-22 14:52:48.125  INFO 7648 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-08-22 14:52:48.146  INFO 7648 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2018-08-22 14:52:48.324  INFO 7648 --- [    Test worker] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'org.hibernate.tool.schema.internal.exec.ScriptSourceInputNonExistentImpl@3462da57'
+2018-08-22 14:52:48.329  INFO 7648 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-08-22 14:52:49.420  WARN 7648 --- [    Test worker] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-08-22 14:52:49.984  INFO 7648 --- [    Test worker] c.c.c.e.j.h.t.TestReglaCilindrajeMoto    : Started TestReglaCilindrajeMoto in 2.82 seconds (JVM running for 24.6)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="co.com.ceiba.estacionamiento.julian.henao.testUnitarioSalidaVehiculo.TestReglaPlacaExiste" tests="2" skipped="0" failures="0" errors="0" timestamp="2018-08-22T19:53:03" hostname="JULIAN-HENAO" time="0.017">
+  <properties/>
+  <testcase name="ReglaPlacaIngresadaNOExiste" classname="co.com.ceiba.estacionamiento.julian.henao.testUnitarioSalidaVehiculo.TestReglaPlacaExiste" time="0.007"/>
+  <testcase name="ReglaConCilindrajeMENOR500Moto" classname="co.com.ceiba.estacionamiento.julian.henao.testUnitarioSalidaVehiculo.TestReglaPlacaExiste" time="0.008"/>
+  <system-out><![CDATA[2018-08-22 14:53:00.772  INFO 7648 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [co.com.ceiba.estacionamiento.julian.henao.testUnitarioSalidaVehiculo.TestReglaPlacaExiste], using SpringBootContextLoader
+2018-08-22 14:53:00.773  INFO 7648 --- [    Test worker] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [co.com.ceiba.estacionamiento.julian.henao.testUnitarioSalidaVehiculo.TestReglaPlacaExiste]: no resource found for suffixes {-context.xml, Context.groovy}.
+2018-08-22 14:53:00.774  INFO 7648 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.com.ceiba.estacionamiento.julian.henao.testUnitarioSalidaVehiculo.TestReglaPlacaExiste]: TestReglaPlacaExiste does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2018-08-22 14:53:00.777  INFO 7648 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.com.ceiba.estacionamiento.julian.henao.AdnJulianHenaoApplication for test class co.com.ceiba.estacionamiento.julian.henao.testUnitarioSalidaVehiculo.TestReglaPlacaExiste
+2018-08-22 14:53:00.779  INFO 7648 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
+2018-08-22 14:53:00.782  INFO 7648 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@61b83f4a, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@4649f56d, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@4ec5ea24, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@5e830fbb, org.springframework.test.context.support.DirtiesContextTestExecutionListener@7ee1294e, org.springframework.test.context.transaction.TransactionalTestExecutionListener@778a5962, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@16ff197d, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@504732ce, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@279bcad1, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@27fc609, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@6ca513ca, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@51d8dd2]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::             (v2.1.0.M1)
+
+2018-08-22 14:53:00.821  INFO 7648 --- [    Test worker] c.c.c.e.j.h.t.TestReglaPlacaExiste       : Starting TestReglaPlacaExiste on JULIAN-HENAO with PID 7648 (started by julian.henao in C:\Users\julian.henao\workspace\adnjulianhenao)
+2018-08-22 14:53:00.821  INFO 7648 --- [    Test worker] c.c.c.e.j.h.t.TestReglaPlacaExiste       : No active profile set, falling back to default profiles: default
+2018-08-22 14:53:01.373  INFO 7648 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$9f750a15] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-08-22 14:53:01.396  INFO 7648 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$1ef55747] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-08-22 14:53:01.507  INFO 7648 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Starting...
+2018-08-22 14:53:01.509  INFO 7648 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Start completed.
+2018-08-22 14:53:01.559  INFO 7648 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-08-22 14:53:01.580  INFO 7648 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2018-08-22 14:53:01.659  INFO 7648 --- [    Test worker] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'org.hibernate.tool.schema.internal.exec.ScriptSourceInputNonExistentImpl@3462da57'
+2018-08-22 14:53:01.660  INFO 7648 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-08-22 14:53:02.527  WARN 7648 --- [    Test worker] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-08-22 14:53:03.015  INFO 7648 --- [    Test worker] c.c.c.e.j.h.t.TestReglaPlacaExiste       : Started TestReglaPlacaExiste in 2.23 seconds (JVM running for 37.63)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
