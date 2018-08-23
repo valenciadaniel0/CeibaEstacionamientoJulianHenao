@@ -21,9 +21,6 @@ public class ReglaSobreCostoCilindraje implements ValidacionSalida {
 
 	private static final int MOTO = 2;
 	private static final int CILINDRAJE = 500;
-
-	public ReglaSobreCostoCilindraje() {
-	}
 	
 	@Override
 	public void validar(int idRegistro, String placa) {
