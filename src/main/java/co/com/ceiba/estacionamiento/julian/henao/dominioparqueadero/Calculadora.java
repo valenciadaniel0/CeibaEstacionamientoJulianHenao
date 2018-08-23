@@ -21,12 +21,15 @@ import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioParqueaderoTar
 @Component("calculadora")
 public class Calculadora {
 
+	private static final int HORASDELDIA = 24;
+	private static final double MILISEGUNDOSAHORAS = 3600000.0;
 	@Autowired
 	@Qualifier("servicioParqueaderoTarifa")
 	private ServicioParqueaderoTarifa servicioParqueaderoTarifa;
 
 	public void calcularCostoParqueadero(ModeloParqueaderoRegistro modeloParqueaderoRegistro, int horasACalcular) {
 
+		// Obtengo las tarifas según el tipo de vehiculo
 		ModeloParqueaderoTarifa modeloParqueaderoTarifa = servicioParqueaderoTarifa
 				.obtenerTarifasPorTipoVehiculo(modeloParqueaderoRegistro.getVehiculo().getTipoVehiculo().getId());
 
@@ -35,25 +38,22 @@ public class Calculadora {
 		int inicioCobroDia = modeloParqueaderoTarifa.getHorasCobroDia();
 		long costoTotal;
 
-		int cuantosDiasFueron = (horasACalcular / 24);
-		int horas = (horasACalcular % 24);
+		int diasEnParqueadero = (horasACalcular / HORASDELDIA);
+		int horasRestantesParqueo = (horasACalcular % HORASDELDIA);
 
-		int horasRestantesMenoresDia = 0;
-		int c = 0;
+		if (inicioCobroDia <= horasRestantesParqueo && horasRestantesParqueo <= HORASDELDIA) {
 
-		if (horas >= inicioCobroDia && horas <= 24) {
-			costoTotal = costodia * (cuantosDiasFueron + 1);
-			modeloParqueaderoRegistro.setDiasParqueadero(cuantosDiasFueron+1);
-			
+			costoTotal = costodia * (diasEnParqueadero + 1);
+			modeloParqueaderoRegistro.setDiasParqueadero(diasEnParqueadero + 1);
+			// Las horas de Parqueadero no se asigan, dado que en la bd
+			// inicializa en cero
+
 		} else {
-			horasRestantesMenoresDia = (horas / inicioCobroDia);
-			c = (horas % inicioCobroDia);
-			costoTotal = (cuantosDiasFueron + horasRestantesMenoresDia) * costodia + c * costohora;
-			modeloParqueaderoRegistro.setDiasParqueadero(cuantosDiasFueron+horasRestantesMenoresDia);
-			modeloParqueaderoRegistro.setHorasParqueadero(c);
-			
+			costoTotal = diasEnParqueadero * costodia + horasRestantesParqueo * costohora;
+			modeloParqueaderoRegistro.setDiasParqueadero(diasEnParqueadero);
+			modeloParqueaderoRegistro.setHorasParqueadero(horasRestantesParqueo);
 		}
-		
+
 		modeloParqueaderoRegistro.setHorasParqueo(horasACalcular);
 		modeloParqueaderoRegistro.setCostoTotal(costoTotal);
 
@@ -61,6 +61,6 @@ public class Calculadora {
 
 	public int calcularHorasParqueadero(LocalDateTime fechaEntrada, LocalDateTime fechaSalida) {
 		long millis = Duration.between(fechaEntrada, fechaSalida).toMillis();
-		return (int) Math.ceil(millis/3600000.0);
+		return (int) Math.ceil(millis / MILISEGUNDOSAHORAS);
 	}
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component("validacionesSalida")
 public class ValidacionesSalida {
-			
+	
 	@Autowired
 	@Qualifier("reglaSobreCostoCilindraje")
 	private ReglaSobreCostoCilindraje reglaSobreCostoCilindraje;	

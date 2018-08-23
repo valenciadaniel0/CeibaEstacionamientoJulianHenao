@@ -30,8 +30,7 @@ public class ControladorVehiculo {
 	/**
 	 *  Por cada peticion nos trae un header y un body del tipo Json
 	 *  Con RequestBody llamo y con el Valid lo convierto en entityVehiculo
-	 */
-	 	
+	 */ 	
 	@RequestMapping(value="", method=RequestMethod.POST)
 	public ResponseEntity<String> crear(@RequestBody ModeloVehiculo modeloVehiculo) {
 		servicioVehiculo.crear(modeloVehiculo);

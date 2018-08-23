@@ -19,8 +19,6 @@ import co.com.ceiba.estacionamiento.julian.henao.entidad.EntidadVehiculo;
 @Repository("repositorioVehiculo")
 public interface IRepositorioVehiculo extends JpaRepository<EntidadVehiculo, Serializable>{ 
 	
-	
-	public abstract EntidadVehiculo findById(int idVehiculo);	
 	public abstract EntidadVehiculo findByPlaca(String placa);	
 	public abstract List<EntidadVehiculo> findAll();
 	

@@ -37,7 +37,7 @@ public class TestReglaDiaHabil {
 	public void ReglaEntradaVehiculoPlacaANoPuedeEntrarLunes() {
 		int lunes = 1;
 		String placaIniciaEnA = "ABC123";
-
+			
 		ModeloTipoVehiculo tipoVehiculoMoto = new TipoVehiculoBuilder().conId(2).conDescripcion("Moto").build();
 		ModeloVehiculo vehiculo = new VehiculoBuilder().conPlaca(placaIniciaEnA).conTipoVehiculo(tipoVehiculoMoto)
 				.conCilindraje(100).build();
@@ -53,16 +53,12 @@ public class TestReglaDiaHabil {
 	@Test(expected = ExcepcionParametroInvalido.class)
 	public void ReglaEntradaVehiculoPlacaANoPuedeEntrarDomingo() {
 		int domingo = 7;
-		String placaIniciaEnA = "ABC123";
-
+		String placaIniciaEnA = "AFC123";
 		ModeloTipoVehiculo tipoVehiculoMoto = new TipoVehiculoBuilder().conId(2).conDescripcion("Moto").build();
 		ModeloVehiculo vehiculo = new VehiculoBuilder().conPlaca(placaIniciaEnA).conTipoVehiculo(tipoVehiculoMoto)
 				.conCilindraje(100).build();
-
 		when(calendario.obtenerDiaActual()).thenReturn(domingo);
-
 		reglaDiaHabil.validar(vehiculo);
-
 	}
 
 	@Test(expected = Test.None.class)

@@ -13,6 +13,8 @@ import co.com.ceiba.estacionamiento.julian.henao.modelo.ModeloVehiculo;
 public class ReglaDiaHabil implements ValidacionEntrada{
 
 	
+	private static final int LUNES = 1;
+	private static final int DOMINGO = 7;
 	
 	@Autowired
 	@Qualifier("calendario")
@@ -35,7 +37,7 @@ public class ReglaDiaHabil implements ValidacionEntrada{
 	 * @return
 	 */
 	private boolean diaNoHabilLunesPlacaA(int diaActual){
-		return diaActual == 1;		
+		return diaActual == LUNES;		
 	}
 	
 	/**
@@ -44,7 +46,7 @@ public class ReglaDiaHabil implements ValidacionEntrada{
 	 * @return
 	 */
 	private boolean diaNoHabilDomingoPlacaA(int diaActual){
-		return diaActual == 7;
+		return diaActual == DOMINGO;
 	}
 
 }

@@ -54,15 +54,6 @@ public class ServicioVehiculo {
 		return convertidorVehiculo.convertirLista(iRepositorioVehiculo.findAll());
 	}
 
-	public ModeloVehiculo obtenerporId(int idVehiculo) {
-		EntidadVehiculo entidadVehiculo = iRepositorioVehiculo.findById(idVehiculo);
-		if (entidadVehiculo == null) {
-			return null;
-		} else {
-			return convertidorVehiculo.convertirEntidadAModelo(entidadVehiculo);
-		}
-	}
-
 	public ModeloVehiculo obtenerPorPlaca(String placa) {
 		EntidadVehiculo entidadVehiculo = iRepositorioVehiculo.findByPlaca(placa);
 		if (entidadVehiculo == null) {

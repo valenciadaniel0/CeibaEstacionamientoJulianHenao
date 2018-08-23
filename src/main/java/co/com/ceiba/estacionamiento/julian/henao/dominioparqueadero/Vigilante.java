@@ -79,7 +79,7 @@ public class Vigilante {
 	 * @param placa
 	 *            del vehiculo
 	 */
-	public void crearRegistro(String placa, int idTipoVehiculo) {
+	private void crearRegistro(String placa, int idTipoVehiculo) {
 		servicioParqueaderoRegistro.insertar(new ModeloParqueaderoRegistro(servicioVehiculo.obtenerPorPlaca(placa),
 				calendario.obtenerFechaActual()));
 		ModeloParqueaderoEspacioDisponible modeloParqueaderoEspacioDisponible = servicioParqueaderoEspacioDisponible
@@ -88,64 +88,58 @@ public class Vigilante {
 		servicioParqueaderoEspacioDisponible.actualizar(modeloParqueaderoEspacioDisponible);
 	}
 
+	
+	/**
+	 * @param idRegistro id del registro del parqueadero
+	 * @param placa del vehiculo a salir
+	 */
 	public void registrarSalida(int idRegistro, String placa) {
 		ExcepcionSobreCosto esc = null;
 		ModeloParqueaderoRegistro modeloParqueaderoRegistro = null;
 		try {
+			modeloParqueaderoRegistro = (servicioParqueaderoRegistro.obtenerRegistroPorIdYPorPlacaSinSalir(idRegistro,
+					placa));
 
 			for (ValidacionSalida validacion : validacionesSalida.validacionesSalida()) {
 				validacion.validar(idRegistro, placa);
 			}
-			/**
-			 * En las validaciones se tiene en cuenta si el registro y la placa
-			 * coinciden
-			 */
-
-			modeloParqueaderoRegistro = (servicioParqueaderoRegistro.obtenerRegistroPorIdYPorPlacaSinSalir(idRegistro,
-					placa));
-
-			modeloParqueaderoRegistro.setFechaSalida(calendario.obtenerFechaActual());
-
-			calculadora.calcularCostoParqueadero(modeloParqueaderoRegistro, calculadora.calcularHorasParqueadero(
-					modeloParqueaderoRegistro.getFechaEntrada(), modeloParqueaderoRegistro.getFechaSalida()));
-			
-			
-			
 
 		} catch (ExcepcionSobreCosto e) {
 			esc = e;
-
-			/**
-			 * El sobrecosto genera una excepción y como en esta excepción ya se
-			 * ha validado la existencia del registro, este se busca para
-			 * manejarlo
-			 */
-			modeloParqueaderoRegistro = (servicioParqueaderoRegistro.obtenerRegistroPorIdYPorPlacaSinSalir(idRegistro,
-					placa));
-
-			modeloParqueaderoRegistro.setFechaSalida(calendario.obtenerFechaActual());
-
-			calculadora.calcularCostoParqueadero(modeloParqueaderoRegistro, calculadora.calcularHorasParqueadero(
-					modeloParqueaderoRegistro.getFechaEntrada(), modeloParqueaderoRegistro.getFechaSalida()));
-
-			modeloParqueaderoRegistro.setCostoTotal(modeloParqueaderoRegistro.getCostoTotal() + 2000);
-		} finally {
-			// Registrar Salida y descontar vehiculo solo si el registro y la
-			// placa coinciden
-			if (modeloParqueaderoRegistro != null) {
-				servicioParqueaderoRegistro.insertar(modeloParqueaderoRegistro);
-				ModeloParqueaderoEspacioDisponible modeloParqueaderoEspacioDisponible = servicioParqueaderoEspacioDisponible
-						.obtenerEspacioDisponiblePorTipoVehiculo(
-								modeloParqueaderoRegistro.getVehiculo().getTipoVehiculo().getId());
-				modeloParqueaderoEspacioDisponible.disminuirEspacio();
-				servicioParqueaderoEspacioDisponible.actualizar(modeloParqueaderoEspacioDisponible);
-			}
 		}
-
-		// En caso de sobre costo, lance la excepción
+		generandoRegistroSalida(modeloParqueaderoRegistro, esc);
+		/*
+		 * En caso de sobreCosto lance la excepción, esto para el mensaje
+		 * informativo en el FrontEnd
+		 */
 		if (esc != null) {
 			throw esc;
 		}
 	}
 
+	private void generandoRegistroSalida(ModeloParqueaderoRegistro modeloParqueaderoRegistro, ExcepcionSobreCosto esc) {
+		if (modeloParqueaderoRegistro != null) {
+
+			modeloParqueaderoRegistro.setFechaSalida(calendario.obtenerFechaActual());
+			calculadora.calcularCostoParqueadero(modeloParqueaderoRegistro, calculadora.calcularHorasParqueadero(
+					modeloParqueaderoRegistro.getFechaEntrada(), modeloParqueaderoRegistro.getFechaSalida()));
+
+			// Si se genero una excepción de sobreCosto hago el aumento
+			if (esc != null) {
+				int sobreCosto = 2000;
+				modeloParqueaderoRegistro.setCostoTotal(modeloParqueaderoRegistro.getCostoTotal() + sobreCosto);
+			}
+
+			// ALmaceno el registro
+			servicioParqueaderoRegistro.insertar(modeloParqueaderoRegistro);
+
+			// Disminuyo el campo espacio actual del parqueadero para aumentar capacidad 
+			ModeloParqueaderoEspacioDisponible modeloParqueaderoEspacioDisponible = servicioParqueaderoEspacioDisponible
+					.obtenerEspacioDisponiblePorTipoVehiculo(
+							modeloParqueaderoRegistro.getVehiculo().getTipoVehiculo().getId());
+			modeloParqueaderoEspacioDisponible.disminuirEspacio();
+			servicioParqueaderoEspacioDisponible.actualizar(modeloParqueaderoEspacioDisponible);
+		}
+	}
+	
 }
