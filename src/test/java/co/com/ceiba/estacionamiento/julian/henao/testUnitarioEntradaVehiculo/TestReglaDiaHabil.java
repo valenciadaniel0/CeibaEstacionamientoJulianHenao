@@ -33,8 +33,8 @@ public class TestReglaDiaHabil {
 	@Rule
 	public ExpectedException exceptionRule = ExpectedException.none();
 
-	@Test
-	public void ReglaEntradaVehiculoPlacaANoPuedeEntrarLunes() {
+	@Test(expected = Test.None.class)
+	public void ReglaEntradaVehiculoPlacaAPuedeEntrarLunes() {
 		int lunes = 1;
 		String placaIniciaEnA = "ABC123";
 			
@@ -44,14 +44,12 @@ public class TestReglaDiaHabil {
 
 		when(calendario.obtenerDiaActual()).thenReturn(lunes);
 
-		exceptionRule.expect(ExcepcionParametroInvalido.class);
-		exceptionRule.expectMessage("La placa que inicia por 'A' NO puede ingresar los Lunes y los Domingos");
 		reglaDiaHabil.validar(vehiculo);
 
 	}
 
-	@Test(expected = ExcepcionParametroInvalido.class)
-	public void ReglaEntradaVehiculoPlacaANoPuedeEntrarDomingo() {
+	@Test(expected = Test.None.class)
+	public void ReglaEntradaVehiculoPlacaAPuedeEntrarDomingo() {
 		int domingo = 7;
 		String placaIniciaEnA = "AFC123";
 		ModeloTipoVehiculo tipoVehiculoMoto = new TipoVehiculoBuilder().conId(2).conDescripcion("Moto").build();
@@ -76,8 +74,8 @@ public class TestReglaDiaHabil {
 	}
 	
 	
-	@Test(expected = Test.None.class)
-	public void ReglaEntradaVehiculoPlacaADiaDiferente() {
+	@Test(expected = ExcepcionParametroInvalido.class)
+	public void ReglaEntradaVehiculoPlacaANOPuedeEntrarDiaDiferente() {
 		int martes = 2;
 		String placaNoIniciaEnA = "ABC123";
 

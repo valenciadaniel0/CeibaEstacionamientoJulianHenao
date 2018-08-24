@@ -25,12 +25,13 @@ public class ReglaDiaHabil implements ValidacionEntrada{
 		
 		int diaActual = calendario.obtenerDiaActual();
 		
-		if(modelVehiculo.getPlaca().charAt(0) == 'A' && (diaNoHabilDomingoPlacaA(diaActual) || diaNoHabilLunesPlacaA(diaActual))){
-			throw new ExcepcionParametroInvalido("La placa que inicia por 'A' NO puede ingresar los Lunes y los Domingos");
+		if(modelVehiculo.getPlaca().charAt(0) == 'A' && !(diaNoHabilDomingoPlacaA(diaActual) || diaNoHabilLunesPlacaA(diaActual))){
+			throw new ExcepcionParametroInvalido("La placa que inicia por 'A' SOLO puede ingresar los Lunes y los Domingos");
 		}
 		
 	}
-		
+			
+	
 	/**
 	 * En el formato LocalDateTime manejado en el calendario Lunes = 1, Martes = 2...
 	 * @param diaActual
