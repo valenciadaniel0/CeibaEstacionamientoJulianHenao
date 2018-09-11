@@ -26,10 +26,6 @@ public class ControladorParqueaderoTarifa {
 	@Qualifier("servicioParqueaderoTarifa")
 	private ServicioParqueaderoTarifa servicioParqueaderoTarifa; 
 	
-	
-	// Por cada peticion nos trae un header y un body del tipo Json
-	// Con RequestBody llamo y con el Valid lo convierto en entityVehiculo
-	
 	@RequestMapping(value="", method=RequestMethod.POST)
 	public ResponseEntity<String> crear(@RequestBody ModeloParqueaderoTarifa modeloParqueaderoTarifa){
 		servicioParqueaderoTarifa.crear(modeloParqueaderoTarifa);

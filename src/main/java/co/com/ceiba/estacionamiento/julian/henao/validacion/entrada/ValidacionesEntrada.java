@@ -42,7 +42,8 @@ public class ValidacionesEntrada {
 		validaciones.add(reglaDiaHabil);
 		validaciones.add(reglaVehiculoSinSalirVuelveAEntrar);
 		validaciones.add(reglaDisponibilidadEspacio);
-		validaciones.add(reglaCilindrajeMoto);		
+		validaciones.add(reglaCilindrajeMoto);
+		
 		return validaciones;
 	}	
 	

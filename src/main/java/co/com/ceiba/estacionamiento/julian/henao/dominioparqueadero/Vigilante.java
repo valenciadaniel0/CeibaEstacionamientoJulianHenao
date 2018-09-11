@@ -59,12 +59,14 @@ public class Vigilante {
 	 *            vehiculo que envia el frontend
 	 */
 	public void registrarEntrada(ModeloVehiculo modeloVehiculo) {
-
+		
+		modeloVehiculo.setPlaca(modeloVehiculo.getPlaca().toUpperCase());
+		
 		for (ValidacionEntrada validacion : validacionesEntrada.validacionesEntrada()) {
 			validacion.validar(modeloVehiculo);
 		}
 
-		if (servicioVehiculo.obtenerPorPlaca(modeloVehiculo.getPlaca()) == null) {
+		if (servicioVehiculo.obtenerPorPlaca(modeloVehiculo.getPlaca().toUpperCase()) == null) {
 			// Si NO se encuentra registrado se debe de crear el Vehiculo
 			servicioVehiculo.insertar(modeloVehiculo);
 		}

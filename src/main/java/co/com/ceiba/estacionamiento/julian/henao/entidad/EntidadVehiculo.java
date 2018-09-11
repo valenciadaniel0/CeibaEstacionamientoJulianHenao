@@ -40,7 +40,7 @@ public class EntidadVehiculo implements Serializable {
 	private EntidadTipoVehiculo tipoVehiculo;
 
 	@Column(name = "cilindraje")
-	private long cilindraje;
+	private double cilindraje;
 
 	public EntidadVehiculo() {
 		// Construtor creado para el uso de la conversión de entidad a Modelo
@@ -70,11 +70,11 @@ public class EntidadVehiculo implements Serializable {
 		this.tipoVehiculo = tipoVehiculo;
 	}
 
-	public long getCilindraje() {
+	public double getCilindraje() {
 		return cilindraje;
 	}
 
-	public void setCilindraje(long cilindraje) {
+	public void setCilindraje(double cilindraje) {
 		this.cilindraje = cilindraje;
 	}
 

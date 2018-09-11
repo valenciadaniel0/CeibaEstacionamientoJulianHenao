@@ -24,8 +24,8 @@ public class ReglaDiaHabil implements ValidacionEntrada{
 	public void validar(ModeloVehiculo modelVehiculo) {
 		
 		int diaActual = calendario.obtenerDiaActual();
-		
-		if(modelVehiculo.getPlaca().charAt(0) == 'A' && !(diaNoHabilDomingoPlacaA(diaActual) || diaNoHabilLunesPlacaA(diaActual))){
+
+		if(modelVehiculo.getPlaca().toUpperCase().charAt(0) == 'A' && !(diaHabilDomingoPlacaA(diaActual) || diaHabilLunesPlacaA(diaActual))){
 			throw new ExcepcionParametroInvalido("La placa que inicia por 'A' SOLO puede ingresar los Lunes y los Domingos");
 		}
 		
@@ -37,7 +37,7 @@ public class ReglaDiaHabil implements ValidacionEntrada{
 	 * @param diaActual
 	 * @return
 	 */
-	private boolean diaNoHabilLunesPlacaA(int diaActual){
+	private boolean diaHabilLunesPlacaA(int diaActual){
 		return diaActual == LUNES;		
 	}
 	
@@ -46,7 +46,7 @@ public class ReglaDiaHabil implements ValidacionEntrada{
 	 * @param diaActual
 	 * @return
 	 */
-	private boolean diaNoHabilDomingoPlacaA(int diaActual){
+	private boolean diaHabilDomingoPlacaA(int diaActual){
 		return diaActual == DOMINGO;
 	}
 
