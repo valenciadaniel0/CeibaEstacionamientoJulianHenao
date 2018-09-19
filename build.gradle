@@ -49,7 +49,7 @@ test {
     exclude '**/testIntegration/**'
 }
 
-taskt iTest(type:Test) {
+task iTest(type: Test) {
     exclude '**/testUnit/**'
 }
 
