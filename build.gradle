@@ -45,6 +45,10 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
+test {
+    exclude '**/testIntegration/**'
+}
+
 task jacoco(group: 'verification', dependsOn: jacocoTestReport) {
 }
 
