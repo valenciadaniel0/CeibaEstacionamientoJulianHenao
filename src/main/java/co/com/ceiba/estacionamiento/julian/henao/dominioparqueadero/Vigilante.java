@@ -11,9 +11,7 @@ import co.com.ceiba.estacionamiento.julian.henao.modelo.ModeloVehiculo;
 import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioParqueaderoEspacioDisponible;
 import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioParqueaderoRegistro;
 import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioVehiculo;
-import co.com.ceiba.estacionamiento.julian.henao.validacion.entrada.ValidacionEntrada;
 import co.com.ceiba.estacionamiento.julian.henao.validacion.entrada.ValidacionesEntrada;
-import co.com.ceiba.estacionamiento.julian.henao.validacion.salida.ValidacionSalida;
 import co.com.ceiba.estacionamiento.julian.henao.validacion.salida.ValidacionesSalida;
 
 /**
@@ -62,10 +60,8 @@ public class Vigilante {
 		
 		modeloVehiculo.setPlaca(modeloVehiculo.getPlaca().toUpperCase());
 		
-		for (ValidacionEntrada validacion : validacionesEntrada.validacionesEntrada()) {
-			validacion.validar(modeloVehiculo);
-		}
-
+		validacionesEntrada.validacionesEntrada().forEach(validacion -> validacion.validar(modeloVehiculo));
+		
 		if (servicioVehiculo.obtenerPorPlaca(modeloVehiculo.getPlaca().toUpperCase()) == null) {
 			// Si NO se encuentra registrado se debe de crear el Vehiculo
 			servicioVehiculo.insertar(modeloVehiculo);
@@ -101,10 +97,8 @@ public class Vigilante {
 		try {
 			modeloParqueaderoRegistro = (servicioParqueaderoRegistro.obtenerRegistroPorIdYPorPlacaSinSalir(idRegistro,
 					placa));
-
-			for (ValidacionSalida validacion : validacionesSalida.validacionesSalida()) {
-				validacion.validar(idRegistro, placa);
-			}
+	
+		validacionesSalida.validacionesSalida().forEach(validacion -> validacion.validar(idRegistro, placa));
 
 		} catch (ExcepcionSobreCosto e) {
 			esc = e;
