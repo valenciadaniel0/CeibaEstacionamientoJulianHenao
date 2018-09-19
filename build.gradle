@@ -49,6 +49,10 @@ test {
     exclude '**/testIntegration/**'
 }
 
+taskt iTest(type:Test) {
+    exclude '**/testUnit/**'
+}
+
 task jacoco(group: 'verification', dependsOn: jacocoTestReport) {
 }
 
