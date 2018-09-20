@@ -45,11 +45,11 @@ dependencies {
 }
 
 test {
-    exclude  '**/testIntegration/**'
+    exclude  '**/testUnit/**'
 }
 
-task iTest(type: Test) {
-    exclude '**/testUnit/**'
+task unitTest(type: Test) {
+    exclude '**/testIntegration/**'
 }
 
 task jacoco(group: 'verification', dependsOn: jacocoTestReport) {
