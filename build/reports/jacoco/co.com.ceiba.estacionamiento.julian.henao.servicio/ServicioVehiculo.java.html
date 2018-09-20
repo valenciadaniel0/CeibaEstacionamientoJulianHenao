@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ServicioVehiculo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">adnjulianhenao</a> &gt; <a href="index.source.html" class="el_package">co.com.ceiba.estacionamiento.julian.henao.servicio</a> &gt; <span class="el_source">ServicioVehiculo.java</span></div><h1>ServicioVehiculo.java</h1><pre class="source lang-java linenums">package co.com.ceiba.estacionamiento.julian.henao.servicio;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import co.com.ceiba.estacionamiento.julian.henao.convertidor.ConvertidorTipoVehiculo;
+import co.com.ceiba.estacionamiento.julian.henao.convertidor.ConvertidorVehiculo;
+import co.com.ceiba.estacionamiento.julian.henao.dominioparqueadero.Vigilante;
+import co.com.ceiba.estacionamiento.julian.henao.entidad.EntidadVehiculo;
+import co.com.ceiba.estacionamiento.julian.henao.modelo.ModeloVehiculo;
+import co.com.ceiba.estacionamiento.julian.henao.repositorio.IRepositorioVehiculo;
+
+@Service(&quot;servicioVehiculo&quot;)
+<span class="fc" id="L17">public class ServicioVehiculo {</span>
+
+	@Autowired
+	@Qualifier(&quot;repositorioVehiculo&quot;)
+	private IRepositorioVehiculo iRepositorioVehiculo;
+
+	@Autowired
+	@Qualifier(&quot;convertidorVehiculo&quot;) 
+	private ConvertidorVehiculo convertidorVehiculo;
+
+	@Autowired
+	@Qualifier(&quot;convertidorTipoVehiculo&quot;)
+	private ConvertidorTipoVehiculo convertidorTipoVehiculo;
+
+	@Autowired
+	@Qualifier(&quot;vigilante&quot;)
+	private Vigilante vigilante;
+
+	public void crear(ModeloVehiculo modeloVehiculo) {
+<span class="nc" id="L36">		vigilante.registrarEntrada(modeloVehiculo);</span>
+<span class="nc" id="L37">	}</span>
+
+	public void insertar(ModeloVehiculo modeloVehiculo) {
+<span class="nc" id="L40">		iRepositorioVehiculo.save(convertidorVehiculo.convertirModeloAEntidad(modeloVehiculo));</span>
+<span class="nc" id="L41">	}</span>
+
+	public void actualizar(ModeloVehiculo modeloVehiculo) {		
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		if (iRepositorioVehiculo.findByPlaca(modeloVehiculo.getPlaca()) != null) {</span>
+<span class="nc" id="L45">			iRepositorioVehiculo.save(convertidorVehiculo.convertirModeloAEntidad(modeloVehiculo));</span>
+		}
+<span class="nc" id="L47">	}</span>
+
+	public void generarSalidaVehiculo(int idRegistro, String placa) {
+<span class="nc" id="L50">		vigilante.registrarSalida(idRegistro, placa);</span>
+<span class="nc" id="L51">	}</span>
+
+	public List&lt;ModeloVehiculo&gt; obtenerVehiculos() {
+<span class="nc" id="L54">		return convertidorVehiculo.convertirLista(iRepositorioVehiculo.findAll());</span>
+	}
+
+	public ModeloVehiculo obtenerPorPlaca(String placa) {
+<span class="nc" id="L58">		EntidadVehiculo entidadVehiculo = iRepositorioVehiculo.findByPlaca(placa);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		if (entidadVehiculo == null) {</span>
+<span class="nc" id="L60">			return null;</span>
+		} else {
+<span class="nc" id="L62">			return convertidorVehiculo.convertirEntidadAModelo(entidadVehiculo);</span>
+		}
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

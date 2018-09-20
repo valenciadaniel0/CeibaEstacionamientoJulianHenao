@@ -45,11 +45,16 @@ dependencies {
 }
 
 test {
-    exclude  '**/testUnit/**'
+    exclude  '**/testIntegration/**'    
 }
 
-task unitTest(type: Test) {
-    exclude '**/testIntegration/**'
+task iTest(group: 'verification', type: Test, dependsOn: build) {
+    jacoco{
+		destinationFile = file('build/jacoco/iTest.exec')
+	}
+	reports.junitXml.destination = file("build/test-results/iTest")
+	reports.html.destination = file("build/reports/tests/iTest") 
+	exclude '**/testUnit/**'
 }
 
 task jacoco(group: 'verification', dependsOn: jacocoTestReport) {
@@ -58,8 +63,8 @@ task jacoco(group: 'verification', dependsOn: jacocoTestReport) {
 jacocoTestReport {
     group = "Reporting"
     reports {
-        xml.enabled true
+        html.enabled true
         csv.enabled false
-        html.destination file("${buildDir}/jacocoHtml")
+        html.destination file("build/reports/jacoco")
     }
 }

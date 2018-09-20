@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ControladorParqueaderoRegistro.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">adnjulianhenao</a> &gt; <a href="index.source.html" class="el_package">co.com.ceiba.estacionamiento.julian.henao.controlador</a> &gt; <span class="el_source">ControladorParqueaderoRegistro.java</span></div><h1>ControladorParqueaderoRegistro.java</h1><pre class="source lang-java linenums">package co.com.ceiba.estacionamiento.julian.henao.controlador;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import co.com.ceiba.estacionamiento.julian.henao.modelo.ModeloParqueaderoRegistro;
+import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioParqueaderoRegistro;
+
+@RestController
+@RequestMapping(&quot;/estacionamiento/registros&quot;)
+@CrossOrigin(origins = &quot;http://localhost:4200&quot;)
+<span class="fc" id="L22">public class ControladorParqueaderoRegistro {</span>
+
+	@Autowired
+	@Qualifier(&quot;servicioParqueaderoRegistro&quot;)
+	private ServicioParqueaderoRegistro servicioParqueaderoRegistro;
+
+	// Por cada peticion nos trae un header y un body del tipo Json
+	// Con RequestBody llamo y con el Valid lo convierto en entityParqueaderoRegistro
+
+	
+	@RequestMapping(value=&quot;&quot;, method=RequestMethod.POST)
+	public ResponseEntity&lt;String&gt; crear(@RequestBody ModeloParqueaderoRegistro modeloParqueaderoRegistro) {
+<span class="nc" id="L34">		servicioParqueaderoRegistro.insertar(modeloParqueaderoRegistro);</span>
+<span class="nc" id="L35">		return ResponseEntity.status(HttpStatus.CREATED).body(&quot;Registro Ingresado exitosamente&quot;);</span>
+	}
+
+	@RequestMapping(value=&quot;/reciente/{id}&quot;, method=RequestMethod.GET)
+	public ResponseEntity&lt;ModeloParqueaderoRegistro&gt; obtenerRegistros(@PathVariable(&quot;id&quot;) int idRegistro) {
+<span class="nc" id="L40">		return ResponseEntity.status(HttpStatus.OK).body(servicioParqueaderoRegistro.obtenerRegistroPorId(idRegistro));</span>
+	}
+	
+	@RequestMapping(value=&quot;/antes&quot;, method=RequestMethod.GET)
+	public ResponseEntity&lt;List&lt;ModeloParqueaderoRegistro&gt;&gt; obtenerRegistrosAnteriores() {
+<span class="nc" id="L45">		return ResponseEntity.status(HttpStatus.OK).body(servicioParqueaderoRegistro.obtenerRegistrosAnteriores());</span>
+	}
+	
+	@RequestMapping(value=&quot;/{id}&quot;, method=RequestMethod.GET)
+	public ResponseEntity&lt;List&lt;ModeloParqueaderoRegistro&gt;&gt; obtenerRegistrosPorTipoVehiculoSinSalir(@PathVariable(&quot;id&quot;) int idTipoVehiculo) {
+<span class="nc" id="L50">		return ResponseEntity.status(HttpStatus.OK).body(servicioParqueaderoRegistro.obtenerRegistrosPorTipoVehiculoSinSalir(idTipoVehiculo));</span>
+	}
+		
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

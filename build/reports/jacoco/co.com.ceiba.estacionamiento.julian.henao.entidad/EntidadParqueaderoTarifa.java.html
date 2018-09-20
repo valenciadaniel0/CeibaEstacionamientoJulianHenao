@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EntidadParqueaderoTarifa.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">adnjulianhenao</a> &gt; <a href="index.source.html" class="el_package">co.com.ceiba.estacionamiento.julian.henao.entidad</a> &gt; <span class="el_source">EntidadParqueaderoTarifa.java</span></div><h1>EntidadParqueaderoTarifa.java</h1><pre class="source lang-java linenums">package co.com.ceiba.estacionamiento.julian.henao.entidad;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import co.com.ceiba.estacionamiento.julian.henao.entidad.EntidadTipoVehiculo;
+
+@SuppressWarnings(&quot;serial&quot;)
+@Entity
+@Table(name=&quot;tarifa&quot;)
+public class EntidadParqueaderoTarifa implements Serializable {
+
+	@Id
+	@Column(name = &quot;id_tarifa&quot;)
+	private int id;
+	
+	@JsonManagedReference
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = &quot;tipo_vehiculo&quot;)
+	private EntidadTipoVehiculo tipoVehiculo;
+	
+	//, referencedColumnName=&quot;id_tipo_vehiculo&quot;
+	
+	@Column(name=&quot;costo_hora&quot;)
+	private long costoHora;
+	
+	@Column(name=&quot;costo_dia&quot;)
+	private long costoDia;
+	
+	@Column(name=&quot;horas_cobro_dia&quot;)
+	private int horasCobroDia;
+		
+<span class="nc" id="L42">	public EntidadParqueaderoTarifa(){</span>
+		// Construtor creado para el uso de la conversión de entidad a Modelo
+<span class="nc" id="L44">	}</span>
+	
+	public int getId() {
+<span class="nc" id="L47">		return id;</span>
+	}
+	public void setId(int id) {
+<span class="nc" id="L50">		this.id = id;</span>
+<span class="nc" id="L51">	}</span>
+	
+	public EntidadTipoVehiculo getTipoVehiculo() {
+<span class="nc" id="L54">		return tipoVehiculo;</span>
+	}
+	public void setTipoVehiculo(EntidadTipoVehiculo tipoVehiculo) {
+<span class="nc" id="L57">		this.tipoVehiculo = tipoVehiculo;</span>
+<span class="nc" id="L58">	}</span>
+	public long getCostoHora() {
+<span class="nc" id="L60">		return costoHora;</span>
+	}
+	public void setCostoHora(long costoHora) {
+<span class="nc" id="L63">		this.costoHora = costoHora;</span>
+<span class="nc" id="L64">	}</span>
+	public long getCostoDia() {
+<span class="nc" id="L66">		return costoDia;</span>
+	}
+	public void setCostoDia(long costoDia) {
+<span class="nc" id="L69">		this.costoDia = costoDia;</span>
+<span class="nc" id="L70">	}</span>
+	public int getHorasCobroDia() {
+<span class="nc" id="L72">		return horasCobroDia;</span>
+	}
+	public void setHorasCobroDia(int horasCobroDia) {
+<span class="nc" id="L75">		this.horasCobroDia = horasCobroDia;</span>
+<span class="nc" id="L76">	}	</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

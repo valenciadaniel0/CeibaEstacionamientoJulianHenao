@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ControladorParqueaderoEspacioDisponible.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">adnjulianhenao</a> &gt; <a href="index.source.html" class="el_package">co.com.ceiba.estacionamiento.julian.henao.controlador</a> &gt; <span class="el_source">ControladorParqueaderoEspacioDisponible.java</span></div><h1>ControladorParqueaderoEspacioDisponible.java</h1><pre class="source lang-java linenums">package co.com.ceiba.estacionamiento.julian.henao.controlador;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import co.com.ceiba.estacionamiento.julian.henao.modelo.ModeloParqueaderoEspacioDisponible;
+import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioParqueaderoEspacioDisponible;
+
+@RestController
+@RequestMapping(&quot;/estacionamiento/espacio&quot;)
+@CrossOrigin(origins = &quot;http://localhost:4200&quot;)
+<span class="fc" id="L20">public class ControladorParqueaderoEspacioDisponible {</span>
+	
+	
+	@Autowired
+	@Qualifier(&quot;servicioParqueaderoEspacioDisponible&quot;)
+	private ServicioParqueaderoEspacioDisponible servicioParqueaderoEspacioDisponible; 
+	
+	// Por cada peticion nos trae un header y un body del tipo Json
+	// Con RequestBody llamo y con el Valid lo convierto en entityVehiculo
+	
+	@RequestMapping(value=&quot;&quot;, method=RequestMethod.POST)
+	public ResponseEntity&lt;String&gt; crear(@RequestBody ModeloParqueaderoEspacioDisponible modeloParqueaderoEspacioDisponible){
+<span class="nc" id="L32">		servicioParqueaderoEspacioDisponible.crear(modeloParqueaderoEspacioDisponible);</span>
+<span class="nc" id="L33">		return ResponseEntity.status(HttpStatus.CREATED).body(&quot;Espacio Ingresado exitosamente&quot;);</span>
+	}
+     
+	@RequestMapping(value=&quot;&quot;, method=RequestMethod.PUT)
+	public ResponseEntity&lt;String&gt; actualizar(@RequestBody ModeloParqueaderoEspacioDisponible modeloParqueaderoEspacioDisponible){
+<span class="nc" id="L38">		servicioParqueaderoEspacioDisponible.actualizar(modeloParqueaderoEspacioDisponible);</span>
+<span class="nc" id="L39">		return ResponseEntity.status(HttpStatus.ACCEPTED).body(&quot;Espacio Actualizado exitosamente&quot;);</span>
+	}
+	
+	@RequestMapping(value=&quot;/{id}&quot;, method=RequestMethod.GET)
+	public ResponseEntity&lt;ModeloParqueaderoEspacioDisponible&gt; obtenerEspacioDisponiblePorTipoVehiculo(@PathVariable(&quot;id&quot;) int idTipoVehiculo){
+<span class="nc" id="L44">		return ResponseEntity.status(HttpStatus.OK).body(servicioParqueaderoEspacioDisponible.obtenerEspacioDisponiblePorTipoVehiculo(idTipoVehiculo));</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

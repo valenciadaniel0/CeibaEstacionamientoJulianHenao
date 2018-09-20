@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConvertidorParqueaderoTarifa.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">adnjulianhenao</a> &gt; <a href="index.source.html" class="el_package">co.com.ceiba.estacionamiento.julian.henao.convertidor</a> &gt; <span class="el_source">ConvertidorParqueaderoTarifa.java</span></div><h1>ConvertidorParqueaderoTarifa.java</h1><pre class="source lang-java linenums">package co.com.ceiba.estacionamiento.julian.henao.convertidor;
+
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Component;
+
+import co.com.ceiba.estacionamiento.julian.henao.entidad.EntidadParqueaderoTarifa;
+import co.com.ceiba.estacionamiento.julian.henao.modelo.ModeloParqueaderoTarifa;
+
+import java.util.List;
+
+@Component(&quot;convertidorParqueaderoTarifa&quot;)
+<span class="fc" id="L13">public class ConvertidorParqueaderoTarifa {</span>
+
+	
+	public List&lt;ModeloParqueaderoTarifa&gt; convertirLista(List&lt;EntidadParqueaderoTarifa&gt; entidadParquederoTarifas) {
+<span class="nc" id="L17">		List&lt;ModeloParqueaderoTarifa&gt; parquederoTarifas = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L18" title="All 2 branches missed.">		for (EntidadParqueaderoTarifa entidadParqueaderoTarifa : entidadParquederoTarifas) {</span>
+<span class="nc" id="L19">			parquederoTarifas.add(convertirEntidadAModelo( entidadParqueaderoTarifa));</span>
+<span class="nc" id="L20">		}</span>
+<span class="nc" id="L21">		return parquederoTarifas;</span>
+	}	
+
+	public ModeloParqueaderoTarifa convertirEntidadAModelo(EntidadParqueaderoTarifa entidadParqueaderoTarifa) {
+<span class="nc" id="L25">		ModeloParqueaderoTarifa modeloParqueaderoTarifa = new ModeloParqueaderoTarifa();</span>
+<span class="nc" id="L26">		ConvertidorTipoVehiculo convertidorTipoVehiculo = new ConvertidorTipoVehiculo();		</span>
+<span class="nc" id="L27">		modeloParqueaderoTarifa.setId(entidadParqueaderoTarifa.getId());		</span>
+<span class="nc" id="L28">		modeloParqueaderoTarifa.setTipoVehiculo(convertidorTipoVehiculo.convertirEntidadAModelo(entidadParqueaderoTarifa.getTipoVehiculo()));</span>
+<span class="nc" id="L29">		modeloParqueaderoTarifa.setCostoHora(entidadParqueaderoTarifa.getCostoHora());</span>
+<span class="nc" id="L30">		modeloParqueaderoTarifa.setCostoDia(entidadParqueaderoTarifa.getCostoDia());</span>
+<span class="nc" id="L31">		modeloParqueaderoTarifa.setHorasCobroDia(entidadParqueaderoTarifa.getHorasCobroDia());</span>
+<span class="nc" id="L32">		return modeloParqueaderoTarifa;</span>
+	}
+
+	public EntidadParqueaderoTarifa convertirModeloAEntidad(ModeloParqueaderoTarifa modeloParqueaderoTarifa) {
+<span class="nc" id="L36">		EntidadParqueaderoTarifa entidadParqueaderoTarifa = new EntidadParqueaderoTarifa();</span>
+<span class="nc" id="L37">		ConvertidorTipoVehiculo convertidorTipoVehiculo = new ConvertidorTipoVehiculo();		</span>
+<span class="nc" id="L38">		entidadParqueaderoTarifa.setId(modeloParqueaderoTarifa.getId());		</span>
+<span class="nc" id="L39">		entidadParqueaderoTarifa.setTipoVehiculo(convertidorTipoVehiculo.convertirModeloAEntidad(modeloParqueaderoTarifa.getTipoVehiculo()));</span>
+<span class="nc" id="L40">		entidadParqueaderoTarifa.setCostoHora(modeloParqueaderoTarifa.getCostoHora());</span>
+<span class="nc" id="L41">		entidadParqueaderoTarifa.setCostoDia(modeloParqueaderoTarifa.getCostoDia());</span>
+<span class="nc" id="L42">		entidadParqueaderoTarifa.setHorasCobroDia(modeloParqueaderoTarifa.getHorasCobroDia());</span>
+<span class="nc" id="L43">		return entidadParqueaderoTarifa;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

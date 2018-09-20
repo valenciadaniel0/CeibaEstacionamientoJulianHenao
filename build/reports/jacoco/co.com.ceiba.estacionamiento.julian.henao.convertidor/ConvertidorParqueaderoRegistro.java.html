@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConvertidorParqueaderoRegistro.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">adnjulianhenao</a> &gt; <a href="index.source.html" class="el_package">co.com.ceiba.estacionamiento.julian.henao.convertidor</a> &gt; <span class="el_source">ConvertidorParqueaderoRegistro.java</span></div><h1>ConvertidorParqueaderoRegistro.java</h1><pre class="source lang-java linenums">package co.com.ceiba.estacionamiento.julian.henao.convertidor;
+
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Component;
+
+import co.com.ceiba.estacionamiento.julian.henao.entidad.EntidadParqueaderoRegistro;
+import co.com.ceiba.estacionamiento.julian.henao.modelo.ModeloParqueaderoRegistro;
+
+import java.util.List;
+
+@Component(&quot;convertidorParqueaderoRegistro&quot;)
+<span class="fc" id="L13">public class ConvertidorParqueaderoRegistro {</span>
+		
+	public List&lt;ModeloParqueaderoRegistro&gt; convertirLista(List&lt;EntidadParqueaderoRegistro&gt; entidadParqueaderoRegistros) {
+<span class="nc" id="L16">		List&lt;ModeloParqueaderoRegistro&gt; modeloParqueaderoRegistros = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L17" title="All 2 branches missed.">		for (EntidadParqueaderoRegistro entidadParqueaderoRegistro : entidadParqueaderoRegistros) {</span>
+<span class="nc" id="L18">			modeloParqueaderoRegistros.add(convertirEntidadAModelo(entidadParqueaderoRegistro));</span>
+<span class="nc" id="L19">		}</span>
+<span class="nc" id="L20">		return modeloParqueaderoRegistros;</span>
+	}
+
+	public ModeloParqueaderoRegistro convertirEntidadAModelo(EntidadParqueaderoRegistro entidadParqueaderoRegistro) {
+<span class="nc" id="L24">		ModeloParqueaderoRegistro modeloParqueaderoRegistro = new ModeloParqueaderoRegistro();		</span>
+<span class="nc" id="L25">		ConvertidorVehiculo convertidorVehiculo = new ConvertidorVehiculo();</span>
+<span class="nc" id="L26">	    modeloParqueaderoRegistro.setId(entidadParqueaderoRegistro.getId());</span>
+<span class="nc" id="L27">	    modeloParqueaderoRegistro.setVehiculo(convertidorVehiculo.convertirEntidadAModelo(entidadParqueaderoRegistro.getVehiculo()));</span>
+<span class="nc" id="L28">	    modeloParqueaderoRegistro.setFechaEntrada(entidadParqueaderoRegistro.getFechaEntrada());</span>
+<span class="nc" id="L29">	    modeloParqueaderoRegistro.setFechaSalida(entidadParqueaderoRegistro.getFechaSalida());</span>
+<span class="nc" id="L30">	    modeloParqueaderoRegistro.setHorasParqueo(entidadParqueaderoRegistro.getHorasParqueo());</span>
+<span class="nc" id="L31">	    modeloParqueaderoRegistro.setDiasParqueadero(entidadParqueaderoRegistro.getDiasParqueadero());</span>
+<span class="nc" id="L32">	    modeloParqueaderoRegistro.setHorasParqueadero(entidadParqueaderoRegistro.getHorasParqueadero());</span>
+<span class="nc" id="L33">	    modeloParqueaderoRegistro.setCostoTotal(entidadParqueaderoRegistro.getCostoTotal());	    </span>
+<span class="nc" id="L34">	    return modeloParqueaderoRegistro;</span>
+	}
+
+	public EntidadParqueaderoRegistro convertirModeloAEntidad(ModeloParqueaderoRegistro modeloParqueaderoRegistro) {
+<span class="nc" id="L38">		EntidadParqueaderoRegistro entidadParqueaderoRegistro = new EntidadParqueaderoRegistro();</span>
+<span class="nc" id="L39">		ConvertidorVehiculo convertidorVehiculo = new ConvertidorVehiculo();</span>
+<span class="nc" id="L40">		entidadParqueaderoRegistro.setId(modeloParqueaderoRegistro.getId());		</span>
+<span class="nc" id="L41">		entidadParqueaderoRegistro.setVehiculo(convertidorVehiculo.convertirModeloAEntidad(modeloParqueaderoRegistro.getVehiculo()));</span>
+<span class="nc" id="L42">		entidadParqueaderoRegistro.setFechaEntrada(modeloParqueaderoRegistro.getFechaEntrada());</span>
+<span class="nc" id="L43">		entidadParqueaderoRegistro.setFechaSalida(modeloParqueaderoRegistro.getFechaSalida());</span>
+<span class="nc" id="L44">		entidadParqueaderoRegistro.setHorasParqueo(modeloParqueaderoRegistro.getHorasParqueo());</span>
+<span class="nc" id="L45">		entidadParqueaderoRegistro.setDiasParqueadero(modeloParqueaderoRegistro.getDiasParqueadero());</span>
+<span class="nc" id="L46">		entidadParqueaderoRegistro.setHorasParqueadero(modeloParqueaderoRegistro.getHorasParqueadero());</span>
+<span class="nc" id="L47">		entidadParqueaderoRegistro.setCostoTotal(modeloParqueaderoRegistro.getCostoTotal());</span>
+<span class="nc" id="L48">		return entidadParqueaderoRegistro;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>
