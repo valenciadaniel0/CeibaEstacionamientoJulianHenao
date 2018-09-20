@@ -37,8 +37,8 @@ public class TestReglaPlacayRegistroCoinciden {
 
 	@Before
 	public void datosPrueba() {
-		placaExistente = "ABC123";
-		idRegistroExistente = 1;
+		placaExistente = "YUC475";
+		idRegistroExistente = 6;
 		placaNOExistente = "FUT405";
 	}
 

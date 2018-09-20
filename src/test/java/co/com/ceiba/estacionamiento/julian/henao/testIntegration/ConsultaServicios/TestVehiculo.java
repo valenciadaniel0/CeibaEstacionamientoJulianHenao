@@ -61,7 +61,7 @@ public class TestVehiculo {
 	@Test
 	@SqlGroup(@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:iniciandoBD.sql"))
 	public void obtenerVehiculos() {		
-		int cantidadVehiculosEnBD = 5;
+		int cantidadVehiculosEnBD = 6;
 		ResponseEntity<List<ModeloVehiculo>> response = 
 				restTemplate.exchange(
 						  url,

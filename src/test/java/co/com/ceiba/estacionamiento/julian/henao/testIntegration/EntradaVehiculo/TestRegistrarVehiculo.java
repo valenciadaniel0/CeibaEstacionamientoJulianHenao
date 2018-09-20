@@ -49,7 +49,7 @@ public class TestRegistrarVehiculo {
 	public void datosPrueba() {
 		placaExistenteYaSalio = "ZXC234";
 		placaExistenteSinSalir = "JKL925";
-		placaInexistente = "FUT405";
+		placaInexistente = "FUT098";
 	}
 
 	/**
