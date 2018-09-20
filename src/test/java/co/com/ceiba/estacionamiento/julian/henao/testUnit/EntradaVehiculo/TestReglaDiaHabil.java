@@ -36,7 +36,7 @@ public class TestReglaDiaHabil {
 	@Test(expected = Test.None.class)
 	public void ReglaEntradaVehiculoPlacaAPuedeEntrarLunes() {
 		int lunes = 1;
-		String placaIniciaEnA = "ABC123";
+		String placaIniciaEnA = "ABC890";
 			
 		ModeloTipoVehiculo tipoVehiculoMoto = new TipoVehiculoBuilder().conId(2).conDescripcion("Moto").build();
 		ModeloVehiculo vehiculo = new VehiculoBuilder().conPlaca(placaIniciaEnA).conTipoVehiculo(tipoVehiculoMoto)
@@ -51,7 +51,7 @@ public class TestReglaDiaHabil {
 	@Test(expected = Test.None.class)
 	public void ReglaEntradaVehiculoPlacaAPuedeEntrarDomingo() {
 		int domingo = 7;
-		String placaIniciaEnA = "AFC123";
+		String placaIniciaEnA = "AFC890";
 		ModeloTipoVehiculo tipoVehiculoMoto = new TipoVehiculoBuilder().conId(2).conDescripcion("Moto").build();
 		ModeloVehiculo vehiculo = new VehiculoBuilder().conPlaca(placaIniciaEnA).conTipoVehiculo(tipoVehiculoMoto)
 				.conCilindraje(100).build();
@@ -62,7 +62,7 @@ public class TestReglaDiaHabil {
 	@Test(expected = Test.None.class)
 	public void ReglaEntradaVehiculoPlacaDiferenteDeASiPuedeEntrarDomingo() {
 		int domingo = 7;
-		String placaNoIniciaEnA = "BBC123";
+		String placaNoIniciaEnA = "BBC890";
 
 		ModeloTipoVehiculo tipoVehiculoMoto = new TipoVehiculoBuilder().conId(2).conDescripcion("Moto").build();
 		ModeloVehiculo vehiculo = new VehiculoBuilder().conPlaca(placaNoIniciaEnA).conTipoVehiculo(tipoVehiculoMoto)
@@ -77,7 +77,7 @@ public class TestReglaDiaHabil {
 	@Test(expected = ExcepcionParametroInvalido.class)
 	public void ReglaEntradaVehiculoPlacaANOPuedeEntrarDiaDiferente() {
 		int martes = 2;
-		String placaNoIniciaEnA = "ABC123";
+		String placaNoIniciaEnA = "ABC890";
 
 		ModeloTipoVehiculo tipoVehiculoMoto = new TipoVehiculoBuilder().conId(2).conDescripcion("Moto").build();
 		ModeloVehiculo vehiculo = new VehiculoBuilder().conPlaca(placaNoIniciaEnA).conTipoVehiculo(tipoVehiculoMoto)
@@ -91,7 +91,7 @@ public class TestReglaDiaHabil {
 	@Test(expected = Test.None.class)
 	public void ReglaEntradaVehiculoPlacaYDiaDiferente() {
 		int miercoles = 3;
-		String placaNoIniciaEnA = "TTC123";
+		String placaNoIniciaEnA = "TTC890";
 
 		ModeloTipoVehiculo tipoVehiculoMoto = new TipoVehiculoBuilder().conId(2).conDescripcion("Moto").build();
 		ModeloVehiculo vehiculo = new VehiculoBuilder().conPlaca(placaNoIniciaEnA).conTipoVehiculo(tipoVehiculoMoto)
@@ -105,7 +105,7 @@ public class TestReglaDiaHabil {
 	@Test
 	public void ReglaEntradaVehiculoPlacaDiferenteDeASiPuedeEntrarLunes() {
 		int lunes = 1;
-		String placaNoIniciaEnA = "WBC123";
+		String placaNoIniciaEnA = "WBC890";
 
 		ModeloTipoVehiculo tipoVehiculoMoto = new TipoVehiculoBuilder().conId(2).conDescripcion("Moto").build();
 		ModeloVehiculo vehiculo = new VehiculoBuilder().conPlaca(placaNoIniciaEnA).conTipoVehiculo(tipoVehiculoMoto)
