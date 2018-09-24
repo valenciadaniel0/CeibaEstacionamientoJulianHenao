@@ -34,7 +34,8 @@ public class TestReglaPlacaExiste {
 		reglaPlacaExiste.validar(cualquierIdRegistro, placaNOExiste);
 	}
 
-	@Test(expected = Test.None.class)
+	//@Test(expected = Test.None.class)
+	@Test(expected = ExcepcionParametroInvalido.class)
 	public void ReglaConCilindrajeMENOR500Moto() {				
 		
 		int cualquierIdRegistro = 1;
