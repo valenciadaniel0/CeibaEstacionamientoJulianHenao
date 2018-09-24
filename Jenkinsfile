@@ -50,6 +50,8 @@ pipeline {
       steps {
         echo "------------>Integration Tests<------------"  
         sh 'gradle --b ./build.gradle iTest'
+	      junit '**/build/test-results/iTest/*.xml' //aggregate test results - JUnit
+	jacoco classPattern:'**/build/classes/java', execPattern:'**/build/jacoco/iTest.exec', sourcePattern:'**/src/main/java'
       }    
     }
        
@@ -80,6 +82,7 @@ post {
     echo 'Esto correrá solo si se ejecuta satisfactoriamente'   
     // Se ejecutará correctamente, siempre y cuando exista la ruta expuesta
     junit '**/build/test-results/test/*.xml'
+	  junit '**/build/test-results/iTest/*.xml'
   }    
   failure {      
     echo 'This will run only if failed' 
