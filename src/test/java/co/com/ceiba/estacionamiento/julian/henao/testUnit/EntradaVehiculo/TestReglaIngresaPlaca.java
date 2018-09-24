@@ -53,23 +53,4 @@ public class TestReglaIngresaPlaca {
 		}
 	}
 
-	/*
-	 * Cuando la excepcion es lanzada se aprueba
-	 * 
-	 * @Test(expected = NullPointerException.class) public void
-	 * whenExceptionThrown_thenExpectationSatisfied() { String test = null;
-	 * test.length(); }
-	 */
-
-	/*
-	 * Cuando deseo evaluar otras propiedades (Integración ???)
-	 * 
-	 * @Rule public ExpectedException exceptionRule = ExpectedException.none();
-	 * 
-	 * @Test public void whenExceptionThrown_thenRuleIsApplied() {
-	 * exceptionRule.expect(NumberFormatException.class);
-	 * exceptionRule.expectMessage("For input string"); Integer.parseInt("1a");
-	 * }
-	 */
-
 }

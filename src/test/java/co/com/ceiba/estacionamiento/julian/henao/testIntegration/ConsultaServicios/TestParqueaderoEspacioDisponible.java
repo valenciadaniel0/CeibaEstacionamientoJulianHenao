@@ -39,12 +39,12 @@ public class TestParqueaderoEspacioDisponible {
 		assertEquals("Espacio Ingresado exitosamente", responseEntity.getBody());
 	}
 
-//	@Test
-//	public void crearEspacioNulo() {
-//		ResponseEntity<String> responseEntity = restTemplate.postForEntity("/estacionamiento/espacio", null,
-//				String.class);
-//		assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, responseEntity.getStatusCode());
-//	}
+	@Test
+	public void crearEspacioNulo() {
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity("/estacionamiento/espacio", null,
+				String.class);
+		assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, responseEntity.getStatusCode());
+	}
 
 	@Test
 	@SqlGroup(@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:iniciandoBD.sql"))
