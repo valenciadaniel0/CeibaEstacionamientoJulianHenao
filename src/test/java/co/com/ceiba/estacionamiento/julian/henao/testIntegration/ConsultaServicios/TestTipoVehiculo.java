@@ -49,7 +49,7 @@ public class TestTipoVehiculo {
 	@Test
 	@SqlGroup(@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:iniciandoBD.sql"))
 	public void obtenerVehiculo() {		
-		int cantidadTipoVehiculoEnBD = 2;
+		int cantidadTipoVehiculoEnBD = 3; // Error debe ser 2
 		ResponseEntity<List<ModeloTipoVehiculo>> response = 
 				restTemplate.exchange(
 						  "/estacionamiento/tipo_vehiculo",
