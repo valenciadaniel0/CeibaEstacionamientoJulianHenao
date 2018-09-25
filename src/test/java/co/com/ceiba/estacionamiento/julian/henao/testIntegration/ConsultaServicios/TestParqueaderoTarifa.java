@@ -52,7 +52,7 @@ public class TestParqueaderoTarifa {
 	@Test
 	@SqlGroup(@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:iniciandoBD.sql"))
 	public void obtenerTarifas() {		
-		int cantidadTarifasEnBD = 3;
+		int cantidadTarifasEnBD = 2;
 		ResponseEntity<List<ModeloParqueaderoTarifa>> response = 
 				restTemplate.exchange(
 						  "/estacionamiento/tipo_vehiculo",
