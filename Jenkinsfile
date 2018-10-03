@@ -95,7 +95,38 @@ stage('Static Code Analysis') {
 		       }
             }
         }    
-  
+        
+        stage("Deployment in testing environment") {
+			steps {
+				echo '------------>BEGIN Deployment<------------'
+				sshPublisher(
+					publishers: [
+						sshPublisherDesc(
+							configName: 'FunctionalTest', 
+							transfers: [
+								sshTransfer(excludes: '', 
+								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/CeibaInduccion/Ceiba-Estacionamiento(julian.henao)/build/adnjulianhenao-1.0-SNAPSHOT.war
+								mv adnjulianhenao-1.0-SNAPSHOT.war pruebaDespliegue/parqueadero/backEnd/JulianHenao_adnjulianhenao-1.0-SNAPSHOT.war ''', 
+								execTimeout: 120000, 
+								flatten: false, 
+								makeEmptyDirs: false, 
+								noDefaultExcludes: false, 
+								patternSeparator: '', 
+								remoteDirectory: '', 
+								remoteDirectorySDF: false, 
+								removePrefix: '', 
+								sourceFiles: '')
+							], 
+							usePromotionTimestamp: false, 
+							useWorkspaceInPromotion: false, 
+							verbose: false
+						)
+					]
+				)
+				echo '------------>END Deployment<------------'                
+			}
+		}
+        
 }
 	
 post {    
