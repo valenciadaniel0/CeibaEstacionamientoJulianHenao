@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.066s</div>
+<div class="counter">0.075s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,32 +79,32 @@
 </thead>
 <tr>
 <td class="success">ReglaEntradaVehiculoPlacaANOPuedeEntrarDiaDiferente</td>
-<td class="success">0.005s</td>
+<td class="success">0.008s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">ReglaEntradaVehiculoPlacaAPuedeEntrarDomingo</td>
-<td class="success">0.037s</td>
+<td class="success">0.040s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">ReglaEntradaVehiculoPlacaAPuedeEntrarLunes</td>
-<td class="success">0.006s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">ReglaEntradaVehiculoPlacaDiferenteDeASiPuedeEntrarDomingo</td>
 <td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">ReglaEntradaVehiculoPlacaDiferenteDeASiPuedeEntrarLunes</td>
+<td class="success">ReglaEntradaVehiculoPlacaDiferenteDeASiPuedeEntrarDomingo</td>
 <td class="success">0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
+<td class="success">ReglaEntradaVehiculoPlacaDiferenteDeASiPuedeEntrarLunes</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">ReglaEntradaVehiculoPlacaYDiaDiferente</td>
-<td class="success">0.005s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -112,12 +112,12 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2018-09-20 12:57:32.703  INFO 14316 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [co.com.ceiba.estacionamiento.julian.henao.testUnit.EntradaVehiculo.TestReglaDiaHabil], using SpringBootContextLoader
-2018-09-20 12:57:32.704  INFO 14316 --- [    Test worker] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [co.com.ceiba.estacionamiento.julian.henao.testUnit.EntradaVehiculo.TestReglaDiaHabil]: no resource found for suffixes {-context.xml, Context.groovy}.
-2018-09-20 12:57:32.705  INFO 14316 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.com.ceiba.estacionamiento.julian.henao.testUnit.EntradaVehiculo.TestReglaDiaHabil]: TestReglaDiaHabil does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2018-09-20 12:57:32.712  INFO 14316 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.com.ceiba.estacionamiento.julian.henao.AdnJulianHenaoApplication for test class co.com.ceiba.estacionamiento.julian.henao.testUnit.EntradaVehiculo.TestReglaDiaHabil
-2018-09-20 12:57:32.715  INFO 14316 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
-2018-09-20 12:57:32.716  INFO 14316 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@532abb8c, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@527a1fed, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@1a650f9a, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@5380a842, org.springframework.test.context.support.DirtiesContextTestExecutionListener@55f08f65, org.springframework.test.context.transaction.TransactionalTestExecutionListener@57f76741, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@655cabfa, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@33c8cdab, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@6212f710, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@e33497c, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@e30303b, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@7b6001c3]
+<pre>2018-10-03 10:56:47.376  INFO 6716 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [co.com.ceiba.estacionamiento.julian.henao.testUnit.EntradaVehiculo.TestReglaDiaHabil], using SpringBootContextLoader
+2018-10-03 10:56:47.378  INFO 6716 --- [    Test worker] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [co.com.ceiba.estacionamiento.julian.henao.testUnit.EntradaVehiculo.TestReglaDiaHabil]: no resource found for suffixes {-context.xml, Context.groovy}.
+2018-10-03 10:56:47.379  INFO 6716 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [co.com.ceiba.estacionamiento.julian.henao.testUnit.EntradaVehiculo.TestReglaDiaHabil]: TestReglaDiaHabil does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2018-10-03 10:56:47.394  INFO 6716 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration co.com.ceiba.estacionamiento.julian.henao.AdnJulianHenaoApplication for test class co.com.ceiba.estacionamiento.julian.henao.testUnit.EntradaVehiculo.TestReglaDiaHabil
+2018-10-03 10:56:47.398  INFO 6716 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
+2018-10-03 10:56:47.401  INFO 6716 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@29579b49, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@6d7d9e88, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@32526f40, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@467fa2ce, org.springframework.test.context.support.DirtiesContextTestExecutionListener@5367f49b, org.springframework.test.context.transaction.TransactionalTestExecutionListener@52efb9a1, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@73e6e4d3, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@483441b3, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@241ba702, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@b962091, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@4f929d4c, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@254164d4]
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -127,20 +127,20 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::             (v2.1.0.M1)
 
-2018-09-20 12:57:32.770  INFO 14316 --- [    Test worker] c.c.c.e.j.h.t.E.TestReglaDiaHabil        : Starting TestReglaDiaHabil on JULIAN-HENAO with PID 14316 (started by julian.henao in C:\Users\julian.henao\workspace\adnjulianhenao)
-2018-09-20 12:57:32.771  INFO 14316 --- [    Test worker] c.c.c.e.j.h.t.E.TestReglaDiaHabil        : No active profile set, falling back to default profiles: default
-2018-09-20 12:57:33.602  INFO 14316 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$b7a16dd6] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2018-09-20 12:57:33.626  INFO 14316 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$3721bb08] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2018-09-20 12:57:33.764  INFO 14316 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
-2018-09-20 12:57:33.766  INFO 14316 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
-2018-09-20 12:57:33.815  INFO 14316 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+2018-10-03 10:56:47.502  INFO 6716 --- [    Test worker] c.c.c.e.j.h.t.E.TestReglaDiaHabil        : Starting TestReglaDiaHabil on JULIAN-HENAO with PID 6716 (started by julian.henao in C:\Users\julian.henao\workspace\adnjulianhenao)
+2018-10-03 10:56:47.505  INFO 6716 --- [    Test worker] c.c.c.e.j.h.t.E.TestReglaDiaHabil        : No active profile set, falling back to default profiles: default
+2018-10-03 10:56:48.632  INFO 6716 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$64de89dc] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-10-03 10:56:48.659  INFO 6716 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$e45ed70e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-10-03 10:56:48.818  INFO 6716 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2018-10-03 10:56:48.821  INFO 6716 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2018-10-03 10:56:48.889  INFO 6716 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
 	name: default
 	...]
-2018-09-20 12:57:33.839  INFO 14316 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
-2018-09-20 12:57:33.971  INFO 14316 --- [    Test worker] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'ScriptSourceInputFromUrl(file:/C:/Users/julian.henao/workspace/adnjulianhenao/build/resources/main/import.sql)'
-2018-09-20 12:57:33.980  INFO 14316 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2018-09-20 12:57:35.003  WARN 14316 --- [    Test worker] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2018-09-20 12:57:35.562  INFO 14316 --- [    Test worker] c.c.c.e.j.h.t.E.TestReglaDiaHabil        : Started TestReglaDiaHabil in 2.843 seconds (JVM running for 17.203)
+2018-10-03 10:56:48.931  INFO 6716 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2018-10-03 10:56:49.065  INFO 6716 --- [    Test worker] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'ScriptSourceInputFromUrl(file:/C:/Users/julian.henao/workspace/adnjulianhenao/build/resources/main/import.sql)'
+2018-10-03 10:56:49.079  INFO 6716 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-10-03 10:56:50.406  WARN 6716 --- [    Test worker] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-10-03 10:56:51.120  INFO 6716 --- [    Test worker] c.c.c.e.j.h.t.E.TestReglaDiaHabil        : Started TestReglaDiaHabil in 3.704 seconds (JVM running for 23.035)
 </pre>
 </span>
 </div>
@@ -152,7 +152,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.8.1</a> at Sep 20, 2018 12:57:47 PM</p>
+<a href="http://www.gradle.org">Gradle 4.8.1</a> at Oct 3, 2018 10:57:03 AM</p>
 </div>
 </div>
 </body>

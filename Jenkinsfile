@@ -112,10 +112,10 @@ stage('Static Code Analysis') {
 								makeEmptyDirs: false, 
 								noDefaultExcludes: false, 
 								patternSeparator: '', 
-								remoteDirectory: '', 
+								remoteDirectory: './pruebaDespliegue/parqueadero/backEnd', 
 								remoteDirectorySDF: false, 
 								removePrefix: '', 
-								sourceFiles: '')
+								sourceFiles: 'adnjulianhenao-1.0-SNAPSHOT.war')
 							], 
 							usePromotionTimestamp: false, 
 							useWorkspaceInPromotion: false, 
