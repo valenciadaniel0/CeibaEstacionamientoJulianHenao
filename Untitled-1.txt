@@ -1,0 +1,27 @@
+Centralizar en un solo punto la salida 
+
+Publicar --> Es tener centralizado el artefacto (En artefactory, o Nexus)
+Despliegue --> Copian los artefactos y los pega el servidor destino
+Release --> (Despliegue a servidores de prueba -- Producción: Se enviaba a la rama master (Tomando el artefactory))
+
+Checkout...Compilación (Gradle-Maven-Ant) ... UnitTest ... IntegrationTest ...  Sonar(Analisis de código estatico) ...  Build (llega hasta la construcción del artefacto ... Se cree el war) ... 
+
+Publish(Commit.. Fix)   (Se traduce en la jerarquia de directorio)
+Version liberada
+Error liberado
+Funcionalidad agregada
+
+Deploy (Cuando se manda al servidor final)
+
+
+Sonar --> Deuda Técnica (Code Smells)-- Estima cuantas horas se pueden demorar en reparar estos code Smells
+
+----
+
+EPM 
+(Transformación Organizacional)
+Skills y trabajo en equipo
+Devops ---- El principal (Integración continua -- Entrega continua)
+Agilismo
+
+Service Design - Experiencia de Usuario -- Minimo producto viable
