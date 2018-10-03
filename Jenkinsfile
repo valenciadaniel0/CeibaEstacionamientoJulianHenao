@@ -83,8 +83,8 @@ stage('Static Code Analysis') {
 		            def server = Artifactory.server 'ar7if4c70ry@c318a'
 		            def uploadSpec = '''
 		            {"files": [{
-		            	"patternSeparator": "[, ]+", 
-		                "pattern": "/build/libs/*.jar,/build/libs/*.war",
+		            	"excludePatterns": "[, ]+", 
+		                "pattern": "**/build/libs/*.jar,**/build/libs/*.war",
 		                "target": "libs-snapshot-local/$JOB_NAME/build/"
 		                }]}'''
 		
