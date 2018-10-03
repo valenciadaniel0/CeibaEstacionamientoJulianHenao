@@ -84,7 +84,7 @@ stage('Static Code Analysis') {
 		            def uploadSpec = '''
 		            {"files": [{		          
 		                "pattern": "build/libs/*.war",
-		                "target": "libs-snapshot-local/$JOB_NAME/build/"
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/build/"
 		                }]}'''
 		
 	                def buildInfo = server.upload(uploadSpec)
@@ -105,7 +105,7 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/CeibaInduccion/Ceiba-Estacionamiento(julian.henao)/build/adnjulianhenao-1.0-SNAPSHOT.war
+								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/build/adnjulianhenao-1.0-SNAPSHOT.war
 								mv adnjulianhenao-1.0-SNAPSHOT.war pruebaDespliegue/parqueadero/backEnd/JulianHenao_adnjulianhenao-1.0-SNAPSHOT.war ''', 
 								execTimeout: 120000, 
 								flatten: false, 
