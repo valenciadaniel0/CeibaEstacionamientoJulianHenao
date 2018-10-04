@@ -106,8 +106,9 @@ stage('Static Code Analysis') {
 							transfers: [
 								sshTransfer(excludes: '', 
 								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/build/adnjulianhenao-2.0-SNAPSHOT.war
-								mv adnjulianhenao-2.0-SNAPSHOT.war pruebaDespliegue/parqueadero/JulianHenao_adnjulianhenao-2.0-SNAPSHOT.war 
-								java -jar JulianHenao_adnjulianhenao-2.0-SNAPSHOT.war''', 
+								mv adnjulianhenao-2.0-SNAPSHOT.war pruebaDespliegue/parqueadero/JulianHenao_adnjulianhenao-2.0-SNAPSHOT.war
+								screen -r 
+								java -jar /home/lab/pruebaDespliegue/parqueadero/JulianHenao_adnjulianhenao-2.0-SNAPSHOT.war''', 
 								execTimeout: 120000, 
 								flatten: false, 
 								makeEmptyDirs: false, 
