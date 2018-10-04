@@ -105,7 +105,7 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/build/adnjulianhenao-1.0-SNAPSHOT.war
+								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/build/adnjulianhenao-2.0-SNAPSHOT.war
 								mv adnjulianhenao-2.0-SNAPSHOT.war pruebaDespliegue/parqueadero/JulianHenao_adnjulianhenao-2.0-SNAPSHOT.war 
 								java -jar JulianHenao_adnjulianhenao-2.0-SNAPSHOT.war''', 
 								execTimeout: 120000, 
