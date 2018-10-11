@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Scenario: the user should be able to enter vehicule automovil" tests="4" skipped="1" failures="2" errors="0" timestamp="2018-10-11T21:22:17" hostname="JULIAN-HENAO" time="10.928">
+  <properties/>
+  <testcase name="Given the user is on the page vehicules" classname="Scenario: the user should be able to enter vehicule automovil" time="0.001"/>
+  <testcase name="When the user enters car plate and choose automovil" classname="Scenario: the user should be able to enter vehicule automovil" time="0.007">
+    <failure message="org.openqa.selenium.NoSuchElementException: Cannot locate element with text: Automovil&#10;For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html&#10;Build info: version: '3.13.0', revision: '2f0d292', time: '2018-06-25T15:24:21.231Z'&#10;System info: host: 'JULIAN-HENAO', ip: '192.168.2.23', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_181'&#10;Driver info: driver.version: unknown" type="org.openqa.selenium.NoSuchElementException">org.openqa.selenium.NoSuchElementException: Cannot locate element with text: Automovil
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.13.0', revision: '2f0d292', time: '2018-06-25T15:24:21.231Z'
+System info: host: 'JULIAN-HENAO', ip: '192.168.2.23', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_181'
+Driver info: driver.version: unknown
+	at org.openqa.selenium.support.ui.Select.selectByVisibleText(Select.java:151)
+	at co.com.ceiba.estacionamiento.julian.henao.pageObjects.IngresarVehiculo.seleccionarTipoVehiculo(IngresarVehiculo.java:47)
+	at co.com.ceiba.estacionamiento.julian.henao.functionalTest.StepDefinition.PasoCrearVehiculo.user_enters_car_plate_and_choose_automovil(PasoCrearVehiculo.java:58)
+	at ✽.When the user enters car plate and choose automovil(enterVehicule.feature:9)
+</failure>
+  </testcase>
+  <testcase name="Then the user should be able to enter vehicule" classname="Scenario: the user should be able to enter vehicule automovil" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="classMethod" classname="Scenario: the user should be able to enter vehicule automovil" time="19.949">
+    <failure message="org.openqa.selenium.NoSuchElementException: Cannot locate element with text: Automovil&#10;For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html&#10;Build info: version: '3.13.0', revision: '2f0d292', time: '2018-06-25T15:24:21.231Z'&#10;System info: host: 'JULIAN-HENAO', ip: '192.168.2.23', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_181'&#10;Driver info: driver.version: unknown" type="org.openqa.selenium.NoSuchElementException">org.openqa.selenium.NoSuchElementException: Cannot locate element with text: Automovil
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.13.0', revision: '2f0d292', time: '2018-06-25T15:24:21.231Z'
+System info: host: 'JULIAN-HENAO', ip: '192.168.2.23', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_181'
+Driver info: driver.version: unknown
+	at org.openqa.selenium.support.ui.Select.selectByVisibleText(Select.java:151)
+	at co.com.ceiba.estacionamiento.julian.henao.pageObjects.IngresarVehiculo.seleccionarTipoVehiculo(IngresarVehiculo.java:47)
+	at co.com.ceiba.estacionamiento.julian.henao.functionalTest.StepDefinition.PasoCrearVehiculo.user_enters_car_plate_and_choose_automovil(PasoCrearVehiculo.java:58)
+	at ✽.When the user enters car plate and choose automovil(enterVehicule.feature:9)
+</failure>
+  </testcase>
+  <system-out><![CDATA[the user is on the page vehicules
+]]></system-out>
+  <system-err><![CDATA[Starting ChromeDriver 2.41.578737 (49da6702b16031c40d63e5618de03a32ff6c197e) on port 20232
+Only local connections are allowed.
+Oct 11, 2018 4:22:12 PM org.openqa.selenium.remote.ProtocolHandshake createSession
+INFO: Detected dialect: OSS
+]]></system-err>
+</testsuite>

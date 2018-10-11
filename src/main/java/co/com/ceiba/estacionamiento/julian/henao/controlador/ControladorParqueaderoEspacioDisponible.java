@@ -16,7 +16,7 @@ import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioParqueaderoEsp
 
 @RestController
 @RequestMapping("/estacionamiento/espacio")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "localhost:4200/")
 public class ControladorParqueaderoEspacioDisponible {
 	
 	

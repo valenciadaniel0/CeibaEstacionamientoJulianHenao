@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("/estacionamiento/vehiculos")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "localhost:4200/")
 public class ControladorVehiculo {
 
 	@Autowired

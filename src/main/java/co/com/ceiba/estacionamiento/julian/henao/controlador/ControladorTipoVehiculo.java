@@ -17,7 +17,7 @@ import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioTipoVehiculo;
 
 @RestController
 @RequestMapping("/estacionamiento/tipo_vehiculo")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "localhost:4200/")
 public class ControladorTipoVehiculo {
 	
 	

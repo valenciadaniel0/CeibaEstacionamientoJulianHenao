@@ -46,7 +46,8 @@ public class TestParqueaderoTarifa {
 	public void crearTarifaNulo() {
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity("/estacionamiento/tarifa", null,
 				String.class);
-		assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, responseEntity.getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+		//assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, responseEntity.getStatusCode());
 	}
 
 	@Test

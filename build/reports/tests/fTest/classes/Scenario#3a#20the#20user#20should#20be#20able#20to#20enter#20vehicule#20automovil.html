@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - Class Scenario: the user should be able to enter vehicule automovil</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class Scenario: the user should be able to enter vehicule automovil</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/default-package.html">default-package</a> &gt; Scenario: the user should be able to enter vehicule automovil</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">4</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">2</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">1</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">19.957s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox failures" id="successRate">
+<div class="percent">33%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Failed tests</a>
+</li>
+<li>
+<a href="#tab1">Tests</a>
+</li>
+<li>
+<a href="#tab2">Standard output</a>
+</li>
+<li>
+<a href="#tab3">Standard error</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Failed tests</h2>
+<div class="test">
+<a name="When the user enters car plate and choose automovil"></a>
+<h3 class="failures">When the user enters car plate and choose automovil</h3>
+<span class="code">
+<pre>org.openqa.selenium.NoSuchElementException: Cannot locate element with text: Automovil
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.13.0', revision: '2f0d292', time: '2018-06-25T15:24:21.231Z'
+System info: host: 'JULIAN-HENAO', ip: '192.168.2.23', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_181'
+Driver info: driver.version: unknown
+	at org.openqa.selenium.support.ui.Select.selectByVisibleText(Select.java:151)
+	at co.com.ceiba.estacionamiento.julian.henao.pageObjects.IngresarVehiculo.seleccionarTipoVehiculo(IngresarVehiculo.java:47)
+	at co.com.ceiba.estacionamiento.julian.henao.functionalTest.StepDefinition.PasoCrearVehiculo.user_enters_car_plate_and_choose_automovil(PasoCrearVehiculo.java:58)
+	at ✽.When the user enters car plate and choose automovil(enterVehicule.feature:9)
+</pre>
+</span>
+</div>
+<div class="test">
+<a name="classMethod"></a>
+<h3 class="failures">classMethod</h3>
+<span class="code">
+<pre>org.openqa.selenium.NoSuchElementException: Cannot locate element with text: Automovil
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.13.0', revision: '2f0d292', time: '2018-06-25T15:24:21.231Z'
+System info: host: 'JULIAN-HENAO', ip: '192.168.2.23', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_181'
+Driver info: driver.version: unknown
+	at org.openqa.selenium.support.ui.Select.selectByVisibleText(Select.java:151)
+	at co.com.ceiba.estacionamiento.julian.henao.pageObjects.IngresarVehiculo.seleccionarTipoVehiculo(IngresarVehiculo.java:47)
+	at co.com.ceiba.estacionamiento.julian.henao.functionalTest.StepDefinition.PasoCrearVehiculo.user_enters_car_plate_and_choose_automovil(PasoCrearVehiculo.java:58)
+	at ✽.When the user enters car plate and choose automovil(enterVehicule.feature:9)
+</pre>
+</span>
+</div>
+</div>
+<div id="tab1" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">Given the user is on the page vehicules</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="skipped">Then the user should be able to enter vehicule</td>
+<td class="skipped">-</td>
+<td class="skipped">ignored</td>
+</tr>
+<tr>
+<td class="failures">When the user enters car plate and choose automovil</td>
+<td class="failures">0.007s</td>
+<td class="failures">failed</td>
+</tr>
+<tr>
+<td class="failures">classMethod</td>
+<td class="failures">19.949s</td>
+<td class="failures">failed</td>
+</tr>
+</table>
+</div>
+<div id="tab2" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>the user is on the page vehicules
+</pre>
+</span>
+</div>
+<div id="tab3" class="tab">
+<h2>Standard error</h2>
+<span class="code">
+<pre>Starting ChromeDriver 2.41.578737 (49da6702b16031c40d63e5618de03a32ff6c197e) on port 20232
+Only local connections are allowed.
+Oct 11, 2018 4:22:12 PM org.openqa.selenium.remote.ProtocolHandshake createSession
+INFO: Detected dialect: OSS
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 4.8.1</a> at Oct 11, 2018 4:22:29 PM</p>
+</div>
+</div>
+</body>
+</html>

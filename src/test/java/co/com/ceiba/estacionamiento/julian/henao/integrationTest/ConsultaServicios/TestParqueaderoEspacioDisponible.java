@@ -43,7 +43,8 @@ public class TestParqueaderoEspacioDisponible {
 	public void crearEspacioNulo() {
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity("/estacionamiento/espacio", null,
 				String.class);
-		assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, responseEntity.getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+		//assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, responseEntity.getStatusCode());
 	}
 
 	@Test

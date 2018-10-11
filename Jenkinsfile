@@ -1,6 +1,6 @@
 pipeline {  
 //Donde se va a ejecutar el Pipeline  
-  agent {
+	agent {
     label 'Slave_Induccion'
   }
   

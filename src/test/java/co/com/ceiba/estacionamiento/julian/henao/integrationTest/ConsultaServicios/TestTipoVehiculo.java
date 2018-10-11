@@ -43,7 +43,7 @@ public class TestTipoVehiculo {
 	public void crearTipoVehiculoNulo() {
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity("/estacionamiento/tipo_vehiculo", null,
 				String.class);
-		assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, responseEntity.getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 	}
 
 	@Test
