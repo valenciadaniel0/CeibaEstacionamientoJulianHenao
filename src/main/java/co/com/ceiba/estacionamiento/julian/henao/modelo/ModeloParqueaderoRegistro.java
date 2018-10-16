@@ -15,8 +15,9 @@ public class ModeloParqueaderoRegistro {
 	
 	public ModeloParqueaderoRegistro(){}		
 	
-	public ModeloParqueaderoRegistro(ModeloVehiculo vehiculo, LocalDateTime fechaEntrada, LocalDateTime fechaSalida,
-			int horasParqueo, int diasParqueadero, int horasParqueadero, long costoTotal) {		
+	public ModeloParqueaderoRegistro(int id, ModeloVehiculo vehiculo, LocalDateTime fechaEntrada, LocalDateTime fechaSalida,
+			int horasParqueo, int diasParqueadero, int horasParqueadero, long costoTotal) {
+		this.id = id;
 		this.vehiculo = vehiculo;
 		this.fechaEntrada = fechaEntrada;
 		this.fechaSalida = fechaSalida;
@@ -27,11 +28,11 @@ public class ModeloParqueaderoRegistro {
 	}
 
 	public ModeloParqueaderoRegistro(int id, ModeloVehiculo vehiculo, LocalDateTime fechaEntrada) {				
-		this(vehiculo,fechaEntrada,null,0,0,0,0);		
+		this(id, vehiculo,fechaEntrada,null,0,0,0,0);		
 	}
 	
 	public ModeloParqueaderoRegistro(ModeloVehiculo vehiculo, LocalDateTime fechaEntrada) {				
-		this(vehiculo,fechaEntrada,null,0,0,0,0);		
+		this(0, vehiculo,fechaEntrada,null,0,0,0,0);		
 	}
 
 

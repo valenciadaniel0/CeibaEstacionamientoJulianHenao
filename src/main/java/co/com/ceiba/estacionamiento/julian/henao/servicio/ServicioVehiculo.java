@@ -51,6 +51,7 @@ public class ServicioVehiculo {
 	}
 
 	public List<ModeloVehiculo> obtenerVehiculos() {
+		
 		return convertidorVehiculo.convertirLista(iRepositorioVehiculo.findAll());
 	}
 
