@@ -4,7 +4,7 @@ public class ModeloVehiculo {
 
 	private int id;
 	private String placa;
-	private ModeloTipoVehiculo tipoVehiculo; // String
+	private ModeloTipoVehiculo tipoVehiculo; 
 	private double cilindraje;
 
 	public ModeloVehiculo() {

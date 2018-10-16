@@ -10,9 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Table;
-
+import javax.persistence.EntityResult;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import co.com.ceiba.estacionamiento.julian.henao.modelo.ModeloTipoVehiculo;
+import co.com.ceiba.estacionamiento.julian.henao.modelo.ModeloVehiculo;
 
 /**
  * Serializable ayuda a la conversión de Hibernate y jpa
@@ -23,6 +28,13 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "vehiculo")
+//@SqlResultSetMappings({
+//	  @SqlResultSetMapping(
+//	      name="ModeloVehiculo",
+//	      entities={@EntityResult(entityClass=ModeloVehiculo.class),
+//	                @EntityResult(entityClass=ModeloTipoVehiculo.class)}
+//	  )
+//	})
 public class EntidadVehiculo implements Serializable {
 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
