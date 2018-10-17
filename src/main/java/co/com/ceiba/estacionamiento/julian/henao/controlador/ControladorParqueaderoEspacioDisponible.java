@@ -22,7 +22,7 @@ import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioParqueaderoEsp
 @CrossOrigin(origins = "localhost:4200/")
 public class ControladorParqueaderoEspacioDisponible {
 	
-	Logger logger = LoggerFactory.getLogger(ControladorParqueaderoEspacioDisponible.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ControladorParqueaderoEspacioDisponible.class);
     
 	@Autowired
 	@Qualifier("servicioParqueaderoEspacioDisponible")
@@ -43,7 +43,7 @@ public class ControladorParqueaderoEspacioDisponible {
 			servicioParqueaderoEspacioDisponible.actualizar(modeloParqueaderoEspacioDisponible);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Espacio Actualizado exitosamente");
 		}catch (ExcepcionParametroInvalido e) {
-			logger.info(e.toString());
+			LOGGER.info(e.getMessage(), e);			
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 		
