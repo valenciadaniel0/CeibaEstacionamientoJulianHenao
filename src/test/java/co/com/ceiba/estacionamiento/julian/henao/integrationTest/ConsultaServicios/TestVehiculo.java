@@ -57,8 +57,9 @@ public class TestVehiculo {
 				String.class);
 		assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 		//assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, responseEntity.getStatusCode());
-	}
-
+	}	
+	
+	
 	@Test
 	@SqlGroup(@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:iniciandoBD.sql"))
 	public void obtenerVehiculos() {		

@@ -40,12 +40,6 @@ public class ServicioVehiculo {
 		iRepositorioVehiculo.save(convertidorVehiculo.convertirModeloAEntidad(modeloVehiculo));
 	}
 
-	public void actualizar(ModeloVehiculo modeloVehiculo) {		
-		if (iRepositorioVehiculo.findByPlaca(modeloVehiculo.getPlaca()) != null) {
-			iRepositorioVehiculo.save(convertidorVehiculo.convertirModeloAEntidad(modeloVehiculo));
-		}
-	}
-
 	public void generarSalidaVehiculo(int idRegistro, String placa) {
 		vigilante.registrarSalida(idRegistro, placa);
 	}
