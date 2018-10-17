@@ -1,5 +1,7 @@
 package co.com.ceiba.estacionamiento.julian.henao.controlador;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -20,7 +22,8 @@ import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioParqueaderoEsp
 @CrossOrigin(origins = "localhost:4200/")
 public class ControladorParqueaderoEspacioDisponible {
 	
-	
+	Logger logger = LoggerFactory.getLogger(ControladorParqueaderoEspacioDisponible.class);
+    
 	@Autowired
 	@Qualifier("servicioParqueaderoEspacioDisponible")
 	private ServicioParqueaderoEspacioDisponible servicioParqueaderoEspacioDisponible; 
@@ -40,6 +43,7 @@ public class ControladorParqueaderoEspacioDisponible {
 			servicioParqueaderoEspacioDisponible.actualizar(modeloParqueaderoEspacioDisponible);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Espacio Actualizado exitosamente");
 		}catch (ExcepcionParametroInvalido e) {
+			logger.info(e.toString());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 		
