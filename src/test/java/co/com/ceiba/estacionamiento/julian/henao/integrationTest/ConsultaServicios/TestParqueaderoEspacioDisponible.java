@@ -85,6 +85,24 @@ public class TestParqueaderoEspacioDisponible {
 		
 	}
 	
+	
+	@Test
+	public void actualizarEspacioInexistente() {
+		int id = 3;		
+		ModeloTipoVehiculo tipoVehiculo = new TipoVehiculoBuilder().conId(id).conDescripcion("Bicicleta").build();
+		ModeloParqueaderoEspacioDisponible espacio =  new ParqueaderoEspacioDisponibleBuilder().conId(id).conTipoVehiculo(tipoVehiculo).conEspacioActual(0).conLimiteEspacio(10).build();
+		
+		
+		HttpEntity<ModeloParqueaderoEspacioDisponible> actualizarEspacioInexistente = new HttpEntity<ModeloParqueaderoEspacioDisponible>(espacio);
+		
+		ResponseEntity<String> responseEntity  = restTemplate.exchange(
+				  url,
+				  HttpMethod.PUT,
+				  actualizarEspacioInexistente, String.class); 		
+		
+		assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+		assertEquals("El id del espacio Disponible no se encuentra registrado", responseEntity.getBody());
+	}
 
 	@Test
 	@SqlGroup(@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:iniciandoBD.sql"))

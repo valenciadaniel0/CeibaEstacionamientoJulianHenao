@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.com.ceiba.estacionamiento.julian.henao.excepcion.ExcepcionParametroInvalido;
 import co.com.ceiba.estacionamiento.julian.henao.modelo.ModeloParqueaderoEspacioDisponible;
 import co.com.ceiba.estacionamiento.julian.henao.servicio.ServicioParqueaderoEspacioDisponible;
 
@@ -35,8 +36,13 @@ public class ControladorParqueaderoEspacioDisponible {
      
 	@RequestMapping(value="", method=RequestMethod.PUT)
 	public ResponseEntity<String> actualizar(@RequestBody ModeloParqueaderoEspacioDisponible modeloParqueaderoEspacioDisponible){
-		servicioParqueaderoEspacioDisponible.actualizar(modeloParqueaderoEspacioDisponible);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Espacio Actualizado exitosamente");
+		try{
+			servicioParqueaderoEspacioDisponible.actualizar(modeloParqueaderoEspacioDisponible);
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Espacio Actualizado exitosamente");
+		}catch (ExcepcionParametroInvalido e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+		
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
