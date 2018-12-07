@@ -122,7 +122,7 @@ pipeline {
 						)
 					]
 				)
-				echo '------------>END BETA Deployment<------------'                
+				echo '########>END BETA Deployment<------------'                
 			}
 		}
 		
