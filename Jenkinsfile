@@ -18,6 +18,11 @@ pipeline {
     gradle 'Gradle4.5_Centos' //Preinstalada en la Configuración del Master  
   }
   
+  environment{      
+      necesitaRollBack = false;
+  }
+
+  
     //Aquí comienzan los “items” del Pipeline  
   stages{
     stage('Checkout') {
@@ -321,10 +326,8 @@ pipeline {
      post {        
   	 	failure {   
    
-    echo 'This will run only if failed' 
-    
-   	
-   
+    echo 'This will run only if failed'        	
+   necesitaRollBack = true;
     //      Send notifications about a Pipeline to an email
     mail (to: 'julian.henao@ceiba.com.co',
                subject: "FALLO EN PRODUCCION Failed Pipeline: ${currentBuild.fullDisplayName}",
@@ -333,6 +336,42 @@ pipeline {
   		}
     }
 		
+		
+		stage('RollBack Release'){
+		when(necesitaRollBack){		    		
+		    steps{
+		        cho '------------>ROLLBACK AMBIENTE PRODUCCION<------------'
+				sshPublisher(
+					publishers: [
+						sshPublisherDesc(
+							configName: 'FunctionalTest', 
+							transfers: [
+								sshTransfer(excludes: '', 
+								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service								
+								echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war CoachEPM/Java/versionamiento/adnjulianhenao.war					
+								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
+								execTimeout: 220000, 
+								flatten: false, 
+								makeEmptyDirs: false, 
+								noDefaultExcludes: false, 
+								patternSeparator: '', 
+								remoteDirectory: '', 
+								remoteDirectorySDF: false, 
+								removePrefix: '', 
+								sourceFiles: '')
+							], 
+							usePromotionTimestamp: false, 
+							useWorkspaceInPromotion: false, 
+							verbose: false
+						)
+					]
+				)
+				echo '-############>FIN ROLLBACK AMBIENTE PRODUCCION<------------'
+		    }
+}
+		    
+		}
+
 		
 		  stage('Publish RELEASE') {       
 	        steps{
@@ -374,33 +413,6 @@ post {
     echo 'This will run only if failed' 
     //      Send notifications about a Pipeline to an email
     
-    echo '------------>ROLLBACK AMBIENTE PRODUCCION<------------'
-				sshPublisher(
-					publishers: [
-						sshPublisherDesc(
-							configName: 'FunctionalTest', 
-							transfers: [
-								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service								
-								echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war CoachEPM/Java/versionamiento/adnjulianhenao.war					
-								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
-								execTimeout: 220000, 
-								flatten: false, 
-								makeEmptyDirs: false, 
-								noDefaultExcludes: false, 
-								patternSeparator: '', 
-								remoteDirectory: '', 
-								remoteDirectorySDF: false, 
-								removePrefix: '', 
-								sourceFiles: '')
-							], 
-							usePromotionTimestamp: false, 
-							useWorkspaceInPromotion: false, 
-							verbose: false
-						)
-					]
-				)
-				echo '-############>FIN ROLLBACK AMBIENTE PRODUCCION<------------'
     
     mail (to: 'julian.henao@ceiba.com.co',
                subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
