@@ -323,33 +323,7 @@ pipeline {
    
     echo 'This will run only if failed' 
     
-   	echo '------------>ROLLBACK AMBIENTE PRODUCCION<------------'
-				sshPublisher(
-					publishers: [
-						sshPublisherDesc(
-							configName: 'FunctionalTest', 
-							transfers: [
-								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service								
-								echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war CoachEPM/Java/versionamiento/adnjulianhenao.war					
-								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
-								execTimeout: 220000, 
-								flatten: false, 
-								makeEmptyDirs: false, 
-								noDefaultExcludes: false, 
-								patternSeparator: '', 
-								remoteDirectory: '', 
-								remoteDirectorySDF: false, 
-								removePrefix: '', 
-								sourceFiles: '')
-							], 
-							usePromotionTimestamp: false, 
-							useWorkspaceInPromotion: false, 
-							verbose: false
-						)
-					]
-				)
-				echo '-############>FIN ROLLBACK AMBIENTE PRODUCCION<------------'
+   	
    
     //      Send notifications about a Pipeline to an email
     mail (to: 'julian.henao@ceiba.com.co',
@@ -399,6 +373,35 @@ post {
    
     echo 'This will run only if failed' 
     //      Send notifications about a Pipeline to an email
+    
+    echo '------------>ROLLBACK AMBIENTE PRODUCCION<------------'
+				sshPublisher(
+					publishers: [
+						sshPublisherDesc(
+							configName: 'FunctionalTest', 
+							transfers: [
+								sshTransfer(excludes: '', 
+								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service								
+								echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war CoachEPM/Java/versionamiento/adnjulianhenao.war					
+								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
+								execTimeout: 220000, 
+								flatten: false, 
+								makeEmptyDirs: false, 
+								noDefaultExcludes: false, 
+								patternSeparator: '', 
+								remoteDirectory: '', 
+								remoteDirectorySDF: false, 
+								removePrefix: '', 
+								sourceFiles: '')
+							], 
+							usePromotionTimestamp: false, 
+							useWorkspaceInPromotion: false, 
+							verbose: false
+						)
+					]
+				)
+				echo '-############>FIN ROLLBACK AMBIENTE PRODUCCION<------------'
+    
     mail (to: 'julian.henao@ceiba.com.co',
                subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                body: "Something is wrong with ${env.BUILD_URL}")
