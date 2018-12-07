@@ -331,7 +331,7 @@ pipeline {
 							transfers: [
 								sshTransfer(excludes: '', 
 								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service								
-								echo Qwert08642 | sudo -S cp CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war CoachEPM/Java/versionamiento/adnjulianhenao.war					
+								echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war CoachEPM/Java/versionamiento/adnjulianhenao.war					
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
