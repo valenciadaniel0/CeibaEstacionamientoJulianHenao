@@ -349,7 +349,7 @@ pipeline {
 						)
 					]
 				)
-				echo '------------>FIN ROLLBACK AMBIENTE PRODUCCION<------------'
+				echo '-############>FIN ROLLBACK AMBIENTE PRODUCCION<------------'
    
     //      Send notifications about a Pipeline to an email
     mail (to: 'julian.henao@ceiba.com.co',
