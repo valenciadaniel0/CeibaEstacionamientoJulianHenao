@@ -76,7 +76,7 @@ stage('Static Code Analysis') {
     }    
   }  
   
-  stage('Publish') {       
+  stage('Publish ALFA') {       
 	        steps{
 		        echo '------------>BEGIN Publish [Artifactory]<------------'
 		        script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
@@ -84,9 +84,12 @@ stage('Static Code Analysis') {
 		            def uploadSpec = '''
 		            {"files": [{		          
 		                "pattern": "build/libs/*.war",
-		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/build/"
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/"
 		                }]}'''
-		
+		// servicioADNCeiba.service
+		// servicioADNCeibaBeta.service
+		// servicioADNCeibaRC.service
+		// servicioADNCeibaRelease.service
 	                def buildInfo = server.upload(uploadSpec)
 	                server.publishBuildInfo(buildInfo)
 	                
@@ -96,7 +99,7 @@ stage('Static Code Analysis') {
             }
         }    
         
-        stage("Deployment in testing environment") {
+        stage("Deployment BETA environment") {
 			steps {
 				echo '------------>BEGIN Deployment<------------'
 				sshPublisher(
@@ -105,17 +108,18 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/build/adnjulianhenao-2.0-SNAPSHOT.war
-								mv adnjulianhenao-2.0-SNAPSHOT.war pruebaDespliegue/parqueadero/JulianHenao_adnjulianhenao-2.0-SNAPSHOT.war ''', 
+								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/adnjulianhenao.war
+								mv adnjulianhenao.war coachEPM/Java/versionamiento/beta/adnjulianhenao.war 
+								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaBeta.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
 								makeEmptyDirs: false, 
 								noDefaultExcludes: false, 
 								patternSeparator: '', 
-								remoteDirectory: './pruebaDespliegue/parqueadero', 
+								remoteDirectory: './coachEPM/Java/versionamiento/beta', 
 								remoteDirectorySDF: false, 
 								removePrefix: '', 
-								sourceFiles: 'adnjulianhenao-2.0-SNAPSHOT.war')
+								sourceFiles: 'adnjulianhenao.war')
 							], 
 							usePromotionTimestamp: false, 
 							useWorkspaceInPromotion: false, 
@@ -126,6 +130,209 @@ stage('Static Code Analysis') {
 				echo '------------>END Deployment<------------'                
 			}
 		}
+		
+		
+	stage('Functional Beta Tests') {      
+      steps {
+        echo "------------>Integration Tests<------------"  
+        sh 'gradle --b ./build.gradle fBetaTest'
+     //    junit '**/build/test-results/iTest/*.xml' //aggregate test results - JUnit
+	
+      }    
+    }
+		
+		
+		  stage('Publish Beta') {       
+	        steps{
+		        echo '------------>BEGIN Publish [Artifactory]<------------'
+		        script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
+		            def server = Artifactory.server 'ar7if4c70ry@c318a'
+		            def uploadSpec = '''
+		            {"files": [{		          
+		                "pattern": "build/libs/*.war",
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/BETA/"
+		                }]}'''
+		// servicioADNCeiba.service
+		// servicioADNCeibaBeta.service
+		// servicioADNCeibaRC.service
+		// servicioADNCeibaRelease.service
+	                def buildInfo = server.upload(uploadSpec)
+	                server.publishBuildInfo(buildInfo)
+	                
+	                
+				echo '------------>END Publish [Artifactory]<------------'
+		       }
+            }
+        }  
+	
+	///// Release Candidate
+	stage("Deployment RCandidate environment") {
+			steps {
+				echo '------------>BEGIN Deployment<------------'
+				sshPublisher(
+					publishers: [
+						sshPublisherDesc(
+							configName: 'FunctionalTest', 
+							transfers: [
+								sshTransfer(excludes: '', 
+								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/adnjulianhenao.war
+								mv adnjulianhenao.war coachEPM/Java/versionamiento/rc/adnjulianhenao.war 
+								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service ''', 
+								execTimeout: 220000, 
+								flatten: false, 
+								makeEmptyDirs: false, 
+								noDefaultExcludes: false, 
+								patternSeparator: '', 
+								remoteDirectory: './coachEPM/Java/versionamiento/rc', 
+								remoteDirectorySDF: false, 
+								removePrefix: '', 
+								sourceFiles: 'adnjulianhenao.war')
+							], 
+							usePromotionTimestamp: false, 
+							useWorkspaceInPromotion: false, 
+							verbose: false
+						)
+					]
+				)
+				echo '------------>END Deployment<------------'                
+			}
+		}
+		
+		
+	stage('Functional RC Tests') {      
+      steps {
+        echo "------------>Integration Tests<------------"  
+        sh 'gradle --b ./build.gradle fRCTest'
+     //    junit '**/build/test-results/iTest/*.xml' //aggregate test results - JUnit
+	
+      }    
+    }
+		
+		
+		  stage('Publish RCandidate') {       
+	        steps{
+		        echo '------------>BEGIN Publish [Artifactory]<------------'
+		        script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
+		            def server = Artifactory.server 'ar7if4c70ry@c318a'
+		            def uploadSpec = '''
+		            {"files": [{		          
+		                "pattern": "build/libs/*.war",
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/"
+		                }]}'''
+		            def buildInfo = server.upload(uploadSpec)
+	                server.publishBuildInfo(buildInfo)
+	                
+	                
+				echo '------------>END Publish [Artifactory]<------------'
+		       }
+            }
+        }  
+			
+    
+    /// RELEASE
+    ///// Release Candidate
+	stage("Deployment Release environment") {
+			steps {
+				echo '------------>BEGIN Deployment<------------'
+				sshPublisher(
+					publishers: [
+						sshPublisherDesc(
+							configName: 'FunctionalTest', 
+							transfers: [
+								sshTransfer(excludes: '', 
+								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/adnjulianhenao.war
+								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
+								cp coachEPM/Java/versionamiento/adnjulianhenao.war coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
+								mv adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war 
+								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
+								execTimeout: 220000, 
+								flatten: false, 
+								makeEmptyDirs: false, 
+								noDefaultExcludes: false, 
+								patternSeparator: '', 
+								remoteDirectory: './coachEPM/Java/versionamiento/', 
+								remoteDirectorySDF: false, 
+								removePrefix: '', 
+								sourceFiles: 'adnjulianhenao.war')
+							], 
+							usePromotionTimestamp: false, 
+							useWorkspaceInPromotion: false, 
+							verbose: false
+						)
+					]
+				)
+				echo '------------>END Deployment<------------'                
+			}
+		}
+		
+		
+	stage('Functional RELEASE Tests') {      
+      steps {
+        echo "------------>Integration Tests<------------"  
+        sh 'gradle --b ./build.gradle fReleaseTest'
+     //    junit '**/build/test-results/iTest/*.xml' //aggregate test results - JUnit
+      }    
+     post {        
+  	 	failure {   
+   
+    echo 'This will run only if failed' 
+    
+   	echo '------------>ROLLBACK AMBIENTE PRODUCCION<------------'
+				sshPublisher(
+					publishers: [
+						sshPublisherDesc(
+							configName: 'FunctionalTest', 
+							transfers: [
+								sshTransfer(excludes: '', 
+								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
+								cp coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war					
+								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
+								execTimeout: 220000, 
+								flatten: false, 
+								makeEmptyDirs: false, 
+								noDefaultExcludes: false, 
+								patternSeparator: '', 
+								remoteDirectory: '', 
+								remoteDirectorySDF: false, 
+								removePrefix: '', 
+								sourceFiles: '')
+							], 
+							usePromotionTimestamp: false, 
+							useWorkspaceInPromotion: false, 
+							verbose: false
+						)
+					]
+				)
+				echo '------------>FIN ROLLBACK AMBIENTE PRODUCCION<------------'
+   
+    //      Send notifications about a Pipeline to an email
+    mail (to: 'julian.henao@ceiba.com.co',
+               subject: "FALLO EN PRODUCCION Failed Pipeline: ${currentBuild.fullDisplayName}",
+               body: "Something is wrong with ${env.BUILD_URL}")
+  			} 
+  		}
+    }
+		
+		
+		  stage('Publish RELEASE') {       
+	        steps{
+		        echo '------------>BEGIN Publish [Artifactory]<------------'
+		        script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
+		            def server = Artifactory.server 'ar7if4c70ry@c318a'
+		            def uploadSpec = '''
+		            {"files": [{		          
+		                "pattern": "build/libs/*.war",
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release/"
+		                }]}'''
+	                def buildInfo = server.upload(uploadSpec)
+	                server.publishBuildInfo(buildInfo)	             
+	                
+				echo '------------>END Publish [Artifactory]<------------'
+		       }
+            }
+        }  
+	
+    
         
 }
 	

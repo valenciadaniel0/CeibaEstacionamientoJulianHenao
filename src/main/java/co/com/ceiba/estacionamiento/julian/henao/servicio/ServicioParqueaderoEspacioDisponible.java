@@ -31,7 +31,8 @@ public class ServicioParqueaderoEspacioDisponible {
 		if (irepositorioParquederoEspacioDisponible.findById(modeloParqueaderoEspacioDisponible.getId()) != null) {
 			irepositorioParquederoEspacioDisponible.save(
 					convertidorParquederoEspacioDisponible.convertirModeloAEntidad(modeloParqueaderoEspacioDisponible));			
-		}else{
+		}
+		else{
 			throw new ExcepcionParametroInvalido("El id del espacio Disponible no se encuentra registrado");
 		}		
 	}

@@ -19,9 +19,6 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
 apply plugin: 'jacoco'
 
-
-version = '2.0-SNAPSHOT'
-
 repositories {
 	mavenCentral()
 	maven { url "https://repo.spring.io/snapshot" }
@@ -56,13 +53,19 @@ dependencies {
 }
 
 test {
-    exclude  '**/integrationTest/**'   
-    exclude  '**/functionalTest/**' 
+    exclude  '**/integrationTest/**'
+    exclude  '**/functionalTest/**'       
+    exclude  '**/functionalTestBeta/**'
+    exclude  '**/functionalTestReleaseCandidate/**'
+    exclude  '**/functionalTestRelease/**' 
 }
 
 task iTest(group: 'verification', type: Test, dependsOn: build) {
     exclude '**/unitTest/**'
-    exclude  '**/functionalTest/**' 
+    exclude  '**/functionalTest/**'
+    exclude  '**/functionalTestBeta/**'
+    exclude  '**/functionalTestReleaseCandidate/**'
+    exclude  '**/functionalTestRelease/**'  
     jacoco{
 		destinationFile = file('build/jacoco/iTest.exec')
 	}
@@ -70,14 +73,43 @@ task iTest(group: 'verification', type: Test, dependsOn: build) {
 	reports.html.destination = file("build/reports/tests/iTest") 
 }
 
-task fTest(group: 'verification', type: Test, dependsOn: build) {
+task fBetaTest(group: 'verification', type: Test, dependsOn: build) {
      exclude '**/unitTest/**'
-     exclude '**/integrationTest/**'  
+     exclude '**/integrationTest/**'
+     exclude  '**/functionalTest/**'
+     exclude  '**/functionalTestReleaseCandidate/**'
+    exclude  '**/functionalTestRelease/**'   
     jacoco{
-		destinationFile = file('build/jacoco/fTest.exec')
+		destinationFile = file('build/jacoco/fBetaTest.exec')
 	}
-	reports.junitXml.destination = file("build/test-results/fTest")
-	reports.html.destination = file("build/reports/tests/fTest") 
+	reports.junitXml.destination = file("build/test-results/fBetaTest")
+	reports.html.destination = file("build/reports/tests/fBetaTest") 
+}
+
+task fRCTest(group: 'verification', type: Test, dependsOn: build) {
+     exclude '**/unitTest/**'
+     exclude '**/integrationTest/**'
+     exclude  '**/functionalTest/**'
+     exclude  '**/functionalTestBeta/**'
+    exclude  '**/functionalTestRelease/**'   
+    jacoco{
+		destinationFile = file('build/jacoco/fRCTest.exec')
+	}
+	reports.junitXml.destination = file("build/test-results/fRCTest")
+	reports.html.destination = file("build/reports/tests/fRCTest") 
+}
+
+task fReleaseTest(group: 'verification', type: Test, dependsOn: build) {
+     exclude '**/unitTest/**'
+     exclude '**/integrationTest/**'
+     exclude  '**/functionalTest/**'
+     exclude  '**/functionalTestReleaseCandidate/**'
+    exclude  '**/functionalTestBeta/**'   
+    jacoco{
+		destinationFile = file('build/jacoco/fReleaseTest.exec')
+	}
+	reports.junitXml.destination = file("build/test-results/fReleaseTest")
+	reports.html.destination = file("build/reports/tests/fReleaseTest") 
 }
 
 task jacoco(group: 'verification', dependsOn: jacocoTestReport) {
