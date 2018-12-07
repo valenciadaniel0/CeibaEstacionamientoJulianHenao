@@ -134,6 +134,36 @@ stage('Static Code Analysis') {
      //    junit '**/build/test-results/iTest/*.xml' //aggregate test results - JUnit
 	
       }    
+      
+      post{
+          always{
+              
+              sshPublisher(
+					publishers: [
+						sshPublisherDesc(
+							configName: 'FunctionalTest', 
+							transfers: [
+								sshTransfer(excludes: '', 
+								execCommand: 'echo Qwert08642 | sudo -S systemctl stop servicioADNCeibaBeta.service ', 
+								execTimeout: 220000, 
+								flatten: false, 
+								makeEmptyDirs: false, 
+								noDefaultExcludes: false, 
+								patternSeparator: '', 
+								remoteDirectory: '', 
+								remoteDirectorySDF: false, 
+								removePrefix: '', 
+								sourceFiles: '')
+							], 
+							usePromotionTimestamp: false, 
+							useWorkspaceInPromotion: false, 
+							verbose: false
+						)
+					]
+				)
+          }        
+      }
+
     }
 		
 		
@@ -166,9 +196,10 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S rm adnjulianhenao.war 
+								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeibaBeta.service						
+								echo Qwert08642 | sudo -S rm adnjulianhenao.war 
 								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/adnjulianhenao.war
-								mv adnjulianhenao.war coachEPM/Java/versionamiento/rc/adnjulianhenao.war 
+								echo Qwert08642 | sudo -S mv adnjulianhenao.war coachEPM/Java/versionamiento/rc/adnjulianhenao.war 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
@@ -197,6 +228,34 @@ stage('Static Code Analysis') {
         sh 'gradle --b ./build.gradle fRCTest'
      //    junit '**/build/test-results/iTest/*.xml' //aggregate test results - JUnit
 	
+      }
+        post{
+          always{
+              
+              sshPublisher(
+					publishers: [
+						sshPublisherDesc(
+							configName: 'FunctionalTest', 
+							transfers: [
+								sshTransfer(excludes: '', 
+								execCommand: 'echo Qwert08642 | sudo -S systemctl stop servicioADNCeibaRC.service ', 
+								execTimeout: 220000, 
+								flatten: false, 
+								makeEmptyDirs: false, 
+								noDefaultExcludes: false, 
+								patternSeparator: '', 
+								remoteDirectory: '', 
+								remoteDirectorySDF: false, 
+								removePrefix: '', 
+								sourceFiles: 'adnjulianhenao.war')
+							], 
+							usePromotionTimestamp: false, 
+							useWorkspaceInPromotion: false, 
+							verbose: false
+						)
+					]
+				)
+          }        
       }    
     }
 		
@@ -234,7 +293,7 @@ stage('Static Code Analysis') {
 								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
 								echo Qwert08642 | sudo -S mv coachEPM/Java/versionamiento/adnjulianhenao.war coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
 								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/adnjulianhenao.war
-								mv adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war 
+								echo Qwert08642 | sudo -S mv adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
@@ -277,7 +336,7 @@ stage('Static Code Analysis') {
 								sshTransfer(excludes: '', 
 								execCommand: ''' echo Qwert08642 | sudo -S rm adnjulianhenao.war
 								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
-								cp coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war					
+								echo Qwert08642 | sudo -S cp coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war					
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
