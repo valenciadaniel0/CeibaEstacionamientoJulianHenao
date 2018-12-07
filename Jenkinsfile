@@ -77,7 +77,7 @@ pipeline {
   
   stage('Publish ALFA') {       
 	        steps{
-		        echo '------------>BEGIN Publish [Artifactory]<------------'
+		        echo '------------>BEGIN ALFA Publish [Artifactory]<------------'
 		        script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
 		            def server = Artifactory.server 'ar7if4c70ry@c318a'
 		            def uploadSpec = '''
@@ -87,14 +87,14 @@ pipeline {
 		                }]}'''
 		            def buildInfo = server.upload(uploadSpec)
 	                server.publishBuildInfo(buildInfo)	             	                
-				echo '------------>END Publish [Artifactory]<------------'
+				echo '------------>END ALF Publish [Artifactory]<------------'
 		       }
             }
         }    
         
         stage("Deployment BETA environment") {
 			steps {
-				echo '------------>BEGIN Deployment<------------'
+				echo '------------>BEGIN BETA Deployment<------------'
 				sshPublisher(
 					publishers: [
 						sshPublisherDesc(
@@ -123,7 +123,7 @@ pipeline {
 						)
 					]
 				)
-				echo '------------>END Deployment<------------'                
+				echo '------------>END BETA Deployment<------------'                
 			}
 		}
 		
@@ -170,7 +170,7 @@ pipeline {
 		
 		  stage('Publish Beta') {       
 	        steps{
-		        echo '------------>BEGIN Publish [Artifactory]<------------'
+		        echo '------------>BEGIN BETA Publish [Artifactory]<------------'
 		        script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
 		            def server = Artifactory.server 'ar7if4c70ry@c318a'
 		            def uploadSpec = '''
@@ -182,7 +182,7 @@ pipeline {
 	                server.publishBuildInfo(buildInfo)
 	                
 	                
-				echo '------------>END Publish [Artifactory]<------------'
+				echo '------------>END BETA Publish [Artifactory]<------------'
 		       }
             }
         }  
@@ -190,16 +190,14 @@ pipeline {
 	///// Release Candidate
 	stage("Deployment RCandidate environment") {
 			steps {
-				echo '------------>BEGIN Deployment<------------'
+				echo '------------>BEGIN RCandidate Deployment<------------'
 				sshPublisher(
 					publishers: [
 						sshPublisherDesc(
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: '''  pwd
-								ls 				
-								echo Qwert08642 | sudo -S systemctl stop servicioADNCeibaBeta.service						
+								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeibaBeta.service						
 								echo Qwert08642 | sudo -S rm adnjulianhenao.war 
 								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/adnjulianhenao.war
 								echo Qwert08642 | sudo -S mv adnjulianhenao.war coachEPM/Java/versionamiento/rc/adnjulianhenao.war 
@@ -241,9 +239,7 @@ pipeline {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: '''  pwd
-								ls 				
-								echo Qwert08642 | sudo -S systemctl stop servicioADNCeibaRC.service ''', 
+								execCommand: '	echo Qwert08642 | sudo -S systemctl stop servicioADNCeibaRC.service ', 
 								execTimeout: 220000, 
 								flatten: false, 
 								makeEmptyDirs: false, 
@@ -252,7 +248,7 @@ pipeline {
 								remoteDirectory: '', 
 								remoteDirectorySDF: false, 
 								removePrefix: '', 
-								sourceFiles: 'adnjulianhenao.war')
+								sourceFiles: '')
 							], 
 							usePromotionTimestamp: false, 
 							useWorkspaceInPromotion: false, 
@@ -267,7 +263,7 @@ pipeline {
 		
 		  stage('Publish RCandidate') {       
 	        steps{
-		        echo '------------>BEGIN Publish [Artifactory]<------------'
+		        echo '------------>BEGIN  R CANDIDATE Publish [Artifactory]<------------'
 		        script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
 		            def server = Artifactory.server 'ar7if4c70ry@c318a'
 		            def uploadSpec = '''
@@ -287,16 +283,14 @@ pipeline {
     ///// Release Candidate
 	stage("Deployment Release environment") {
 			steps {
-				echo '------------>BEGIN Deployment<------------'
+				echo '------------>BEGIN RELEASE Deployment<------------'
 				sshPublisher(
 					publishers: [
 						sshPublisherDesc(
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' pwd
-								ls 				
-								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
+								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
 								echo Qwert08642 | sudo -S mv coachEPM/Java/versionamiento/adnjulianhenao.war coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
 								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/adnjulianhenao.war
 								echo Qwert08642 | sudo -S mv adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war 
@@ -306,7 +300,7 @@ pipeline {
 								makeEmptyDirs: false, 
 								noDefaultExcludes: false, 
 								patternSeparator: '', 
-								remoteDirectory: './coachEPM/Java/versionamiento/', 
+								remoteDirectory: './coachEPM/Java/versionamiento', 
 								remoteDirectorySDF: false, 
 								removePrefix: '', 
 								sourceFiles: 'adnjulianhenao.war')
