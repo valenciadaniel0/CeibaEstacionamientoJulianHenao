@@ -108,7 +108,8 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/adnjulianhenao.war
+								execCommand: '''echo Qwert08642 | sudo -S adnjulianhenao.war 
+								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/adnjulianhenao.war
 								mv adnjulianhenao.war coachEPM/Java/versionamiento/beta/adnjulianhenao.war 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaBeta.service ''', 
 								execTimeout: 220000, 
@@ -175,7 +176,8 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/adnjulianhenao.war
+								execCommand: ''' echo Qwert08642 | sudo -S adnjulianhenao.war 
+								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/adnjulianhenao.war
 								mv adnjulianhenao.war coachEPM/Java/versionamiento/rc/adnjulianhenao.war 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service ''', 
 								execTimeout: 220000, 
@@ -240,7 +242,8 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/adnjulianhenao.war
+								execCommand: ''' echo Qwert08642 | sudo -S adnjulianhenao.war
+								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/adnjulianhenao.war
 								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
 								cp coachEPM/Java/versionamiento/adnjulianhenao.war coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
 								mv adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war 
@@ -284,7 +287,8 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
+								execCommand: ''' echo Qwert08642 | sudo -S adnjulianhenao.war
+								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
 								cp coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war					
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
 								execTimeout: 220000, 
