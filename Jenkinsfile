@@ -37,24 +37,23 @@ pipeline {
             }
         }    
     
-    stage('Unit Tests') {      
-      steps{        
-        echo "------------>Unit Tests<------------"      
-        sh 'gradle --b ./build.gradle test'
-   //     junit '**/build/test-results/test/*.xml' //aggregate test results - JUnit
-	
-      }    
-    }
+   // stage('Unit Tests') {      
+   //   steps{        
+   //     echo "------------>Unit Tests<------------"      
+   //     sh 'gradle --b ./build.gradle test'
+   //     junit '**/build/test-results/test/*.xml' //aggregate test results - JUnit	
+   //   }    
+   // }
     
-    stage('Integration Tests') {      
-      steps {
-        echo "------------>Integration Tests<------------"  
-        sh 'gradle --b ./build.gradle iTest'
+   // stage('Integration Tests') {      
+  //    steps {
+   //     echo "------------>Integration Tests<------------"  
+    //    sh 'gradle --b ./build.gradle iTest'
      //    junit '**/build/test-results/iTest/*.xml' //aggregate test results - JUnit
-	
-      }    
-    }
-       
+	//
+    //  }    
+   // }
+      
 
 
 stage('Static Code Analysis') {
