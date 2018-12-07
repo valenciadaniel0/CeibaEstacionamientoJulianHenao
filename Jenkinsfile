@@ -340,7 +340,7 @@ pipeline {
 		stage('RollBack Release'){
 		when(necesitaRollBack){		    		
 		    steps{
-		        cho '------------>ROLLBACK AMBIENTE PRODUCCION<------------'
+		        echo '###########>ROLLBACK AMBIENTE PRODUCCION<############'
 				sshPublisher(
 					publishers: [
 						sshPublisherDesc(
