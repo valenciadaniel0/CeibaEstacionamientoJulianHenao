@@ -105,7 +105,7 @@ pipeline {
 								ls 				
 								echo Qwert08642 | sudo -S rm adnjulianhenao.war 
 								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/adnjulianhenao.war
-								echo Qwert08642 | sudo -S mv adnjulianhenao.war coachEPM/Java/versionamiento/beta/adnjulianhenao.war 
+								echo Qwert08642 | sudo -S cp adnjulianhenao.war coachEPM/Java/versionamiento/beta/adnjulianhenao.war 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaBeta.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
@@ -197,10 +197,10 @@ pipeline {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeibaBeta.service						
+								execCommand: '''echo Qwert08642 | sudo -S systemctl stop servicioADNCeibaBeta.service						
 								echo Qwert08642 | sudo -S rm adnjulianhenao.war 
 								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/adnjulianhenao.war
-								echo Qwert08642 | sudo -S mv adnjulianhenao.war coachEPM/Java/versionamiento/rc/adnjulianhenao.war 
+								echo Qwert08642 | sudo -S cp adnjulianhenao.war coachEPM/Java/versionamiento/rc/adnjulianhenao.war 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
@@ -290,10 +290,11 @@ pipeline {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
-								echo Qwert08642 | sudo -S mv coachEPM/Java/versionamiento/adnjulianhenao.war coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
+								execCommand: ''' echo Qwert08642 | sudo -S rm adnjulianhenao.war
+								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
+								echo Qwert08642 | sudo -S cp coachEPM/Java/versionamiento/adnjulianhenao.war coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
 								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/adnjulianhenao.war
-								echo Qwert08642 | sudo -S mv adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war 
+								echo Qwert08642 | sudo -S cp adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
@@ -335,7 +336,7 @@ pipeline {
 							transfers: [
 								sshTransfer(excludes: '', 
 								execCommand: ''' echo Qwert08642 | sudo -S rm adnjulianhenao.war
-								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
+								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service								
 								echo Qwert08642 | sudo -S cp coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war					
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
 								execTimeout: 220000, 
