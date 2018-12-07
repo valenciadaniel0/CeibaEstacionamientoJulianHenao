@@ -86,14 +86,8 @@ stage('Static Code Analysis') {
 		                "pattern": "build/libs/*.war",
 		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/"
 		                }]}'''
-		// servicioADNCeiba.service
-		// servicioADNCeibaBeta.service
-		// servicioADNCeibaRC.service
-		// servicioADNCeibaRelease.service
-	                def buildInfo = server.upload(uploadSpec)
-	                server.publishBuildInfo(buildInfo)
-	                
-	                
+		            def buildInfo = server.upload(uploadSpec)
+	                server.publishBuildInfo(buildInfo)	             	                
 				echo '------------>END Publish [Artifactory]<------------'
 		       }
             }
@@ -108,7 +102,7 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: '''echo Qwert08642 | sudo -S adnjulianhenao.war 
+								execCommand: '''echo Qwert08642 | sudo -S rm adnjulianhenao.war 
 								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/adnjulianhenao.war
 								mv adnjulianhenao.war coachEPM/Java/versionamiento/beta/adnjulianhenao.war 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaBeta.service ''', 
@@ -153,10 +147,6 @@ stage('Static Code Analysis') {
 		                "pattern": "build/libs/*.war",
 		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/BETA/"
 		                }]}'''
-		// servicioADNCeiba.service
-		// servicioADNCeibaBeta.service
-		// servicioADNCeibaRC.service
-		// servicioADNCeibaRelease.service
 	                def buildInfo = server.upload(uploadSpec)
 	                server.publishBuildInfo(buildInfo)
 	                
@@ -176,7 +166,7 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S adnjulianhenao.war 
+								execCommand: ''' echo Qwert08642 | sudo -S rm adnjulianhenao.war 
 								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/adnjulianhenao.war
 								mv adnjulianhenao.war coachEPM/Java/versionamiento/rc/adnjulianhenao.war 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service ''', 
@@ -222,9 +212,7 @@ stage('Static Code Analysis') {
 		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/"
 		                }]}'''
 		            def buildInfo = server.upload(uploadSpec)
-	                server.publishBuildInfo(buildInfo)
-	                
-	                
+	                server.publishBuildInfo(buildInfo)	                	         
 				echo '------------>END Publish [Artifactory]<------------'
 		       }
             }
@@ -242,10 +230,10 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S adnjulianhenao.war
-								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/adnjulianhenao.war
+								execCommand: ''' echo Qwert08642 | sudo -S rm adnjulianhenao.war								
 								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
-								cp coachEPM/Java/versionamiento/adnjulianhenao.war coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
+								echo Qwert08642 | sudo -S mv coachEPM/Java/versionamiento/adnjulianhenao.war coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
+								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/adnjulianhenao.war
 								mv adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
 								execTimeout: 220000, 
@@ -287,7 +275,7 @@ stage('Static Code Analysis') {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S adnjulianhenao.war
+								execCommand: ''' echo Qwert08642 | sudo -S rm adnjulianhenao.war
 								echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
 								cp coachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war coachEPM/Java/versionamiento/adnjulianhenao.war					
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
