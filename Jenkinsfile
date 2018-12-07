@@ -390,9 +390,9 @@ pipeline {
 post {    
   always {      
     echo 'This will always run'  
-     junit '**/build/test-results/test/*.xml'
-     junit '**/build/test-results/iTest/*.xml'
-     jacoco classPattern:'**/build/classes/java', sourcePattern:'**/src/main/java', execPattern:'**/build/jacoco/*.exec'
+     //junit '**/build/test-results/test/*.xml'
+     //junit '**/build/test-results/iTest/*.xml'
+     //jacoco classPattern:'**/build/classes/java', sourcePattern:'**/src/main/java', execPattern:'**/build/jacoco/*.exec'
      
   }    
   success {      
