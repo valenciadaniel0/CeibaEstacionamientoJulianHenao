@@ -317,28 +317,14 @@ pipeline {
 		
 		
 	stage('Functional RELEASE Tests') {      
-      steps {
+     try{
+          steps {
         echo "------------>FUNCTIONAL RELEASE Tests<------------"  
         sh 'gradle --b ./build.gradle fReleaseTest'
      
       }    
-     post {        
-  	 	failure {   
-    		echo 'This will run only if failed'    
-    		    	
-    		//env.necesitaRollBack = 'true'	    
- 		
-    //      Send notifications about a Pipeline to an email
-   			mail (to: 'julian.henao@ceiba.com.co',
-               subject: "FALLO EN PRODUCCION Failed Pipeline: ${currentBuild.fullDisplayName}",
-               body: "Something is wrong with ${env.BUILD_URL}")
-  			} 
-  		}
-    }
-		
-		
-	stage('RollBack Release'){
-	steps{
+     }catch(Exception e){
+         steps{
 		when(necesitaRollBack == 'true'){
 		    				    
 		        echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'
@@ -369,9 +355,12 @@ pipeline {
 				)
 				echo '-############>FIN WHENN ROLLBACK AMBIENTE PRODUCCION<------------'
 		    }
-		    }		  
-		}
-
+		    }		
+     }
+     }
+		
+		
+	
 		
 		  stage('Publish RELEASE') {       
 	        steps{

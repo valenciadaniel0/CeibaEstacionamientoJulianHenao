@@ -100,8 +100,13 @@ task fRCTest(group: 'verification', type: Test, dependsOn: build) {
 }
 
 
-def buildNumber = System.getenv("BUILD_NUMBER")
-def jenkinsBuild = buildNumber != null ? buildNumber : "0"
+//def fname = new File( 'version.properties' )
+//Properties props = new Properties()
+//props.load( new FileInputStream( fname ) )
+//def v = props.get( 'buildVersion' )
+
+def buildNumber = System.getenv("buildNumber")
+version = buildNumber != null ? buildNumber : "0"
 
 task fReleaseTest(group: 'verification', type: Test, dependsOn: build) {
      exclude '**/unitTest/**'
