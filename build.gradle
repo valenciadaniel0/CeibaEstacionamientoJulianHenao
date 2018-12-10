@@ -105,8 +105,8 @@ task fRCTest(group: 'verification', type: Test, dependsOn: build) {
 //props.load( new FileInputStream( fname ) )
 //def v = props.get( 'buildVersion' )
 
-//def buildNumber = System.getenv("buildNumber")
-//version = buildNumber != null ? buildNumber : "0"
+def buildNumber = System.getenv("buildNumber")
+def version = buildNumber != null ? buildNumber : "0"
 
 task fReleaseTest(group: 'verification', type: Test, dependsOn: build) {
      exclude '**/unitTest/**'
