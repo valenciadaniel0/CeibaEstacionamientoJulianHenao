@@ -321,14 +321,49 @@ pipeline {
 		
 		
 	stage('Functional_RELEASE_Tests') {      
+        
+         try {
                steps {
         echo "------------>FUNCTIONAL RELEASE Tests<------------"  
         sh 'gradle --b ./build.gradle fReleaseTest'
+     }
      
-      }    
+        }
+        catch (exc) {
+            steps{                          
+                    echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'
+				sshPublisher(
+					publishers: [
+						sshPublisherDesc(
+							configName: 'FunctionalTest', 
+							transfers: [
+								sshTransfer(excludes: '', 
+								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service								
+								echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war CoachEPM/Java/versionamiento/adnjulianhenao.war					
+								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
+								execTimeout: 220000, 
+								flatten: false, 
+								makeEmptyDirs: false, 
+								noDefaultExcludes: false, 
+								patternSeparator: '', 
+								remoteDirectory: '', 
+								remoteDirectorySDF: false, 
+								removePrefix: '', 
+								sourceFiles: '')
+							], 
+							usePromotionTimestamp: false, 
+							useWorkspaceInPromotion: false, 
+							verbose: false
+						)
+					]
+				)
+				echo '-############>FIN WHENN ROLLBACK AMBIENTE PRODUCCION<------------'
+		    }
+		    }
+             
    }  
 
-	stage('RollBack',wait: true){
+	stage('RollBack'){
 	 b =  build(job: "Functional_RELEASE_Tests", propagate: false).result
          echo b
       steps{
@@ -365,7 +400,7 @@ pipeline {
 		    }		     
      }
 		
-	stage('Publish RELEASE',wait: true){
+	stage('Publish RELEASE'){
 			   b =  build(job: "Functional_RELEASE_Tests", propagate: false).result
          echo b
 		
