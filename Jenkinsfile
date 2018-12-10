@@ -14,6 +14,17 @@ pipeline {
     	gradle 'Gradle4.5_Centos' //Preinstalada en la Configuracion del Master  
 	}  
 
+	 parameters {
+            choice(
+                name: 'Nodes',
+                choices:"Linux\nMac",
+                description: "Choose Node!")
+            string(
+                name: 'nombreProyecto',
+                defaultValue:"adnjulianhenao_${BUILD_TIMESTAMP}_${BUILD_DISPLAY_NAME}.war",
+                description: "Nombre del proyecto Versionado")
+    }
+
 	environment{      
     	nombreProyecto =  "adnjulianhenao_${BUILD_TIMESTAMP}_${BUILD_DISPLAY_NAME}.war"
   	}
@@ -22,26 +33,29 @@ pipeline {
     	
     	stage('Checkout') {
       		steps{      
-        		echo "------------>Checkout<------------"
+        		echo "####################->Init Checkout<-####################"
 	      		checkout([$class: 'GitSCM', branches: [[name: '*/master']],
 					doGenerateSubmoduleConfigurations: false, extensions: [], gitTool:
 					'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId:'GitHub_juliancho923',url:'https://github.com/JULIANCHO923/Ceiba-Estacionamiento-julian.henao-']]])
+				echo "####################->End Checkout<-####################"					
 			}
 		}        
     
     	stage('Compile'){
         	steps{
-            	echo "------------>Compile<------------"
+            	echo "####################->Init Compile<-####################"
                 sh 'gradle clean'
-				sh 'gradle --b ./build.gradle compileJava'		  
+				sh 'gradle --b ./build.gradle compileJava'
+				echo "####################->End Compile<-####################"		  
             }
         }    
     
     	stage('Unit Tests') {      
       		steps{        
-        		echo "------------>Unit Tests<------------"      
+        		echo "####################->Init Unit Tests<-####################"      
         		sh 'gradle --b ./build.gradle test'
-        		junit '**/build/test-results/test/*.xml' //aggregate test results - JUnit	
+        		junit '**/build/test-results/test/*.xml' //aggregate test results - JUnit
+        		echo "####################->End Unit Tests<-####################"	
       		}    
     	}
     
@@ -77,7 +91,7 @@ pipeline {
 		            def uploadSpec = '''
 		            {"files": [{		          
 		                "pattern": "build/libs/*.war",
-		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/${env.nombreProyecto}"
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/${nombreProyecto}"
 		            }]}'''
 		            def buildInfo = server.upload(uploadSpec)
 	                server.publishBuildInfo(buildInfo)	             	                
@@ -96,10 +110,10 @@ pipeline {
 							transfers: [
 								sshTransfer(excludes: '', 
 								execCommand: '''echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service 
-								echo Qwert08642 | sudo -S rm ${env.nombreProyecto}
-								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/${env.nombreProyecto}
-								echo Qwert08642 | sudo -S cp ${env.nombreProyecto} CoachEPM/Java/versionamiento/beta/adnjulianhenao.war 
-								echo Qwert08642 | sudo -S mv ${env.nombreProyecto} CoachEPM/Java/versionamiento/beta/${env.nombreProyecto}
+								echo Qwert08642 | sudo -S rm ${nombreProyecto}
+								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/${nombreProyecto}
+								echo Qwert08642 | sudo -S cp ${nombreProyecto} CoachEPM/Java/versionamiento/beta/adnjulianhenao.war 
+								echo Qwert08642 | sudo -S mv ${nombreProyecto} CoachEPM/Java/versionamiento/beta/${nombreProyecto}
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaBeta.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
@@ -165,7 +179,7 @@ pipeline {
 		            def uploadSpec = '''
 		            {"files": [{		          
 		                "pattern": "build/libs/*.war",
-		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/BETA/${env.nombreProyecto}"
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/BETA/${nombreProyecto}"
 		                }]}'''
 	                def buildInfo = server.upload(uploadSpec)
 	                server.publishBuildInfo(buildInfo)	                
@@ -183,9 +197,9 @@ pipeline {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: '''wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/${env.nombreProyecto}
-								echo Qwert08642 | sudo -S cp ${env.nombreProyecto} CoachEPM/Java/versionamiento/rc/adnjulianhenao.war
-								echo Qwert08642 | sudo -S mv ${env.nombreProyecto} CoachEPM/Java/versionamiento/rc/${env.nombreProyecto} 
+								execCommand: '''wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/${nombreProyecto}
+								echo Qwert08642 | sudo -S cp ${nombreProyecto} CoachEPM/Java/versionamiento/rc/adnjulianhenao.war
+								echo Qwert08642 | sudo -S mv ${nombreProyecto} CoachEPM/Java/versionamiento/rc/${nombreProyecto} 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
@@ -250,7 +264,7 @@ pipeline {
 		            def uploadSpec = '''
 		            {"files": [{		          
 		                "pattern": "build/libs/*.war",
-		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/${env.nombreProyecto}"
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/${nombreProyecto}"
 		                }]}'''
 		            def buildInfo = server.upload(uploadSpec)
 	                server.publishBuildInfo(buildInfo)	                	         
@@ -269,9 +283,9 @@ pipeline {
 							transfers: [
 								sshTransfer(excludes: '', 
 								execCommand: ''' echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/adnjulianhenao.war CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
-								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/${env.nombreProyecto}
-								echo Qwert08642 | sudo -S cp ${env.nombreProyecto} CoachEPM/Java/versionamiento/adnjulianhenao.war
-								echo Qwert08642 | sudo -S mv ${env.nombreProyecto} CoachEPM/Java/versionamiento/${env.nombreProyecto} 
+								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/${nombreProyecto}
+								echo Qwert08642 | sudo -S cp ${nombreProyecto} CoachEPM/Java/versionamiento/adnjulianhenao.war
+								echo Qwert08642 | sudo -S mv ${nombreProyecto} CoachEPM/Java/versionamiento/${nombreProyecto} 
 								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
 								execTimeout: 220000, 
 								flatten: false, 
@@ -306,7 +320,7 @@ pipeline {
 		            	def uploadSpec = '''
 		            		{"files": [{		          
 		                	"pattern": "build/libs/*.war",
-		                	"target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release/${env.nombreProyecto}"
+		                	"target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release/${nombreProyecto}"
 		                	}]}'''
 	                	def buildInfo = server.upload(uploadSpec)
 	                	server.publishBuildInfo(buildInfo)	             	                
