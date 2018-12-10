@@ -95,11 +95,15 @@ pipeline {
 				echo '------------>END ALF Publish [Artifactory]<------------'
 		       }
             }
+        
+        
         }    
         
         stage("Deployment BETA environment") {
 			steps {
 				echo '------------>BEGIN BETA Deployment<------------'
+				
+				
 				sshPublisher(
 					publishers: [
 						sshPublisherDesc(
@@ -225,7 +229,7 @@ pipeline {
 		}
 		
 		
-	stage('Functional RC Tests') {      
+	stage('Functional RCandidate Tests') {      
       steps {
         echo "------------>Functional RELEASE CANDIDATE Tests<------------"  
         sh 'gradle --b ./build.gradle fRCTest'
@@ -316,16 +320,19 @@ pipeline {
 		}
 		
 		
-	stage('Functional RELEASE Tests') {      
-     try{
-          steps {
+	stage('Functional_RELEASE_Tests') {      
+               steps {
         echo "------------>FUNCTIONAL RELEASE Tests<------------"  
         sh 'gradle --b ./build.gradle fReleaseTest'
      
       }    
-     }catch(Exception e){
+   }  
+
+	stage('RollBack',wait = true){
          steps{
-		when(necesitaRollBack == 'true'){
+         b =  build(job: "Functional_RELEASE_Tests", propagate: false).result
+         echo b
+		when(b == 'FAILURE'){
 		    				    
 		        echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'
 				sshPublisher(
@@ -355,15 +362,16 @@ pipeline {
 				)
 				echo '-############>FIN WHENN ROLLBACK AMBIENTE PRODUCCION<------------'
 		    }
-		    }		
-     }
+		    }		     
      }
 		
 		
 	
-		
-		  stage('Publish RELEASE') {       
-	        steps{
+			  stage('Publish RELEASE',wait = true){
+         steps{
+         b =  build(job: "Publish ALFA", propagate: false).result
+         echo b
+		when(b == 'FAILURE'){
 		        echo '------------>BEGIN Publish [Artifactory]<------------'
 		        script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
 		            def server = Artifactory.server 'ar7if4c70ry@c318a'
@@ -379,6 +387,8 @@ pipeline {
 		       }
             }
         }  
+        
+        }
 	
     
         
