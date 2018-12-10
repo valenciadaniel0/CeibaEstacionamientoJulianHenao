@@ -99,6 +99,10 @@ task fRCTest(group: 'verification', type: Test, dependsOn: build) {
 	reports.html.destination = file("build/reports/tests/fRCTest") 
 }
 
+
+def buildNumber = System.getenv("BUILD_NUMBER")
+def jenkinsBuild = buildNumber != null ? buildNumber : "0"
+
 task fReleaseTest(group: 'verification', type: Test, dependsOn: build) {
      exclude '**/unitTest/**'
      exclude '**/integrationTest/**'

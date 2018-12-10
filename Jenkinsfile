@@ -19,7 +19,8 @@ pipeline {
   }
   
   environment{      
-      necesitaRollBack = false;
+      necesitaRollBack = 'false'
+      nombreProyecto = 'adnjulianhenao'${buildNumber}
   }
 
   
@@ -278,8 +279,7 @@ pipeline {
 				echo '------------>END Publish [Artifactory]<------------'
 		       }
             }
-        }  
-			
+        }  			
     
     /// RELEASE
     ///// Release Candidate
@@ -320,16 +320,19 @@ pipeline {
 	stage('Functional RELEASE Tests') {      
       steps {
         echo "------------>FUNCTIONAL RELEASE Tests<------------"  
-        sh 'gradle --b ./build.gradle fReleaseTest'
-     //    junit '**/build/test-results/iTest/*.xml' //aggregate test results - JUnit
+        env.necesitaRollBack = sh 'gradle --b ./build.gradle fReleaseTest'
+     
+     echo env.necesitaRollBack
+     
       }    
      post {        
   	 	failure {   
-   
-    echo 'This will run only if failed'        	
-   necesitaRollBack = true;
+    		echo 'This will run only if failed'    
+    		    	
+    		//env.necesitaRollBack = 'true'	    
+ 		
     //      Send notifications about a Pipeline to an email
-    mail (to: 'julian.henao@ceiba.com.co',
+   			mail (to: 'julian.henao@ceiba.com.co',
                subject: "FALLO EN PRODUCCION Failed Pipeline: ${currentBuild.fullDisplayName}",
                body: "Something is wrong with ${env.BUILD_URL}")
   			} 
@@ -337,10 +340,14 @@ pipeline {
     }
 		
 		
-		stage('RollBack Release'){
-		when(necesitaRollBack){		    		
-		    steps{
-		        echo '###########>ROLLBACK AMBIENTE PRODUCCION<############'
+	stage('RollBack Release'){
+	steps{
+		when(necesitaRollBack == 'true'){
+		
+        
+    
+		    				    
+		        echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'
 				sshPublisher(
 					publishers: [
 						sshPublisherDesc(
@@ -366,10 +373,9 @@ pipeline {
 						)
 					]
 				)
-				echo '-############>FIN ROLLBACK AMBIENTE PRODUCCION<------------'
+				echo '-############>FIN WHENN ROLLBACK AMBIENTE PRODUCCION<------------'
 		    }
-}
-		    
+		    }		  
 		}
 
 		
@@ -408,12 +414,9 @@ post {
     // Se ejecutará correctamente, siempre y cuando exista la ruta expuesta
    
   }    
-  failure {   
-   
+  failure {      
     echo 'This will run only if failed' 
-    //      Send notifications about a Pipeline to an email
-    
-    
+    //      Send notifications about a Pipeline to an email        
     mail (to: 'julian.henao@ceiba.com.co',
                subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                body: "Something is wrong with ${env.BUILD_URL}")
