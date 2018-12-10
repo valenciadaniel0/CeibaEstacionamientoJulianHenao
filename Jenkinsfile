@@ -320,9 +320,7 @@ pipeline {
 	stage('Functional RELEASE Tests') {      
       steps {
         echo "------------>FUNCTIONAL RELEASE Tests<------------"  
-        env.necesitaRollBack = sh 'gradle --b ./build.gradle fReleaseTest'
-     
-     echo env.necesitaRollBack
+        sh 'gradle --b ./build.gradle fReleaseTest'
      
       }    
      post {        
@@ -343,9 +341,6 @@ pipeline {
 	stage('RollBack Release'){
 	steps{
 		when(necesitaRollBack == 'true'){
-		
-        
-    
 		    				    
 		        echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'
 				sshPublisher(
