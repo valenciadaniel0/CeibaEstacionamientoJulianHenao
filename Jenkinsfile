@@ -20,7 +20,6 @@ pipeline {
   
   environment{      
       necesitaRollBack = 'false'
-      nombreProyecto = 'adnjulianhenao'${buildNumber}
   }
 
   
