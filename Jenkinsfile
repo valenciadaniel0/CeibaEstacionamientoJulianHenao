@@ -321,15 +321,32 @@ pipeline {
 		
 		
 	stage('Functional_RELEASE_Tests') {      
-        script {
-        steps{          
+        steps{
+                 script {
+                 //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
+          try {
+                  
 
-         try {               
+                         
         echo "------------>FUNCTIONAL RELEASE Tests<------------"  
         sh 'gradle --b ./build.gradle fReleaseTest'
+        
+        echo '------------>BEGIN Publish [Artifactory]<------------'
+		        
+		            def server = Artifactory.server 'ar7if4c70ry@c318a'
+		            def uploadSpec = '''
+		            {"files": [{		          
+		                "pattern": "build/libs/*.war",
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release/"
+		                }]}'''
+	                def buildInfo = server.upload(uploadSpec)
+	                server.publishBuildInfo(buildInfo)	             
+	                
+				echo '------------>END Publish [Artifactory]<------------'
+        
      	}            
-        catch (exc) {                                    
-                    echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'
+        catch (exc) {                                            
+                    echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'                    
 				sshPublisher(
 					publishers: [
 						sshPublisherDesc(
@@ -359,69 +376,10 @@ pipeline {
 		    }
 		    }
          }
+         
    }  
-
-	stage('RollBack'){
-	 b =  build(job: "Functional_RELEASE_Tests", propagate: false).result
-         echo b
-      steps{
-		if(b == 'FAILURE'){
-		    				    
-		        echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'
-				sshPublisher(
-					publishers: [
-						sshPublisherDesc(
-							configName: 'FunctionalTest', 
-							transfers: [
-								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service								
-								echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war CoachEPM/Java/versionamiento/adnjulianhenao.war					
-								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
-								execTimeout: 220000, 
-								flatten: false, 
-								makeEmptyDirs: false, 
-								noDefaultExcludes: false, 
-								patternSeparator: '', 
-								remoteDirectory: '', 
-								remoteDirectorySDF: false, 
-								removePrefix: '', 
-								sourceFiles: '')
-							], 
-							usePromotionTimestamp: false, 
-							useWorkspaceInPromotion: false, 
-							verbose: false
-						)
-					]
-				)
-				echo '-############>FIN WHENN ROLLBACK AMBIENTE PRODUCCION<------------'
-		    }
-		    }		     
-     }
-		
-	stage('Publish RELEASE'){
-			   b =  build(job: "Functional_RELEASE_Tests", propagate: false).result
-         echo b
-		
-         steps{
-        if(b == 'FAILURE'){
-		        echo '------------>BEGIN Publish [Artifactory]<------------'
-		        script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
-		            def server = Artifactory.server 'ar7if4c70ry@c318a'
-		            def uploadSpec = '''
-		            {"files": [{		          
-		                "pattern": "build/libs/*.war",
-		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release/"
-		                }]}'''
-	                def buildInfo = server.upload(uploadSpec)
-	                server.publishBuildInfo(buildInfo)	             
-	                
-				echo '------------>END Publish [Artifactory]<------------'
-		       }
-            }
-        }  
-        
-        }
-        
+	
+            
 }
 	
 post {    
