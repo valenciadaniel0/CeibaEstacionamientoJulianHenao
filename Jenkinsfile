@@ -13,7 +13,7 @@ pipeline {
     	jdk 'JDK8_Centos' //Preinstalada en la Configuracion del Master    
     	gradle 'Gradle4.5_Centos' //Preinstalada en la Configuracion del Master  
 	}  
-
+/*
 	 parameters {
           // choice(
           //     name: 'Nodes',
@@ -24,7 +24,7 @@ pipeline {
                 defaultValue:"adnjulianhenao_${BUILD_TIMESTAMP}_${BUILD_DISPLAY_NAME}.war",
                 description: "Nombre del proyecto Versionado")
     }
-
+*/
 	environment{      
     	nombreProyecto =  "adnjulianhenao_${BUILD_TIMESTAMP}_${BUILD_DISPLAY_NAME}.war"
   	}
