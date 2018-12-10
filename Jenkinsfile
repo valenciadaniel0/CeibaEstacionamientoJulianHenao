@@ -321,7 +321,7 @@ pipeline {
 		
 		
 	stage('Functional_RELEASE_Tests') {      
-        
+        script {
          try {
                steps {
         echo "------------>FUNCTIONAL RELEASE Tests<------------"  
@@ -360,7 +360,7 @@ pipeline {
 				echo '-############>FIN WHENN ROLLBACK AMBIENTE PRODUCCION<------------'
 		    }
 		    }
-             
+             }
    }  
 
 	stage('RollBack'){
