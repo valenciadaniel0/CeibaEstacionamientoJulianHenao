@@ -15,10 +15,10 @@ pipeline {
 	}  
 
 	 parameters {
-            choice(
-                name: 'Nodes',
-                choices:"Linux\nMac",
-                description: "Choose Node!")
+          // choice(
+          //     name: 'Nodes',
+          //    choices:"Linux\nMac",
+          //     description: "Choose Node!")
             string(
                 name: 'nombreProyecto',
                 defaultValue:"adnjulianhenao_${BUILD_TIMESTAMP}_${BUILD_DISPLAY_NAME}.war",
