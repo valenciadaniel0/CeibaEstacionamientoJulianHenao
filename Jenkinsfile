@@ -26,7 +26,7 @@ pipeline {
     }
 */
 	environment{      
-    	nombreProyecto =  "adnjulianhenao_${BUILD_TIMESTAMP}_${BUILD_DISPLAY_NAME}.war"
+    	nombreProyecto =  "adnjulianhenao_${BUILD_DISPLAY_NAME}.war"
   	}
   
 	stages{	//Aqui comienzan los items del Pipeline 
@@ -91,7 +91,7 @@ pipeline {
 		            def uploadSpec = '''
 		            {"files": [{		          
 		                "pattern": "build/libs/*.war",
-		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/${nombreProyecto}"
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/$nombreProyecto"
 		            }]}'''
 		            def buildInfo = server.upload(uploadSpec)
 	                server.publishBuildInfo(buildInfo)	             	                
@@ -109,12 +109,12 @@ pipeline {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: '''echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service 
-								echo Qwert08642 | sudo -S rm ${nombreProyecto}
-								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/${nombreProyecto}
-								echo Qwert08642 | sudo -S cp ${nombreProyecto} CoachEPM/Java/versionamiento/beta/adnjulianhenao.war 
-								echo Qwert08642 | sudo -S mv ${nombreProyecto} CoachEPM/Java/versionamiento/beta/${nombreProyecto}
-								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaBeta.service ''', 
+								execCommand: """\ echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service 
+								echo Qwert08642 | sudo -S rm $nombreProyecto
+								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/$nombreProyecto
+								echo Qwert08642 | sudo -S cp $nombreProyecto CoachEPM/Java/versionamiento/beta/adnjulianhenao.war 
+								echo Qwert08642 | sudo -S mv $nombreProyecto CoachEPM/Java/versionamiento/beta/$nombreProyecto
+								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaBeta.service """, 
 								execTimeout: 220000, 
 								flatten: false, 
 								makeEmptyDirs: false, 
@@ -179,7 +179,7 @@ pipeline {
 		            def uploadSpec = '''
 		            {"files": [{		          
 		                "pattern": "build/libs/*.war",
-		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/BETA/${nombreProyecto}"
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/BETA/$nombreProyecto"
 		                }]}'''
 	                def buildInfo = server.upload(uploadSpec)
 	                server.publishBuildInfo(buildInfo)	                
@@ -197,10 +197,10 @@ pipeline {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: '''wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/${nombreProyecto}
-								echo Qwert08642 | sudo -S cp ${nombreProyecto} CoachEPM/Java/versionamiento/rc/adnjulianhenao.war
-								echo Qwert08642 | sudo -S mv ${nombreProyecto} CoachEPM/Java/versionamiento/rc/${nombreProyecto} 
-								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service ''', 
+								execCommand: """\ wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/$nombreProyecto
+								echo Qwert08642 | sudo -S cp $nombreProyecto CoachEPM/Java/versionamiento/rc/adnjulianhenao.war
+								echo Qwert08642 | sudo -S mv $nombreProyecto CoachEPM/Java/versionamiento/rc/$nombreProyecto 
+								echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service """, 
 								execTimeout: 220000, 
 								flatten: false, 
 								makeEmptyDirs: false, 
@@ -264,7 +264,7 @@ pipeline {
 		            def uploadSpec = '''
 		            {"files": [{		          
 		                "pattern": "build/libs/*.war",
-		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/${nombreProyecto}"
+		                "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/$nombreProyecto"
 		                }]}'''
 		            def buildInfo = server.upload(uploadSpec)
 	                server.publishBuildInfo(buildInfo)	                	         
@@ -282,11 +282,11 @@ pipeline {
 							configName: 'FunctionalTest', 
 							transfers: [
 								sshTransfer(excludes: '', 
-								execCommand: ''' echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/adnjulianhenao.war CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
-								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/${nombreProyecto}
-								echo Qwert08642 | sudo -S cp ${nombreProyecto} CoachEPM/Java/versionamiento/adnjulianhenao.war
-								echo Qwert08642 | sudo -S mv ${nombreProyecto} CoachEPM/Java/versionamiento/${nombreProyecto} 
-								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
+								execCommand: """\ echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/adnjulianhenao.war CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
+								wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/$nombreProyecto
+								echo Qwert08642 | sudo -S cp $nombreProyecto CoachEPM/Java/versionamiento/adnjulianhenao.war
+								echo Qwert08642 | sudo -S mv $nombreProyecto CoachEPM/Java/versionamiento/$nombreProyecto 
+								echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """, 
 								execTimeout: 220000, 
 								flatten: false, 
 								makeEmptyDirs: false, 
@@ -320,7 +320,7 @@ pipeline {
 		            	def uploadSpec = '''
 		            		{"files": [{		          
 		                	"pattern": "build/libs/*.war",
-		                	"target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release/${nombreProyecto}"
+		                	"target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release/$nombreProyecto"
 		                	}]}'''
 	                	def buildInfo = server.upload(uploadSpec)
 	                	server.publishBuildInfo(buildInfo)	             	                
@@ -335,9 +335,9 @@ pipeline {
 									configName: 'FunctionalTest', 
 									transfers: [
 										sshTransfer(excludes: '', 
-										execCommand: ''' echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service								
+										execCommand: """\ echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service								
 										echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war CoachEPM/Java/versionamiento/adnjulianhenao.war					
-										echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service ''', 
+										echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """, 
 										execTimeout: 220000, 
 										flatten: false, 
 										makeEmptyDirs: false, 
