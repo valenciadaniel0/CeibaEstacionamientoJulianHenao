@@ -322,15 +322,13 @@ pipeline {
 		
 	stage('Functional_RELEASE_Tests') {      
         script {
-         try {
-               steps {
+        steps{          
+
+         try {               
         echo "------------>FUNCTIONAL RELEASE Tests<------------"  
         sh 'gradle --b ./build.gradle fReleaseTest'
-     }
-     
-        }
-        catch (exc) {
-            steps{                          
+     	}            
+        catch (exc) {                                    
                     echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'
 				sshPublisher(
 					publishers: [
@@ -360,7 +358,7 @@ pipeline {
 				echo '-############>FIN WHENN ROLLBACK AMBIENTE PRODUCCION<------------'
 		    }
 		    }
-             }
+         }
    }  
 
 	stage('RollBack'){
