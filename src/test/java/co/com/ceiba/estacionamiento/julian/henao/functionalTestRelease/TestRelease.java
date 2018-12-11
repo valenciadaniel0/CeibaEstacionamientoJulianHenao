@@ -22,7 +22,7 @@ public class TestRelease {
 	
 	@Test
 	public void testTrue() {
-		assertTrue(true);
+		assertTrue(false);
 	}
 
 	

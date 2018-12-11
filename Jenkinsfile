@@ -314,12 +314,12 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
          steps{
              script {  //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline                
              try {
-      echo "------------>FUNCTIONAL RELEASE Tests<------------"  
-            sh 'gradle --b ./build.gradle fReleaseTest'
-            junit '**/build/test-results/fReleaseTest/*.xml' //aggregate test results - JUnit
+	      		echo "------------>FUNCTIONAL RELEASE Tests<------------"  
+	            sh 'gradle --b ./build.gradle fReleaseTest'
+	            junit '**/build/test-results/fReleaseTest/*.xml' //aggregate test results - JUnit
             
             echo '------------>BEGIN Publish [Artifactory]<------------'          
-      def server = Artifactory.server 'ar7if4c70ry@c318a'
+      			def server = Artifactory.server 'ar7if4c70ry@c318a'
                def uploadSpec = '''
                 {"files": [{            
                    "pattern": "build/libs/*.war",
@@ -327,7 +327,7 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
                    }]}'''
                   def buildInfo = server.upload(uploadSpec)
                   server.publishBuildInfo(buildInfo)                               
-      echo '------------>END Publish [Artifactory]<------------'  
+      			echo '------------>END Publish [Artifactory]<------------'  
             
          }catch (exc) {               
                                       
@@ -359,7 +359,7 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
         )
        ]
       )
-      currentBuild.result = 'UNSTABLE'
+      currentBuild.result = 'FAILURE'
       echo '-############>FIN WHENN ROLLBACK AMBIENTE PRODUCCION<------------'
         }
     }
