@@ -388,9 +388,9 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
     }    
     failure {      
       echo 'This will run only if failed'             
-      mail (to: 'julian.henao@ceiba.com.co',
-               subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-               body: "Something is wrong with ${env.BUILD_URL}")
+    //  mail (to: 'julian.henao@ceiba.com.co',
+    //           subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+    //           body: "Something is wrong with ${env.BUILD_URL}")
     }    
     unstable {      
       echo 'This will run only if the run was marked as unstable'    
@@ -398,9 +398,9 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
     changed {      
       echo 'This will run only if the state of the Pipeline has changed'      
       echo 'For example, if the Pipeline was previously failing but is now successful'               
-           mail (to: 'julian.henao@ceiba.com.co',
-             subject: "Changed State Pipeline: ${currentBuild.fullDisplayName}",
-                body: "The state of the Pipeline has changed. See ${env.BUILD_URL}")
+      //     mail (to: 'julian.henao@ceiba.com.co',
+      //       subject: "Changed State Pipeline: ${currentBuild.fullDisplayName}",
+      //          body: "The state of the Pipeline has changed. See ${env.BUILD_URL}")
     }  
   }
  }   
