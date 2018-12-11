@@ -311,6 +311,16 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
   }
     
   stage('Functional_RELEASE_Tests') {      
+         environment{
+             
+             buildNumberAnterior = Jenkins.instance.getItem("$JOB_NAME").lastSuccessfulBuild.number
+            echo "Build Anterior"
+            echo  "$buildNumberAnterior"
+            adn = "adnjulianhenao_$buildNumberAnterior" 
+            echo  "$adn"           
+            
+         }
+        
          steps{
              script {  //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline                
              try {
@@ -319,11 +329,6 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
 	            junit '**/build/test-results/fReleaseTest/*.xml' //aggregate test results - JUnit
                         
          }catch (exc) {               
-            def buildNumberAnterior = Jenkins.instance.getItem("$JOB_NAME").lastSuccessfulBuild.number
-            echo "Build Anterior"
-            echo  buildNumberAnterior
-            def adn = "adnjulianhenao_" + buildNumberAnterior 
-            echo  adn           
                      echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'                    
       sshPublisher(
        publishers: [
