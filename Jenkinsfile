@@ -286,9 +286,9 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service """,
         sshTransfer(excludes: '', 
         execCommand: """\
 echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/adnjulianhenao.war CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
-wget http:\\artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/$nombreProyecto
+wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/$nombreProyecto
 echo Qwert08642 | sudo -S cp $nombreProyecto CoachEPM/Java/versionamiento/adnjulianhenao.war
-echo Qwert08642 | sudo -S mv $nombreProyecto CoachEPM/Java/versionamiento/$nombreProyecto
+echo Qwert08642 | sudo -S mv $nombreProyecto CoachEPM/Java/versionamiento/release/$nombreProyecto
 echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """, 
         execTimeout: 220000, 
         flatten: false, 
@@ -340,6 +340,7 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
           sshTransfer(excludes: '', 
           execCommand: """\
 echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
+echo Qwert08642 | sudo -S rm CoachEPM/Java/versionamiento/release/$nombreProyecto
 echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war CoachEPM/Java/versionamiento/adnjulianhenao.war
 echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """, 
           execTimeout: 220000, 
