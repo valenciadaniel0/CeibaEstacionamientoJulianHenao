@@ -44,8 +44,8 @@ pipeline {
 	stage('Compile'){
 		steps{
 			echo "####################->Init Compile<-####################"
-            sh 'gradle clean'
-    		sh 'gradle --b ./build.gradle compileJava'
+            bat 'gradle clean'
+    		bat 'gradle --b ./build.gradle compileJava'
     		echo "####################->End Compile<-####################"    
     	}
     }    
@@ -53,7 +53,7 @@ pipeline {
      stage('Unit Tests') {      
         steps{        
           echo "####################->Init Unit Tests<-####################"      
-          sh 'gradle --b ./build.gradle test'
+          bat 'gradle --b ./build.gradle test'
           junit '**/build/test-results/test/*.xml' //aggregate test results - JUnit
           echo "####################->End Unit Tests<-####################" 
         }    
@@ -62,7 +62,7 @@ pipeline {
      stage('Integration Tests') {      
         steps {
         	echo "------------>Integration Tests<------------"  
-          	sh 'gradle --b ./build.gradle iTest'
+          	bat 'gradle --b ./build.gradle iTest'
            	junit '**/build/test-results/iTest/*.xml' //aggregate test results - JUnit
      	}    
      }
@@ -71,7 +71,7 @@ pipeline {
 		steps{
         	echo '------------>Anilisis de codigo estatico<------------'
          	withSonarQubeEnv('Sonar') {
-        		sh "${tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner"             
+        		bat "${tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner"             
           	}     
 		}
     }
@@ -79,7 +79,7 @@ pipeline {
 	stage('Build') {      
     	steps {
         	echo "------------>Build<------------"         
-         	sh 'gradle --b ./build.gradle build -x test'   
+         	bat 'gradle --b ./build.gradle build -x test'   
       	}    
     }  
   
@@ -140,7 +140,7 @@ wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero
   stage('Functional Beta Tests') {      
         steps {
           echo "------------>FUNCTIONAL BETA Tests<------------"  
-          sh 'gradle --b ./build.gradle fBetaTest'
+          bat 'gradle --b ./build.gradle fBetaTest'
          junit '**/build/test-results/fBetaTest/*.xml' //aggregate test results - JUnit 
         }          
         post{
@@ -226,7 +226,7 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service """,
   stage('Functional RCandidate Tests') {      
         steps {
           echo "------------>Functional RELEASE CANDIDATE Tests<------------"  
-          sh 'gradle --b ./build.gradle fRCTest'
+          bat 'gradle --b ./build.gradle fRCTest'
         junit '**/build/test-results/fRCTest/*.xml' //aggregate test results - JUnit 
         }
          post{
@@ -315,7 +315,7 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
              script {  //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline                
              try {
 	      		echo "------------>FUNCTIONAL RELEASE Tests<------------"  
-	            sh 'gradle --b ./build.gradle fReleaseTest'
+	            bat 'gradle --b ./build.gradle fReleaseTest'
 	            junit '**/build/test-results/fReleaseTest/*.xml' //aggregate test results - JUnit
                         
          }catch (exc) {               
