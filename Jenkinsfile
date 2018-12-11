@@ -83,26 +83,26 @@ pipeline {
       }    
     }  
   
-    stage('Publish ALFA') {       
-      steps{
-       echo '------------>BEGIN ALFA Publish [Artifactory]<------------'
-          script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
-           def server = Artifactory.server 'ar7if4c70ry@c318a'
-              def uploadSpec = '''
-              {"files": [{            
-                  "pattern": "build/libs/*.war",
-                  "target": "libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/$nombreProyecto"
-              }]}'''
-              def buildInfo = server.upload(uploadSpec)
-                 server.publishBuildInfo(buildInfo)                               
-     echo '------------>END ALF Publish [Artifactory]<------------'
-         }
-   }                
-  }    
+	stage('Publish ALFA') {       
+    	steps{
+       		echo '------------>BEGIN ALFA Publish [Artifactory]<------------'
+          		script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
+           			def server = Artifactory.server 'ar7if4c70ry@c318a'
+              		def uploadSpec = '''
+              						{"files": [{            
+                  					"pattern": "build/libs/*.war",
+                  					"target": "libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/$nombreProyecto"
+              						}]}'''
+              		def buildInfo = server.upload(uploadSpec)
+                 	server.publishBuildInfo(buildInfo)                               
+     				echo '------------>END ALF Publish [Artifactory]<------------'
+         	}
+		}                
+	}    
         
-        stage("Deployment BETA environment") {
-   steps {
-    echo '------------>BEGIN BETA Deployment<------------'        
+	stage("Deployment BETA environment") {
+   		steps {
+    		echo '------------>BEGIN BETA Deployment<------------'        
     sshPublisher(
      publishers: [
       sshPublisherDesc(
@@ -317,20 +317,13 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
 	      		echo "------------>FUNCTIONAL RELEASE Tests<------------"  
 	            sh 'gradle --b ./build.gradle fReleaseTest'
 	            junit '**/build/test-results/fReleaseTest/*.xml' //aggregate test results - JUnit
-            
-            echo '------------>BEGIN Publish [Artifactory]<------------'          
-      			def server = Artifactory.server 'ar7if4c70ry@c318a'
-               def uploadSpec = '''
-                {"files": [{            
-                   "pattern": "build/libs/*.war",
-                   "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release/$nombreProyecto"
-                   }]}'''
-                  def buildInfo = server.upload(uploadSpec)
-                  server.publishBuildInfo(buildInfo)                               
-      			echo '------------>END Publish [Artifactory]<------------'  
-            
+                        
          }catch (exc) {               
-                                      
+            def buildNumberAnterior = Jenkins.instance.getItem("$JOB_NAME").lastSuccessfulBuild.number
+            echo "Build Anterior"
+            echo  buildNumberAnterior
+            def adn = "adnjulianhenao_" + buildNumberAnterior 
+            echo  adn           
                      echo '###########>ROLLBACK WHENNN AMBIENTE PRODUCCION<############'                    
       sshPublisher(
        publishers: [
@@ -364,7 +357,26 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
         }
     }
    }         
-     }             
+     }
+     
+     
+     stage('Publish RELEASE') {       
+    	steps{
+    			echo '------------>BEGIN ALFA Publish [Artifactory]<------------'
+          		script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
+           			def server = Artifactory.server 'ar7if4c70ry@c318a'
+              		def uploadSpec = '''
+              						{"files": [{            
+                  					"pattern": "build/libs/*.war",
+                  					"target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release/$nombreProyecto"
+              						}]}'''
+              		def buildInfo = server.upload(uploadSpec)
+                 	server.publishBuildInfo(buildInfo)                               
+     				echo '------------>END ALF Publish [Artifactory]<------------'
+         	}
+		}                
+	}
+                  
  }
  
  post {    
