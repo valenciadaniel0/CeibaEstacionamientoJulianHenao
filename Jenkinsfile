@@ -31,15 +31,15 @@ pipeline {
   
  stages{ //Aqui comienzan los items del Pipeline 
      
-     stage('Checkout') {
-        steps{      
-          echo "####################->Init Checkout<-####################"
-         checkout([$class: 'GitSCM', branches: [[name: '*/master']],
-     doGenerateSubmoduleConfigurations: false, extensions: [], gitTool:
-     'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId:'GitHub_juliancho923',url:'https://github.com/JULIANCHO923/Ceiba-Estacionamiento-julian.henao-']]])
-    echo "####################->End Checkout<-####################"     
-   }
-  }        
+   //  stage('Checkout') {
+    //    steps{      
+    //      echo "####################->Init Checkout<-####################"
+    //     checkout([$class: 'GitSCM', branches: [[name: '*/master']],
+    // doGenerateSubmoduleConfigurations: false, extensions: [], gitTool:
+    // 'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId:'GitHub_juliancho923',url:'https://github.com/JULIANCHO923/Ceiba-Estacionamiento-julian.henao-']]])
+    //echo "####################->End Checkout<-####################"     
+   //}
+  //}        
     
      stage('Compile'){
          steps{
@@ -311,15 +311,7 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
   }
     
   stage('Functional_RELEASE_Tests') {      
-         environment{
-             
-             buildNumberAnterior = Jenkins.instance.getItem("$JOB_NAME").lastSuccessfulBuild.number
-            echo "Build Anterior"
-            echo  "$buildNumberAnterior"
-            adn = "adnjulianhenao_$buildNumberAnterior" 
-            echo  "$adn"           
-            
-         }
+         
         
          steps{
              script {  //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline                
