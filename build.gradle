@@ -99,15 +99,6 @@ task fRCTest(group: 'verification', type: Test, dependsOn: build) {
 	reports.html.destination = file("build/reports/tests/fRCTest") 
 }
 
-
-//def fname = new File( 'version.properties' )
-//Properties props = new Properties()
-//props.load( new FileInputStream( fname ) )
-//def v = props.get( 'buildVersion' )
-
-def buildNumber = System.getenv("buildNumber")
-def version = buildNumber != null ? buildNumber : "0"
-
 task fReleaseTest(group: 'verification', type: Test, dependsOn: build) {
      exclude '**/unitTest/**'
      exclude '**/integrationTest/**'
