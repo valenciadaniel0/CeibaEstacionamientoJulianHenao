@@ -66,15 +66,6 @@ pipeline {
            	junit '**/build/test-results/iTest/*.xml' //aggregate test results - JUnit
      	}    
      }
-      
-	stage('Static Code Analysis') {
-		steps{
-        	echo '------------>Anilisis de codigo estatico<------------'
-         	withSonarQubeEnv('Sonar') {
-        		bat "${tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner"             
-          	}     
-		}
-    }
     
 	stage('Build') {      
     	steps {
@@ -87,11 +78,11 @@ pipeline {
     	steps{
        		echo '------------>BEGIN ALFA Publish [Artifactory]<------------'
           		script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
-           			def server = Artifactory.server 'ar7if4c70ry@c318a'
+           			def server = Artifactory.server 'Artifactory_Version_6.5.9'
               		def uploadSpec = '''
               						{"files": [{            
                   					"pattern": "build/libs/*.war",
-                  					"target": "libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/$nombreProyecto"
+                  					"target": "jenkins-snapshot/Parqueadero_Julian_Henao/ALFA/$nombreProyecto"
               						}]}'''
               		def buildInfo = server.upload(uploadSpec)
                  	server.publishBuildInfo(buildInfo)                               
@@ -112,7 +103,7 @@ pipeline {
         execCommand:"""\
 echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
 echo Qwert08642 | sudo -S rm $nombreProyecto
-wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/ALFA/$nombreProyecto
+wget http://192.168.2.23:8081/artifactory/jenkins-snapshot/Parqueadero_Julian_Henao/ALFA/$nombreProyecto
         echo Qwert08642 | sudo -S cp $nombreProyecto CoachEPM/Java/versionamiento/beta/adnjulianhenao.war 
         echo Qwert08642 | sudo -S mv $nombreProyecto CoachEPM/Java/versionamiento/beta/$nombreProyecto
         echo Qwert08642 | sudo -S systemctl start servicioADNCeibaBeta.service """, 
@@ -176,11 +167,11 @@ wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero
       steps{
        echo '------------>BEGIN BETA Publish [Artifactory]<------------'
     script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
-              def server = Artifactory.server 'ar7if4c70ry@c318a'
+              def server = Artifactory.server 'Artifactory_Version_6.5.9'
               def uploadSpec = '''
               {"files": [{            
                   "pattern": "build/libs/*.war",
-                  "target": "libs-snapshot-local/Parqueadero_Julian_Henao/BETA/$nombreProyecto"
+                  "target": "jenkins-snapshot/Parqueadero_Julian_Henao/BETA/$nombreProyecto"
                   }]}'''
                  def buildInfo = server.upload(uploadSpec)
                  server.publishBuildInfo(buildInfo)                 
@@ -199,7 +190,7 @@ wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero
        transfers: [
         sshTransfer(excludes: '', 
         execCommand: """\
-wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/BETA/$nombreProyecto
+wget http://192.168.2.23:8081/artifactory/jenkins-snapshot/Parqueadero_Julian_Henao/BETA/$nombreProyecto
 echo Qwert08642 | sudo -S cp $nombreProyecto CoachEPM/Java/versionamiento/rc/adnjulianhenao.war
 echo Qwert08642 | sudo -S mv $nombreProyecto CoachEPM/Java/versionamiento/rc/$nombreProyecto 
 echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service """, 
@@ -262,11 +253,11 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service """,
       steps{
        echo '------------>BEGIN  R CANDIDATE Publish [Artifactory]<------------'
           script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
-              def server = Artifactory.server 'ar7if4c70ry@c318a'
+              def server = Artifactory.server 'Artifactory_Version_6.5.9'
               def uploadSpec = '''
               {"files": [{            
                   "pattern": "build/libs/*.war",
-                  "target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/$nombreProyecto"
+                  "target": "jenkins-snapshot/Parqueadero_Julian_Henao/Release_Candidate/$nombreProyecto"
                   }]}'''
               def buildInfo = server.upload(uploadSpec)
                  server.publishBuildInfo(buildInfo)                           
@@ -286,7 +277,7 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeibaRC.service """,
         sshTransfer(excludes: '', 
         execCommand: """\
 echo Qwert08642 | sudo -S mv CoachEPM/Java/versionamiento/adnjulianhenao.war CoachEPM/Java/versionamiento/ultimoEstable/adnjulianhenao.war
-wget http://artifactory.ceiba.com.co/artifactory/libs-snapshot-local/Parqueadero_Julian_Henao/Release_Candidate/$nombreProyecto
+wget http://192.168.2.23:8081/artifactory/jenkins-snapshot/Parqueadero_Julian_Henao/Release_Candidate/$nombreProyecto
 echo Qwert08642 | sudo -S cp $nombreProyecto CoachEPM/Java/versionamiento/adnjulianhenao.war
 echo Qwert08642 | sudo -S mv $nombreProyecto CoachEPM/Java/versionamiento/release/$nombreProyecto
 echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """, 
@@ -359,11 +350,11 @@ echo Qwert08642 | sudo -S systemctl start servicioADNCeiba.service """,
     	steps{
     			echo '------------>BEGIN ALFA Publish [Artifactory]<------------'
           		script{ //takes a block of Scripted Pipeline and executes that in the Declarative Pipeline
-           			def server = Artifactory.server 'ar7if4c70ry@c318a'
+           			def server = Artifactory.server 'Artifactory_Version_6.5.9'
               		def uploadSpec = '''
               						{"files": [{            
                   					"pattern": "build/libs/*.war",
-                  					"target": "libs-snapshot-local/Parqueadero_Julian_Henao/Release/$nombreProyecto"
+                  					"target": "jenkins-snapshot/Parqueadero_Julian_Henao/Release/$nombreProyecto"
               						}]}'''
               		def buildInfo = server.upload(uploadSpec)
                  	server.publishBuildInfo(buildInfo)                               
