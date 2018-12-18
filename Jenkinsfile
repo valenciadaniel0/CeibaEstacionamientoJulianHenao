@@ -167,12 +167,8 @@ def checkout(){
                     name: '*/master'
                 ]],
                 doGenerateSubmoduleConfigurations: false, 
-                extensions: [[
-                    $class: 'SparseCheckoutPaths', 
-                    sparseCheckoutPaths: [[
-                        path: ''
-                    ]]
-                ]], 
+                extensions: [],
+                // [ $class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[ path: '']]] 
                 gitTool: 'Git_Centos', 
                 submoduleCfg: [], 
                 userRemoteConfigs: [[
