@@ -34,7 +34,7 @@ node('Slave_Induccion') {
         stage('Clean') {
         	echo "####################->Init Clean<-####################"                        
             dir("${env.directorio}"){
-                sh './gradlew clean'
+                bat './gradlew clean'
             }
             echo "####################->End Clean<-####################"
         }
@@ -42,7 +42,7 @@ node('Slave_Induccion') {
         stage('Compile') {
         	echo "####################->Init Compile<-####################"
             dir("${env.directorio}"){
-                sh './gradlew compileJava'
+                bat './gradlew compileJava'
             }
             echo "####################->End Compile<-####################"
         }
@@ -50,7 +50,7 @@ node('Slave_Induccion') {
         stage('Unit Test') {
         	echo "####################->Init Unit Test<-####################"
             dir("${env.directorio}"){
-                sh './gradlew test'
+                bat './gradlew test'
                 junit '**/build/test-results/test/*.xml'                
             }
             echo "####################->End Unit Test<-####################"
@@ -59,14 +59,14 @@ node('Slave_Induccion') {
         stage('Sonar'){
         	echo "####################->Init Sonar<-####################"
             withSonarQubeEnv('Sonar') {
-                 sh "${sonarHome}/bin/sonar-scanner -Dproject.settings=./${env.directorio}/sonar-project.properties"
+                bat "..\\..\\..\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner -Dproject.settings=sonar-project.properties"
             }  
             echo "####################->End Sonar<-####################"
         }
         
         stage("Quality Gate"){
         	echo "####################->Init Quality Gate<-####################"
-            timeout(time: 2, unit: 'MINUTES') {
+            timeout(time: 1, unit: 'MINUTES') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
                     error "Pipeline abortado porque el quality gate del análisis del sonar no es OK: ${qg.status}"
@@ -79,7 +79,7 @@ node('Slave_Induccion') {
 		stage('Integration Test') {
         	echo "####################->Init Integration Test<-####################"
             dir("${env.directorio}"){
-                sh './gradlew iTest'
+                bat './gradlew iTest'
                 junit '**/build/test-results/iTest/*.xml'                                
             }
             echo "####################->End Integration Test<-####################"
@@ -88,7 +88,7 @@ node('Slave_Induccion') {
         stage('Build') {
         	echo "####################->Init Build<-####################"
             dir("${env.directorio}"){
-                sh './gradlew build -x test'
+                bat './gradlew build -x test'
             }
             echo "####################->End Build<-####################"
         }
@@ -103,7 +103,7 @@ node('Slave_Induccion') {
 			echo "####################->Init Deploy Dllo<-####################"
 			descargarUltimaVersionAlJenkins("alpha")
 			dir("artefactos/alpha/"){
-                    sh 'ls -l'
+                    bat 'dir'
             }
 		}
 		
@@ -175,7 +175,7 @@ node('Slave_Induccion') {
                 println(err.getMessage());
                 dir("artefactos/release/"){
                     echo "estos son los archivos en artefactos/release en jenkins"
-                    sh 'ls -l'
+                    bat 'dir'
                 }
                 // enviar notificacion warning
                 throw err
