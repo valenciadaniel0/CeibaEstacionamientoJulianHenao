@@ -1,6 +1,6 @@
 import java.text.SimpleDateFormat
 
-node('Slave_Induccion') {
+node('Master') {
 
     try{
         def dateFormat = new SimpleDateFormat("dd-MMMMM-yyyy")
