@@ -3,7 +3,7 @@ import java.text.SimpleDateFormat
 node('Slave_Induccion') {
 
     try{
-        def dateFormat = new SimpleDateFormat("dd-MM-yyy")
+        def dateFormat = new SimpleDateFormat("dd-MMMMM-yyyy")
         def date = new Date()
         String dateNow = dateFormat.format(date)
 
@@ -16,7 +16,7 @@ node('Slave_Induccion') {
         env.JAVA_HOME="${tool 'JDK8_Centos'}"
         env.GRADLE="${tool 'Gradle4.5_Centos'}"
         env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
-        //env.sonarHome= tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+        env.sonarHome= tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
         
         // variables de ambiente
         env.directorio = ""
@@ -55,7 +55,7 @@ node('Slave_Induccion') {
             }
             echo "####################->End Unit Test<-####################"
         }
-   /*     
+      
         stage('Sonar'){
         	echo "####################->Init Sonar<-####################"
             withSonarQubeEnv('Sonar') {
@@ -74,7 +74,7 @@ node('Slave_Induccion') {
             }
             echo "####################->End Quality Gate<-####################"
         }
-*/
+
 
 		stage('Integration Test') {
         	echo "####################->Init Integration Test<-####################"
@@ -98,13 +98,19 @@ node('Slave_Induccion') {
             publicarArtefacto("alpha")
             echo "####################->End Publish Alpha<-####################"        
         }
-
-        stage('Deploy Dllo') {
-        	echo "####################->Init Deploy Dllo<-####################"            
-            descargarUltimaVersionAlphaAlJenkins()
-            dir("artefactos/alpha/"){
+		
+		stage("Download Alpha version to Jenkins"){
+			echo "####################->Init Deploy Dllo<-####################"
+			descargarUltimaVersionAlJenkins("alpha")
+			dir("artefactos/alpha/"){
                     bat 'dir'
             }
+		}
+
+
+		
+        stage('Deploy Dllo') {
+        	echo "####################->Init Deploy Dllo<-####################"                                    
             //desplegar en dllo
             deploy()
             echo "####################->End Deploy Dllo<-####################"
@@ -167,7 +173,7 @@ node('Slave_Induccion') {
                     error("fallaron los test en el ambiente de Producción")
                 }
             }catch(err) {
-                descargarVersionEstableReleaseAlJenkins()
+                descargarUltimaVersionAlJenkins("release/estable")
                 println(err.getMessage());
                 dir("artefactos/release/"){
                     echo "estos son los archivos en artefactos/release en jenkins"
@@ -223,30 +229,17 @@ def checkout(){
             ])
 }
 
-def descargarUltimaVersionAlphaAlJenkins(){
-
+def descargarUltimaVersionAlJenkins(carpeta){
+	
     def server = Artifactory.server 'Artifactory_Version_6.5.9'
+    
+    env.targetString = "${carpeta}"
+    
     def downloadSpec = '''{
                             "files": [
                                 {
-                                	"pattern": "jenkins-snapshot/CoachEPM/Java/Parqueadero/alpha/${versionamiento}",
-                  					"target": "artefactos/alpha/"                                                                                             
-                                    "flat": "true",
-                                    "recursive": "true"
-                                }
-                            ]
-                        }'''
-        server.download(downloadSpec)
-}
-
-def descargarVersionEstableReleaseAlJenkins(){
-
-    def server = Artifactory.server 'Artifactory_Version_6.5.9'
-    def downloadSpec = '''{
-                            "files": [
-                                {
-                                	"pattern": "jenkins-snapshot/CoachEPM/Java/Parqueadero/release/estable/",                                    
-                                    "target": "artefactos/release/",                      
+                                	"pattern": "jenkins-snapshot/CoachEPM/Java/Parqueadero/${targetString}/${versionamiento}",
+                  					"target": "artefactos/${targetString}/"                                                                                             
                                     "flat": "true",
                                     "recursive": "true"
                                 }
