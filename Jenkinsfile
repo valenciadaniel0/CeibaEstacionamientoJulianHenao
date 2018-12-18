@@ -26,65 +26,92 @@ node('Slave_Induccion') {
         // INICIO STAGES
 
         stage('Checkout') {
+        	echo "####################->Init Checkout<-####################"
             checkout()
+            echo "####################->End Checkout<-####################"
         }
         
         stage('Clean') {
+        	echo "####################->Init Clean<-####################"                        
             dir("${env.directorio}"){
                 bat './gradlew clean'
             }
+            echo "####################->End Clean<-####################"
         }
         
-        stage('Compilacion') {
+        stage('Compile') {
+        	echo "####################->Init Compile<-####################"
             dir("${env.directorio}"){
                 bat './gradlew compileJava'
             }
+            echo "####################->End Compile<-####################"
         }
 
         stage('Unit Test') {
+        	echo "####################->Init Unit Test<-####################"
             dir("${env.directorio}"){
                 bat './gradlew test'
-                junit '**/build/test-results/test/*.xml'
-                jacoco classPattern:'**/build/classes/java', sourcePattern:'**/src/main/java', execPattern:'**/build/jacoco/*.exec'
+                junit '**/build/test-results/test/*.xml'                
             }
+            echo "####################->End Unit Test<-####################"
         }
    /*     
         stage('Sonar'){
+        	echo "####################->Init Sonar<-####################"
             withSonarQubeEnv('Sonar') {
                 bat "${sonarHome}/bin/sonar-scanner -Dproject.settings=./${env.directorio}/sonar-project.properties"
             }  
+            echo "####################->End Sonar<-####################"
         }
         
         stage("Quality Gate"){
+        	echo "####################->Init Quality Gate<-####################"
             timeout(time: 1, unit: 'HOURS') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
                     error "Pipeline abortado porque el quality gate del análisis del sonar no es OK: ${qg.status}"
                 }
             }
+            echo "####################->End Quality Gate<-####################"
         }
 */
+
+		stage('Integration Test') {
+        	echo "####################->Init Integration Test<-####################"
+            dir("${env.directorio}"){
+                bat './gradlew iTest'
+                junit '**/build/test-results/iTest/*.xml'                                
+            }
+            echo "####################->End Integration Test<-####################"
+        }
+		
         stage('Build') {
+        	echo "####################->Init Build<-####################"
             dir("${env.directorio}"){
                 bat './gradlew build -x test'
             }
+            echo "####################->End Build<-####################"
         }
         
-        stage('PUBLISH ALPHA') {        
-            publicarArtefacto("alpha")        
+        stage('Publish Alpha') {
+	        echo "####################->Init Publish Alpha<-####################"        
+            publicarArtefacto("alpha")
+            echo "####################->End Publish Alpha<-####################"        
         }
 
-        stage('DEPLOY DLLO') {            
+        stage('Deploy Dllo') {
+        	echo "####################->Init Deploy Dllo<-####################"            
             descargarUltimaVersionAlphaAlJenkins()
             dir("artefactos/alpha/"){
                     bat 'dir'
-                }
+            }
             //desplegar en dllo
             deploy()
-            
+            echo "####################->End Deploy Dllo<-####################"
         }
 
-        stage('TESTING DLLO') {        
+        stage('Testing into Dllo') {
+            echo "####################->Init Testing into Dllo<-####################"    
             try{
                 if(testDesarrollo==false){
                     error("fallaron los test en el ambiente de desarrollo")
@@ -92,18 +119,24 @@ node('Slave_Induccion') {
             }catch(err) {
                 println(err.getMessage());
                 throw err
-            }        
+            }
+            echo "####################->End Testing into Dllo<-####################"        
         }
 
-        stage('PUBLISH BETA') {        
-            publicarArtefacto("beta")        
+        stage('Publish Beta') {
+        	echo "####################->Init Publish Beta<-####################"        
+            publicarArtefacto("beta")
+            echo "####################->End Publish Beta<-####################"        
         }
 
-        stage('DEPLOY QA') {        
+        stage('Deploy QA') {
+        	echo "####################->Init Deploy into QA<-####################"        
             // Desplegar en  QA  
+            echo "####################->End Deploy into QA<-####################"
         }
 
-        stage('TESTING QA') {        
+        stage('Testing into QA') { 
+        	echo "####################->Init Testing into QA<-####################"       
             try{
                 if(testQA==false){
                     error("fallaron los test en el ambiente de QA")
@@ -111,18 +144,24 @@ node('Slave_Induccion') {
             }catch(err) {
                 println(err.getMessage());
                 throw err
-            }        
+            }
+            echo "####################->End Testing into QA<-####################"        
         }
 
-        stage('PUBLISH RC') {        
-            publicarArtefacto("release-candidate")        
+        stage('Publish Release Candidate') {
+        	echo "####################->Init Publish Release Candidate<-####################"        
+            publicarArtefacto("release-candidate")
+            echo "####################->End Publish Release Candidate<-####################"        
         }
 
-        stage('DEPLOY PRODUCCION') {        
-            // Desplegar en  QA  
+        stage('Deploy Production') {    
+            echo "####################->Init Deploy Production<-####################"
+            // Desplegar en  Produccion  
+            echo "####################->End Deploy Production<-####################"
         }
 
-        stage('TESTING PRODUCCION') {        
+        stage('Testing into Production') {
+        	echo "####################->Init Testing into Production<-####################"
             try{
                 if(testProduccion==false){
                     error("fallaron los test en el ambiente de Producción")
@@ -132,29 +171,35 @@ node('Slave_Induccion') {
                 println(err.getMessage());
                 dir("artefactos/release/"){
                     echo "estos son los archivos en artefactos/release en jenkins"
-                    bat 'ls -al'
+                    bat 'dir'
                 }
                 // enviar notificacion warning
                 throw err
-            }        
+            }
+            echo "####################->End Testing into Production<-####################"        
         }
 
-        stage('PUBLISH RELEASE') {        
+        stage('Publish Release') {        
+        	echo "####################->Init Publish Release<-####################"
             publicarArtefacto("release")
-            publicarArtefactoEstableRelease()       
-        }
-
-        stage('STAGE END PIPELINE') {        
-            eliminarCarpetaArtefactosEnJenkins()
+            publicarArtefactoEstableRelease()
+            echo "####################->End Publish Release<-####################"       
         }
         
+        /*
+        stage('Clean Workspace') {
+        	echo "####################->Init Clean Workspace<-####################"        
+            eliminarCarpetaArtefactosEnJenkins()
+            echo "####################->End Clean Workspace<-####################"
+        }
+        */
         // fin stages
 
     }catch(err){
         echo "Hubo un error en el pipeline"
 
     }finally{
-        notificar()
+    	accionesPost()
     }
     
     
@@ -253,13 +298,7 @@ def eliminarCarpetaArtefactosEnJenkins(){
     }
 }
 
-def notificar(){
-    if(currentBuild.result == 'FAILURE'){    	
-        mail to: 'julian.henao@ceiba.com.co',
-            subject: "El pipeline ha fallado: ${currentBuild.fullDisplayName}",
-            body: "para verlo puede dar clic en  ${env.BUILD_URL}"        
-    }    
-}
+
 
 def deploy(){
 
@@ -273,7 +312,9 @@ def deploy(){
                     sshTransfer(
                         excludes: '', 
                         execCommand: '''
-                            echo Qwert08642 | sudo -S ls -al
+                        	echo Qwert08642 | sudo -S systemctl stop servicioADNCeiba.service
+                        	pwd                        
+                            ls -al
                         ''', 
                         execTimeout: 220000, 
                         flatten: false, 
@@ -292,4 +333,23 @@ def deploy(){
             )
         ]
     )
+}
+
+def accionesPost(){
+    post{
+        always{
+            jacoco classPattern:'**/build/classes/java', sourcePattern:'**/src/main/java', execPattern:'**/build/jacoco/*.exec'
+        }
+        failure{
+                notificar()       
+    	}       
+    }
+}
+
+def notificar(){
+    if(currentBuild.result == 'FAILURE'){    	
+        mail to: 'julian.henao@ceiba.com.co',
+            subject: "El pipeline ha fallado: ${currentBuild.fullDisplayName}",
+            body: "para verlo puede dar clic en  ${env.BUILD_URL}"        
+    }    
 }
