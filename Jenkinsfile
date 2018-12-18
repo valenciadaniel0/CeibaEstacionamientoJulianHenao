@@ -176,7 +176,7 @@ def checkout(){
                 gitTool: 'Git_Centos', 
                 submoduleCfg: [], 
                 userRemoteConfigs: [[
-                    credentialsId: 'juliancho923', 
+                    credentialsId: 'GitHub_juliancho923', 
                     url: 'https://github.com/JULIANCHO923/Ceiba-Estacionamiento-julian.henao-'
                 ]]
             ])
@@ -258,12 +258,10 @@ def eliminarCarpetaArtefactosEnJenkins(){
 }
 
 def notificar(){
-    if(currentBuild.result == 'FAILURE'){
-        mail (
-            to: 'julian.henao@ceiba.com.co',
+    if(currentBuild.result == 'FAILURE'){    	
+        mail to: 'julian.henao@ceiba.com.co',
             subject: "El pipeline ha fallado: ${currentBuild.fullDisplayName}",
-            body: "para verlo puede dar clic en  ${env.BUILD_URL}"
-        )
+            body: "para verlo puede dar clic en  ${env.BUILD_URL}"        
     }    
 }
 
