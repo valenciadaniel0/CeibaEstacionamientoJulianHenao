@@ -1,7 +1,6 @@
 import java.text.SimpleDateFormat
-//import hudson.model.Build;
- import jenkins.model.Jenkins
-            import hudson.model.*
+import jenkins.model.Jenkins
+import hudson.model.*
             
 node('Slave_Induccion') {
     try{
@@ -95,7 +94,44 @@ node('Slave_Induccion') {
             bat './gradlew compileJava'
             echo "####################->End Compile<-####################"
         }
-		
+			
+		stage('Unit Test') {
+        	echo "####################->Init Unit Test<-####################"
+        	env.etapa = "Unit Test"
+            bat './gradlew test'
+            junit '**/build/test-results/test/*.xml'
+            echo "####################->End Unit Test<-####################"
+        }
+      
+        stage('Sonar'){
+        	echo "####################->Init Sonar<-####################"
+        	env.etapa = "Sonar"
+            withSonarQubeEnv('Sonar') {
+                bat "..\\..\\..\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner -Dproject.settings=sonar-project.properties"
+            }  
+            echo "####################->End Sonar<-####################"
+        }
+        
+        stage("Quality Gate"){
+        	echo "####################->Init Quality Gate<-####################"
+        	env.etapa = "Quality Gate"
+        	sleep 5
+            timeout(time: 15, unit: 'MINUTES') {
+                def qg = waitForQualityGate()
+                if (qg.status != 'OK') {
+                    error "Pipeline abortado porque el quality gate del análisis del sonar no es OK: ${qg.status}"
+                }
+            }
+            echo "####################->End Quality Gate<-####################"
+        }
+
+		stage('Integration Test') {
+        	echo "####################->Init Integration Test<-####################"
+            env.etapa = "Integration Test"
+            bat './gradlew iTest'
+            junit '**/build/test-results/iTest/*.xml'                                
+            echo "####################->End Integration Test<-####################"
+        }
         stage('Build') {
         	echo "####################->Init Build<-####################"
             env.etapa = "Build"
@@ -367,3 +403,4 @@ def sendEmailApprovalEmail(bodyEmail,bodyInput){
     body: "${bodyEmail}, y aprobar la tarea de despliegue a producción para continuar con el pipeline. gracias \nPor favor ir a la siguiente dirección ${env.BUILD_URL}input/");    
     input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
 }
+		
