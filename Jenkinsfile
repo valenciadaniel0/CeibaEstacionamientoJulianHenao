@@ -36,14 +36,16 @@ node('Slave_Induccion') {
         env.errorEncontrado = ""
     
     
-    	options {
-			buildDiscarder(logRotator(numToKeepStr: '3')) 
-			disableConcurrentBuilds() 
-		}
+        properties([
+            buildDiscarder(
+                logRotator(
+                    numToKeepStr: '3'
+                )
+            ),
+            disableConcurrentBuilds()
+            //,pipelineTriggers([cron('0 * * * *')])
+        ])
     
-    	triggers{
-    	    // pollSCM('@hourly')    	    
-    	}
 
         // INICIO STAGES
 
@@ -92,44 +94,6 @@ node('Slave_Induccion') {
         	env.etapa = "Compile"
             bat './gradlew compileJava'
             echo "####################->End Compile<-####################"
-        }
-		
-		stage('Unit Test') {
-        	echo "####################->Init Unit Test<-####################"
-        	env.etapa = "Unit Test"
-            bat './gradlew test'
-            junit '**/build/test-results/test/*.xml'
-            echo "####################->End Unit Test<-####################"
-        }
-      
-        stage('Sonar'){
-        	echo "####################->Init Sonar<-####################"
-        	env.etapa = "Sonar"
-            withSonarQubeEnv('Sonar') {
-                bat "..\\..\\..\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner -Dproject.settings=sonar-project.properties"
-            }  
-            echo "####################->End Sonar<-####################"
-        }
-        
-        stage("Quality Gate"){
-        	echo "####################->Init Quality Gate<-####################"
-        	env.etapa = "Quality Gate"
-        	sleep 5
-            timeout(time: 15, unit: 'MINUTES') {
-                def qg = waitForQualityGate()
-                if (qg.status != 'OK') {
-                    error "Pipeline abortado porque el quality gate del análisis del sonar no es OK: ${qg.status}"
-                }
-            }
-            echo "####################->End Quality Gate<-####################"
-        }
-
-		stage('Integration Test') {
-        	echo "####################->Init Integration Test<-####################"
-            env.etapa = "Integration Test"
-            bat './gradlew iTest'
-            junit '**/build/test-results/iTest/*.xml'                                
-            echo "####################->End Integration Test<-####################"
         }
 		
         stage('Build') {
@@ -239,12 +203,12 @@ node('Slave_Induccion') {
         }
 
 		stage('Send Email for get approval of deploy in production '){
-            sendEmailApprovalEmail('todas las pruebas funcionales pasaron, se requiere su aprobación para hacer el despliegue en producción','por favor apruebe la tarea de despliegue en producción del sistema')
+            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobación para hacer el despliegue en producción','¿Desea aprobar el despliegue a producción del sistema?')
             //input id: 'DeployProd', message: 'Aprobación de paso a despliegue en producción', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
-           resultadoAprobacion = "'${env.isApprove}'"
+           	env.resultadoAprobacion = "'${env.isApprove}'"
          //   println('resultado variable de resultado aprobacion ${env.isApprove}')
             if(env.resultadoAprobacion == 'Rechazar'){
-            echo '###------------------- La tarea de despliegue fue rechazada-----#######'
+            	echo '###------------------- La tarea de despliegue fue rechazada-----#######'
             }else{
                 echo '######------- La tarea de despliegue fue aprobada----############'
             }
@@ -255,9 +219,14 @@ node('Slave_Induccion') {
         	echo "####################->Init Publish Release<-####################"
             env.etapa = "Publish Release"
             publicarArtefacto(env.CarpetaRelease)
+            echo "####################->End Publish Release<-####################"       
+        }
+        
+         stage('Publish Release-Estable') {
+        	echo "####################->Init Publish Release-Estable<-####################"
             env.etapa = "Publish Release/estable"
             publicarArtefacto(env.CarpetaReleaseUltimoEstable)
-            echo "####################->End Publish Release<-####################"       
+            echo "####################->End Publish Release-Estable<-####################"       
         }
         
         /*
@@ -315,9 +284,15 @@ def descargarUltimaVersionAlJenkins(carpeta){
 
 def publicarArtefacto(carpeta){
     def server = Artifactory.server 'ar7if4c70ry@c318a'    
-    if(env.targetString.toString().equals(env.CarpetaReleaseUltimoEstable.toString())){
+    
+    echo "##############Condicional####################"
+    print("${carpeta}" == env.CarpetaReleaseUltimoEstable)
+    
+    if("${carpeta}" == env.CarpetaReleaseUltimoEstable){
+        echo "Primer condicional"
 		env.targetString = "${carpeta}"                        
 	}else{
+	    echo "Segundo condicional"
 		env.targetString = "${carpeta}/${versionamiento}"
     }                                                    
     def uploadSpec = '''{
@@ -382,14 +357,13 @@ def notificar(){
     if(currentBuild.result == 'FAILURE'){    	
         mail to: 'julian.henao@ceiba.com.co',
             subject: "El pipeline ha fallado en la etapa: #<- ${env.etapa} -># ",
-            body: "Puede acceder directamente por el siguiente enlace:  ${env.BUILD_URL} \n ############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
+            body: "Puede acceder a la información de la consola en el siguiente enlace:  ${env.BUILD_URL} \n############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
     }    
 }
 
 def sendEmailApprovalEmail(bodyEmail,bodyInput){
     mail (to: 'julian.henao@ceiba.com.co',
-    subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
-    body: "Por favor ir a la siguiente dirección ${env.BUILD_URL}/input/ ${bodyEmail}, y aprobar la tarea de des´liegue a producción para continuar con el pipeline. gracias");
-    //input "'${bodyInput}'";
-    input id: 'DeployProd', message: 'Aprobación de paso a despliegue en producción', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
+    subject: "JENKINS: Aprobación Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
+    body: "${bodyEmail}, y aprobar la tarea de despliegue a producción para continuar con el pipeline. gracias \nPor favor ir a la siguiente dirección ${env.BUILD_URL}input/");    
+    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
 }
