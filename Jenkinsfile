@@ -1,7 +1,9 @@
 import java.text.SimpleDateFormat
-
-node('Master') {
-
+//import hudson.model.Build;
+ import jenkins.model.Jenkins
+            import hudson.model.*
+            
+node('Slave_Induccion') {
     try{
         def dateFormat = new SimpleDateFormat("dd-MMMMM-yyyy")
         def date = new Date()
@@ -20,53 +22,90 @@ node('Master') {
         
         // variables de ambiente
         env.directorio = ""
+        
         env.versionamiento = "${dateNow}.${BUILD_NUMBER}"
         env.targeString = ""
-        
+        env.etapa = ""
+        env.errorEncontrado = ""
+    
         // INICIO STAGES
+
+       stage('GEt'){
+            echo "####################->Init Get<-####################"        
+     
+
+        def test_job = Jenkins.instance.getItemByFullName("${JOB_NAME}")
+        def last_sucessful_build_number=test_job.getLastSuccessfulBuild().getNumber()   
+        print(last_sucessful_build_number)
+        def last_versionamiento=test_job.getLastSuccessfulBuild().getEnvironment()
+        print(last_versionamiento)
+        echo "111############################"
+        def last_versionamiento3=test_job.getLastSuccessfulBuild().getCharacteristicEnvVars()
+        print(last_versionamiento3)
+        echo "222############################"
+        def last_versionamiento4=test_job.getLastSuccessfulBuild().getProperties()
+        //print(last_versionamiento4)
+        echo "333############################"
+        print(last_versionamiento4.time)
+        echo "444############################"
+        
+        //print(last_versionamiento4.time["DAY"])
+        //print(last_versionamiento4.time["MONTH"])
+        //print(last_versionamiento4.time["YEAR"])
+        
+        
+        //print(last_versionamiento4.time["date"])
+//        def format2 = Date.parse("dd MM yy hh:mm:ss T yyyy", last_versionamiento4.time).format("dd-MMMMM-yyyy")
+  
+  String versionamientoUltimoEstable = new SimpleDateFormat("dd-MMMMM-yyyy").format(last_versionamiento4.time)+"."+last_sucessful_build_number
+  print(versionamientoUltimoEstable);
+     
+ echo "####################->End Get<-####################"        
+        }
 
         stage('Checkout') {
         	echo "####################->Init Checkout<-####################"
+        	env.etapa = "Checkout"
             checkout()
             echo "####################->End Checkout<-####################"
         }
         
         stage('Clean') {
-        	echo "####################->Init Clean<-####################"                        
-            dir("${env.directorio}"){
-                sh './gradlew clean'
-            }
+        	echo "####################->Init Clean<-####################"
+        	env.etapa = "Clean"
+            bat './gradlew clean'
             echo "####################->End Clean<-####################"
         }
         
         stage('Compile') {
         	echo "####################->Init Compile<-####################"
-            dir("${env.directorio}"){
-                sh './gradlew compileJava'
-            }
+        	env.etapa = "Compile"
+            bat './gradlew compileJava'
             echo "####################->End Compile<-####################"
         }
-
-        stage('Unit Test') {
+		
+		stage('Unit Test') {
         	echo "####################->Init Unit Test<-####################"
-            dir("${env.directorio}"){
-                sh './gradlew test'
-                junit '**/build/test-results/test/*.xml'                
-            }
+        	env.etapa = "Unit Test"
+            bat './gradlew test'
+            junit '**/build/test-results/test/*.xml'
             echo "####################->End Unit Test<-####################"
         }
       
         stage('Sonar'){
         	echo "####################->Init Sonar<-####################"
+        	env.etapa = "Sonar"
             withSonarQubeEnv('Sonar') {
-                 sh "${sonarHome}/bin/sonar-scanner -Dproject.settings=./${env.directorio}/sonar-project.properties"
+                bat "..\\..\\..\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner -Dproject.settings=sonar-project.properties"
             }  
             echo "####################->End Sonar<-####################"
         }
         
         stage("Quality Gate"){
         	echo "####################->Init Quality Gate<-####################"
-            timeout(time: 2, unit: 'MINUTES') {
+        	env.etapa = "Quality Gate"
+        	sleep 5
+            timeout(time: 15, unit: 'MINUTES') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
                     error "Pipeline abortado porque el quality gate del análisis del sonar no es OK: ${qg.status}"
@@ -75,50 +114,50 @@ node('Master') {
             echo "####################->End Quality Gate<-####################"
         }
 
-
 		stage('Integration Test') {
         	echo "####################->Init Integration Test<-####################"
-            dir("${env.directorio}"){
-                sh './gradlew iTest'
-                junit '**/build/test-results/iTest/*.xml'                                
-            }
+            env.etapa = "Integration Test"
+            bat './gradlew iTest'
+            junit '**/build/test-results/iTest/*.xml'                                
             echo "####################->End Integration Test<-####################"
         }
 		
         stage('Build') {
         	echo "####################->Init Build<-####################"
-            dir("${env.directorio}"){
-                sh './gradlew build -x test'
-            }
+            env.etapa = "Build"
+            bat './gradlew build -x test'
             echo "####################->End Build<-####################"
         }
-        
+     
         stage('Publish Alpha') {
-	        echo "####################->Init Publish Alpha<-####################"        
+	        echo "####################->Init Publish Alpha<-####################"
+	        env.etapa = "Publish Alpha"
             publicarArtefacto("alpha")
             echo "####################->End Publish Alpha<-####################"        
         }
 		
 		stage("Download Alpha version to Jenkins"){
 			echo "####################->Init Deploy Dllo<-####################"
+			env.etapa = "Download Alpha version to Jenkins"
 			descargarUltimaVersionAlJenkins("alpha")
 			dir("artefactos/alpha/"){
-                    sh 'ls -l'
+                    bat 'dir'
             }
 		}
 		
         stage('Deploy Dllo') {
         	echo "####################->Init Deploy Dllo<-####################"                                    
-            //desplegar en dllo
+            env.etapa = "Deploy Dllo"
             deploy()
             echo "####################->End Deploy Dllo<-####################"
         }
 
         stage('Testing into Dllo') {
-            echo "####################->Init Testing into Dllo<-####################"    
+            echo "####################->Init Testing into Dllo<-####################"
+            env.etapa = "Testing into Dllo"    
             try{
                 if(testDesarrollo==false){
-                    error("fallaron los test en el ambiente de desarrollo")
+                    error("Fallaron los test en el ambiente de desarrollo")
                 }
             }catch(err) {
                 println(err.getMessage());
@@ -128,19 +167,21 @@ node('Master') {
         }
 
         stage('Publish Beta') {
-        	echo "####################->Init Publish Beta<-####################"        
+        	echo "####################->Init Publish Beta<-####################"
+        	env.etapa = "Publish Beta"        
             publicarArtefacto("beta")
             echo "####################->End Publish Beta<-####################"        
         }
 
         stage('Deploy QA') {
         	echo "####################->Init Deploy into QA<-####################"        
-            // Desplegar en  QA  
+            env.etapa = "Deploy QA" 
             echo "####################->End Deploy into QA<-####################"
         }
 
         stage('Testing into QA') { 
-        	echo "####################->Init Testing into QA<-####################"       
+        	echo "####################->Init Testing into QA<-####################"
+        	env.etapa = "Testing into QA"       
             try{
                 if(testQA==false){
                     error("fallaron los test en el ambiente de QA")
@@ -153,29 +194,33 @@ node('Master') {
         }
 
         stage('Publish Release Candidate') {
-        	echo "####################->Init Publish Release Candidate<-####################"        
+        	echo "####################->Init Publish Release Candidate<-####################"
+        	env.etapa = "Publish Release Candidate"        
             publicarArtefacto("release-candidate")
             echo "####################->End Publish Release Candidate<-####################"        
         }
 
         stage('Deploy Production') {    
             echo "####################->Init Deploy Production<-####################"
-            // Desplegar en  Produccion  
+            env.etapa = "Deploy Production"
+            // Desplegar en  Produccion
+              
             echo "####################->End Deploy Production<-####################"
         }
 
         stage('Testing into Production') {
         	echo "####################->Init Testing into Production<-####################"
+        	env.etapa = "Testing into Production"
             try{
                 if(testProduccion==false){
                     error("fallaron los test en el ambiente de Producción")
                 }
             }catch(err) {
-                descargarUltimaVersionAlJenkins("release/estable")
+                /// SE DEBE REALIZAR ROLLBACK EN CASO DE ERROR Y TRAER ULTIMO ESTABLE
                 println(err.getMessage());
                 dir("artefactos/release/"){
                     echo "estos son los archivos en artefactos/release en jenkins"
-                    sh 'ls -l'
+                    bat 'dir'
                 }
                 // enviar notificacion warning
                 throw err
@@ -183,10 +228,25 @@ node('Master') {
             echo "####################->End Testing into Production<-####################"        
         }
 
-        stage('Publish Release') {        
+		stage('Send Email for get approval of deploy in production '){
+            sendEmailApprovalEmail('todas las pruebas funcionales pasaron, se requiere su aprobación para hacer el despliegue en producción','por favor apruebe la tarea de despliegue en producción del sistema')
+            input id: 'DeployProd', message: 'Aprobación de paso a despliegue en producción', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
+           resultadoAprobacion = "'${env.isApprove}'"
+         //   println('resultado variable de resultado aprobacion ${env.isApprove}')
+            if(env.resultadoAprobacion == 'Rechazar'){
+            echo '###------------------- La tarea de despliegue fue rechazada-----#######'
+            }else{
+                echo '######------- La tarea de despliegue fue aprobada----############'
+            }
+            
+        }
+
+        stage('Publish Release') {
         	echo "####################->Init Publish Release<-####################"
+            env.etapa = "Publish Release"
             publicarArtefacto("release")
-            publicarArtefactoEstableRelease()
+            env.etapa = "Publish Release/estable"
+            publicarArtefacto("release/estable")
             echo "####################->End Publish Release<-####################"       
         }
         
@@ -198,14 +258,14 @@ node('Master') {
         }
         */
         // fin stages
-
     }catch(err){
         echo "Hubo un error en el pipeline"
-
-    }finally{
-    	accionesPost()
+        env.errorEncontrado = err.getMessage()
+        currentBuild.result = 'FAILURE'
+    }finally{    	
+        jacoco classPattern:'**/build/classes/java', sourcePattern:'**/src/main/java', execPattern:'**/build/jacoco/*.exec'
+        notificar()
     }
-    
     
 }// fin node
 
@@ -228,16 +288,13 @@ def checkout(){
 }
 
 def descargarUltimaVersionAlJenkins(carpeta){
-	
-    def server = Artifactory.server 'Artifactory_Version_6.5.9'
-    
+    def server = Artifactory.server 'ar7if4c70ry@c318a'
     env.targetString = "${carpeta}"
-    
     def downloadSpec = '''{
                             "files": [
                                 {
                                 	"pattern": "jenkins-snapshot/CoachEPM/Java/Parqueadero/${targetString}/${versionamiento}",
-                  					"target": "artefactos/${targetString}/"                                                                                             
+                  					"target": "artefactos/${targetString}/",                                                                                             
                                     "flat": "true",
                                     "recursive": "true"
                                 }
@@ -247,12 +304,12 @@ def descargarUltimaVersionAlJenkins(carpeta){
 }
 
 def publicarArtefacto(carpeta){
-    def server = Artifactory.server 'Artifactory_Version_6.5.9'
+    def server = Artifactory.server 'ar7if4c70ry@c318a'
     env.targetString = "${carpeta}"
     def uploadSpec = '''{
                             "files": [
                                     {
-                                        "pattern": "build/libs/adnjulianhenao-(*).war",
+                                        "pattern": "build/libs/adnjulianhenao.war",
                                         "target": "jenkins-snapshot/CoachEPM/Java/Parqueadero/${targetString}/${versionamiento}/adnjulianhenao.war"
                                     }
                             ]
@@ -265,31 +322,11 @@ def publicarArtefacto(carpeta){
         server.publishBuildInfo buildInfo    
 }
 
-def publicarArtefactoEstableRelease(){
-    def server = Artifactory.server 'Artifactory_Version_6.5.9'
-    def uploadSpec = '''{
-                            "files": [
-                                    {
-                                        "pattern": "build/libs/adnjulianhenao-(*).war",
-                                        "target": "jenkins-snapshot/CoachEPM/Java/Parqueadero/release/estable/adnjulianhenao.jar"
-                                    }
-                            ]
-                        }'''
-    
-    def buildInfo = Artifactory.newBuildInfo()
-        buildInfo.env.capture = true
-        buildInfo.number = "release-estable-${versionamiento}"
-        server.upload spec: uploadSpec, buildInfo: buildInfo
-        server.publishBuildInfo buildInfo    
-}
-
 def eliminarCarpetaArtefactosEnJenkins(){
     dir("artefactos/"){
         deleteDir()
     }
 }
-
-
 
 def deploy(){
 
@@ -326,21 +363,18 @@ def deploy(){
     )
 }
 
-def accionesPost(){
-    post{
-        always{
-            jacoco classPattern:'**/build/classes/java', sourcePattern:'**/src/main/java', execPattern:'**/build/jacoco/*.exec'
-        }
-        failure{
-                notificar()       
-    	}       
-    }
-}
 
 def notificar(){
     if(currentBuild.result == 'FAILURE'){    	
         mail to: 'julian.henao@ceiba.com.co',
-            subject: "El pipeline ha fallado: ${currentBuild.fullDisplayName}",
-            body: "para verlo puede dar clic en  ${env.BUILD_URL}"        
+            subject: "El pipeline ha fallado en la etapa: #<- ${env.etapa} -># ",
+            body: "Puede acceder directamente por el siguiente enlace:  ${env.BUILD_URL} \n ############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
     }    
+}
+
+def sendEmailApprovalEmail(bodyEmail,bodyInput){
+    mail (to: 'julian.henao@ceiba.com.co',
+    subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
+    body: "Por favor ir a la siguiente dirección ${env.BUILD_URL}/input/ ${bodyEmail}, y aprobar la tarea de des´liegue a producción para continuar con el pipeline. gracias");
+    input "'${bodyInput}'";
 }
