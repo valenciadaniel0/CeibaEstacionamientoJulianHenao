@@ -20,6 +20,13 @@ node('Slave_Induccion') {
         env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
         env.sonarHome= tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
         
+        //Carpetas despliegues
+        env.CarpetaAlpha = "alpha"
+        env.CarpetaBeta = "beta"
+        env.CarpetaReleaseCandidate = "releaseCandidate"
+        env.CarpetaRelease = "release"
+        env.CarpetaReleaseUltimoEstable = "release/estable"
+        
         // variables de ambiente
         env.directorio = ""
         
@@ -30,11 +37,12 @@ node('Slave_Induccion') {
     
         // INICIO STAGES
 
-       stage('GEt'){
+       stage('GET Ultimo Build Estable'){
             echo "####################->Init Get<-####################"        
      
 
         def test_job = Jenkins.instance.getItemByFullName("${JOB_NAME}")
+  
         def last_sucessful_build_number=test_job.getLastSuccessfulBuild().getNumber()   
         print(last_sucessful_build_number)
         def last_versionamiento=test_job.getLastSuccessfulBuild().getEnvironment()
@@ -48,19 +56,11 @@ node('Slave_Induccion') {
         echo "333############################"
         print(last_versionamiento4.time)
         echo "444############################"
-        
-        //print(last_versionamiento4.time["DAY"])
-        //print(last_versionamiento4.time["MONTH"])
-        //print(last_versionamiento4.time["YEAR"])
-        
-        
-        //print(last_versionamiento4.time["date"])
-//        def format2 = Date.parse("dd MM yy hh:mm:ss T yyyy", last_versionamiento4.time).format("dd-MMMMM-yyyy")
   
-  String versionamientoUltimoEstable = new SimpleDateFormat("dd-MMMMM-yyyy").format(last_versionamiento4.time)+"."+last_sucessful_build_number
-  print(versionamientoUltimoEstable);
+  		String versionamientoUltimoEstable = new SimpleDateFormat("dd-MMMMM-yyyy").format(last_versionamiento4.time)+"."+last_sucessful_build_number
+  		print(versionamientoUltimoEstable);
      
- echo "####################->End Get<-####################"        
+ 		echo "####################->End Get<-####################"        
         }
 
         stage('Checkout') {
@@ -132,14 +132,14 @@ node('Slave_Induccion') {
         stage('Publish Alpha') {
 	        echo "####################->Init Publish Alpha<-####################"
 	        env.etapa = "Publish Alpha"
-            publicarArtefacto("alpha")
+            publicarArtefacto(env.CarpetaAlpha)
             echo "####################->End Publish Alpha<-####################"        
         }
 		
 		stage("Download Alpha version to Jenkins"){
 			echo "####################->Init Deploy Dllo<-####################"
 			env.etapa = "Download Alpha version to Jenkins"
-			descargarUltimaVersionAlJenkins("alpha")
+			descargarUltimaVersionAlJenkins(env.CarpetaAlpha)
 			dir("artefactos/alpha/"){
                     bat 'dir'
             }
@@ -169,7 +169,7 @@ node('Slave_Induccion') {
         stage('Publish Beta') {
         	echo "####################->Init Publish Beta<-####################"
         	env.etapa = "Publish Beta"        
-            publicarArtefacto("beta")
+            publicarArtefacto(env.CarpetaBeta)
             echo "####################->End Publish Beta<-####################"        
         }
 
@@ -196,7 +196,7 @@ node('Slave_Induccion') {
         stage('Publish Release Candidate') {
         	echo "####################->Init Publish Release Candidate<-####################"
         	env.etapa = "Publish Release Candidate"        
-            publicarArtefacto("release-candidate")
+            publicarArtefacto(env.CarpetaReleaseCandidate)
             echo "####################->End Publish Release Candidate<-####################"        
         }
 
@@ -244,9 +244,9 @@ node('Slave_Induccion') {
         stage('Publish Release') {
         	echo "####################->Init Publish Release<-####################"
             env.etapa = "Publish Release"
-            publicarArtefacto("release")
+            publicarArtefacto(env.CarpetaRelease)
             env.etapa = "Publish Release/estable"
-            publicarArtefacto("release/estable")
+            publicarArtefacto(env.CarpetaReleaseUltimoEstable)
             echo "####################->End Publish Release<-####################"       
         }
         
@@ -305,7 +305,7 @@ def descargarUltimaVersionAlJenkins(carpeta){
 
 def publicarArtefacto(carpeta){
     def server = Artifactory.server 'ar7if4c70ry@c318a'    
-    if(env.targetString == "release/estable"){
+    if(env.targetString.toString().equals(env.CarpetaReleaseUltimoEstable.toString())){
 		env.targetString = "${carpeta}"                        
 	}else{
 		env.targetString = "${carpeta}/${versionamiento}"
