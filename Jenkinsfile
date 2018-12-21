@@ -35,6 +35,16 @@ node('Slave_Induccion') {
         env.etapa = ""
         env.errorEncontrado = ""
     
+    
+    	options {
+			buildDiscarder(logRotator(numToKeepStr: '3')) 
+			disableConcurrentBuilds() 
+		}
+    
+    	triggers{
+    	    // pollSCM('@hourly')    	    
+    	}
+
         // INICIO STAGES
 
        stage('GET Ultimo Build Estable'){
