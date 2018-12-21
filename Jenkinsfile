@@ -230,7 +230,7 @@ node('Slave_Induccion') {
 
 		stage('Send Email for get approval of deploy in production '){
             sendEmailApprovalEmail('todas las pruebas funcionales pasaron, se requiere su aprobación para hacer el despliegue en producción','por favor apruebe la tarea de despliegue en producción del sistema')
-            input id: 'DeployProd', message: 'Aprobación de paso a despliegue en producción', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
+            //input id: 'DeployProd', message: 'Aprobación de paso a despliegue en producción', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
            resultadoAprobacion = "'${env.isApprove}'"
          //   println('resultado variable de resultado aprobacion ${env.isApprove}')
             if(env.resultadoAprobacion == 'Rechazar'){
@@ -304,13 +304,17 @@ def descargarUltimaVersionAlJenkins(carpeta){
 }
 
 def publicarArtefacto(carpeta){
-    def server = Artifactory.server 'ar7if4c70ry@c318a'
-    env.targetString = "${carpeta}"
+    def server = Artifactory.server 'ar7if4c70ry@c318a'    
+    if(env.targetString == "release/estable"){
+		env.targetString = "${carpeta}"                        
+	}else{
+		env.targetString = "${carpeta}/${versionamiento}"
+    }                                                    
     def uploadSpec = '''{
-                            "files": [
-                                    {
+                         "files": [
+                                   {
                                         "pattern": "build/libs/adnjulianhenao.war",
-                                        "target": "jenkins-snapshot/CoachEPM/Java/Parqueadero/${targetString}/${versionamiento}/adnjulianhenao.war"
+                                        "target": "jenkins-snapshot/CoachEPM/Java/Parqueadero/${targetString}/adnjulianhenao.war"
                                     }
                             ]
                         }'''
@@ -376,5 +380,6 @@ def sendEmailApprovalEmail(bodyEmail,bodyInput){
     mail (to: 'julian.henao@ceiba.com.co',
     subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
     body: "Por favor ir a la siguiente dirección ${env.BUILD_URL}/input/ ${bodyEmail}, y aprobar la tarea de des´liegue a producción para continuar con el pipeline. gracias");
-    input "'${bodyInput}'";
+    //input "'${bodyInput}'";
+    input id: 'DeployProd', message: 'Aprobación de paso a despliegue en producción', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
 }
