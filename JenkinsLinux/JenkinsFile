@@ -34,6 +34,11 @@ node('Slave_Induccion') {
         env.etapa = "Inicio"
         env.errorEncontrado = ""
     
+    	// Lista de usuarios para aprobación
+    	List<String> listUserApprove = new ArrayList<String>();
+		listUserApprove.add("julian.henao");
+		listUserApprove.add("jorge.menco");
+		listUserApprove.add("gonzalo.garcia");
     
         //def projectProperties = [ [$class: 'BuildDiscarderProperty',strategy: [$class: 'LogRotator', numToKeepStr: '5']], ]
         //properties(projectProperties)
@@ -127,7 +132,7 @@ node('Slave_Induccion') {
             timeout(time: 15, unit: 'MINUTES') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
-                    error "Pipeline abortado porque el quality gate del analisis del sonar no es OK: ${qg.status}"
+                  //  error "Pipeline abortado porque el quality gate del analisis del sonar no es OK: ${qg.status}"
                 }
             }
             echo "####################->End Quality Gate<-####################"
@@ -246,18 +251,27 @@ node('Slave_Induccion') {
             echo "####################->End Testing into Production<-####################"        
         }
 
-		stage('Send Email for get approval of deploy in production '){
-            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobacin para hacer el despliegue en produccin','Desea aprobar el despliegue a produccin del sistema?')
-            //input id: 'DeployProd', message: 'Aprobacin de paso a despliegue en produccin', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobacin', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
-           	env.resultadoAprobacion = "'${env.isApprove}'"
-         //   println('resultado variable de resultado aprobacion ${env.isApprove}')
-            if(env.resultadoAprobacion == 'Rechazar'){
-            	echo '###------------------- La tarea de despliegue fue rechazada-----#######'
-            }else{
-                echo '######------- La tarea de despliegue fue aprobada----############'
-            }
-            
-        }
+		stage('Send Email for get approval of deploy in production '){			
+			
+			try {	
+				for (String usuarioAccess : listUserApprove) {
+					timeout(time: 60, unit: 'SECONDS') { // MINUTES -- change to a convenient timeout for you   							
+		        		sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobacin para hacer el despliegue en produccin','Desea aprobar el despliegue a produccin del sistema?',usuarioAccess)
+		       			echo ("###########-> Se ha enviado un correo al usuario: " +sendApprovalEmail['submitter']  +" - El resultado de su respuesta fue: " + sendApprovalEmail['result'] + " <-###########")		        			        			            
+    				}
+    			}
+			}catch(err) { // timeout reached or input false
+    			def user = err.getCauses()[0].getUser()
+    			if('SYSTEM' == user.toString()) { // SYSTEM means timeout.
+        			error ("El proceso resulto fuera de tiempo para la respuesta del email, por tal motivo fue abortado")        		
+    			} else {        			
+        			error ("El proceso fue abortado por: [${user}]")        			
+    			}
+    			currentBuild.result = 'FAILURE'
+			}
+		}
+            	
+       
 
         stage('Publish Release') {
         	echo "####################->Init Publish Release<-####################"
@@ -400,9 +414,22 @@ def notificar(){
     }    
 }
 
-def sendEmailApprovalEmail(bodyEmail,bodyInput){
-    mail (to: 'julian.henao@ceiba.com.co',
+
+def sendEmail(){
+    mail (to: 'jorge.menco@ceiba.com.co,julian.henao@ceiba.com.co,gonzalo.garcia@ceiba.com.co',
+    subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
+    body: "Por favor ir a la siguiente dirección ${env.BUILD_URL}/input, y aprovar la tarea de despliegue a producción para continuar con el pipeline. gracias");
+    input(message:'Apruebe la tarea de paso a producción',
+        submitter:'julian.henao,gonzalo.garcia',
+        submitterParameter:'resultApprove')
+}
+
+def sendApprovalEmail(bodyEmail,bodyInput,userAccess){
+    mail (to: "${userAccess}@ceiba.com.co",
     subject: "JENKINS: Aprobacin Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
     body: "${bodyEmail}, y aprobar la tarea de despliegue a produccion para continuar con el pipeline. gracias \nPor favor ir a la siguiente direccin ${env.BUILD_URL}input/");    
-    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobacion', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
+    //input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobacion', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
+    input(id: 'sendApprovalEmail', message:'¿Aprueba la tarea de paso a producción?',
+        submitter:"${userAccess}",
+        submitterParameter:'result')
 }
