@@ -256,7 +256,7 @@ node('Slave_Induccion') {
 			try {	
 				for (String usuarioAccess : listUserApprove) {
 					timeout(time: 60, unit: 'SECONDS') { // MINUTES -- change to a convenient timeout for you   							
-		        		sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobacin para hacer el despliegue en produccin','Desea aprobar el despliegue a produccin del sistema?',usuarioAccess)
+		        		sendApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobacin para hacer el despliegue en produccin','Desea aprobar el despliegue a produccin del sistema?',usuarioAccess)
 		       			echo ("###########-> Se ha enviado un correo al usuario: " +sendApprovalEmail['submitter']  +" - El resultado de su respuesta fue: " + sendApprovalEmail['result'] + " <-###########")		        			        			            
     				}
     			}
