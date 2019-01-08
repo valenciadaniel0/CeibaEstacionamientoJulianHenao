@@ -1,7 +1,8 @@
 import java.text.SimpleDateFormat
-
+//import jenkins.model.Jenkins
+//import hudson.model.*
+            
 node('Slave_Induccion') {
-
     try{
         def dateFormat = new SimpleDateFormat("dd-MMMMM-yyyy")
         def date = new Date()
@@ -18,107 +19,163 @@ node('Slave_Induccion') {
         env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
         env.sonarHome= tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
         
+        //Carpetas despliegues
+        env.CarpetaAlpha = "alpha"
+        env.CarpetaBeta = "beta"
+        env.CarpetaReleaseCandidate = "releaseCandidate"
+        env.CarpetaRelease = "release"
+        env.CarpetaReleaseUltimoEstable = "release/estable"
+        
         // variables de ambiente
         env.directorio = ""
+        
         env.versionamiento = "${dateNow}.${BUILD_NUMBER}"
         env.targeString = ""
-        
-        // INICIO STAGES
+        env.etapa = "Inicio"
+        env.errorEncontrado = ""
+    
+    
+        //def projectProperties = [ [$class: 'BuildDiscarderProperty',strategy: [$class: 'LogRotator', numToKeepStr: '5']], ]
+        //properties(projectProperties)
+    
+        properties([
+            buildDiscarder(
+                logRotator(
+                    numToKeepStr: '3'
+                )
+            ),
+            disableConcurrentBuilds()
+            //,pipelineTriggers([cron('0 * * * *')])
+        ])
+    
 
+        // INICIO STAGES
+/*
+       stage('GET Ultimo Build Estable'){
+            echo "####################->Init Get<-####################"        
+     
+
+        def test_job = Jenkins.instance.getItemByFullName("${JOB_NAME}")
+  
+        def last_sucessful_build_number=test_job.getLastSuccessfulBuild().getNumber()   
+        print(last_sucessful_build_number)
+        def last_versionamiento=test_job.getLastSuccessfulBuild().getEnvironment()
+        print(last_versionamiento)
+        echo "111############################"
+        def last_versionamiento3=test_job.getLastSuccessfulBuild().getCharacteristicEnvVars()
+        print(last_versionamiento3)
+        echo "222############################"
+        def last_versionamiento4=test_job.getLastSuccessfulBuild().getProperties()
+        //print(last_versionamiento4)
+        echo "333############################"
+        print(last_versionamiento4.time)
+        echo "444############################"
+  
+  		String versionamientoUltimoEstable = new SimpleDateFormat("dd-MMMMM-yyyy").format(last_versionamiento4.time)+"."+last_sucessful_build_number
+  		print(versionamientoUltimoEstable);
+     
+ 		echo "####################->End Get<-####################"        
+        }
+*/
         stage('Checkout') {
         	echo "####################->Init Checkout<-####################"
+        	env.etapa = "Checkout"
             checkout()
             echo "####################->End Checkout<-####################"
         }
         
         stage('Clean') {
-        	echo "####################->Init Clean<-####################"                        
-            dir("${env.directorio}"){
-                bat './gradlew clean'
-            }
+        	echo "####################->Init Clean<-####################"
+        	env.etapa = "Clean"
+        	sh ''' pwd 
+        	    ls -l
+        	    chmod 777 ./gradlew
+        	    ls -l'''
+            sh './gradlew clean'
             echo "####################->End Clean<-####################"
         }
         
         stage('Compile') {
         	echo "####################->Init Compile<-####################"
-            dir("${env.directorio}"){
-                bat './gradlew compileJava'
-            }
+        	env.etapa = "Compile"
+            sh './gradlew compileJava'
             echo "####################->End Compile<-####################"
         }
-
-        stage('Unit Test') {
+			
+		stage('Unit Test') {
         	echo "####################->Init Unit Test<-####################"
-            dir("${env.directorio}"){
-                bat './gradlew test'
-                junit '**/build/test-results/test/*.xml'                
-            }
+        	env.etapa = "Unit Test"
+            sh './gradlew test'
+            junit '**/build/test-results/test/*.xml'
             echo "####################->End Unit Test<-####################"
         }
       
         stage('Sonar'){
         	echo "####################->Init Sonar<-####################"
+        	env.etapa = "Sonar"
             withSonarQubeEnv('Sonar') {
-                bat "..\\..\\..\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner -Dproject.settings=sonar-project.properties"
+              //  bat "..\\..\\..\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner -Dproject.settings=sonar-project.properties"
+               sh "${sonarHome}/bin/sonar-scanner -Dproject.settings=./${env.directorio}/sonar-project.properties"
             }  
             echo "####################->End Sonar<-####################"
         }
         
         stage("Quality Gate"){
         	echo "####################->Init Quality Gate<-####################"
-            timeout(time: 1, unit: 'MINUTES') {
+        	env.etapa = "Quality Gate"
+        	sleep 5
+            timeout(time: 15, unit: 'MINUTES') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
-                    error "Pipeline abortado porque el quality gate del análisis del sonar no es OK: ${qg.status}"
+                    error "Pipeline abortado porque el quality gate del analisis del sonar no es OK: ${qg.status}"
                 }
             }
             echo "####################->End Quality Gate<-####################"
         }
 
-
 		stage('Integration Test') {
         	echo "####################->Init Integration Test<-####################"
-            dir("${env.directorio}"){
-                bat './gradlew iTest'
-                junit '**/build/test-results/iTest/*.xml'                                
-            }
+            env.etapa = "Integration Test"
+            sh './gradlew iTest'
+            junit '**/build/test-results/iTest/*.xml'                                
             echo "####################->End Integration Test<-####################"
         }
-		
         stage('Build') {
         	echo "####################->Init Build<-####################"
-            dir("${env.directorio}"){
-                bat './gradlew build -x test'
-            }
+            env.etapa = "Build"
+            sh './gradlew build -x test'
             echo "####################->End Build<-####################"
         }
-        
+     
         stage('Publish Alpha') {
-	        echo "####################->Init Publish Alpha<-####################"        
-            publicarArtefacto("alpha")
+	        echo "####################->Init Publish Alpha<-####################"
+	        env.etapa = "Publish Alpha"
+            publicarArtefacto(env.CarpetaAlpha)
             echo "####################->End Publish Alpha<-####################"        
         }
 		
 		stage("Download Alpha version to Jenkins"){
 			echo "####################->Init Deploy Dllo<-####################"
-			descargarUltimaVersionAlJenkins("alpha")
+			env.etapa = "Download Alpha version to Jenkins"
+			descargarUltimaVersionAlJenkins(env.CarpetaAlpha)
 			dir("artefactos/alpha/"){
-                    bat 'dir'
+                    sh 'ls -l'
             }
 		}
 		
         stage('Deploy Dllo') {
         	echo "####################->Init Deploy Dllo<-####################"                                    
-            //desplegar en dllo
+            env.etapa = "Deploy Dllo"
             deploy()
             echo "####################->End Deploy Dllo<-####################"
         }
 
         stage('Testing into Dllo') {
-            echo "####################->Init Testing into Dllo<-####################"    
+            echo "####################->Init Testing into Dllo<-####################"
+            env.etapa = "Testing into Dllo"    
             try{
                 if(testDesarrollo==false){
-                    error("fallaron los test en el ambiente de desarrollo")
+                    error("Fallaron los test en el ambiente de desarrollo")
                 }
             }catch(err) {
                 println(err.getMessage());
@@ -128,19 +185,21 @@ node('Slave_Induccion') {
         }
 
         stage('Publish Beta') {
-        	echo "####################->Init Publish Beta<-####################"        
-            publicarArtefacto("beta")
+        	echo "####################->Init Publish Beta<-####################"
+        	env.etapa = "Publish Beta"        
+            publicarArtefacto(env.CarpetaBeta)
             echo "####################->End Publish Beta<-####################"        
         }
 
         stage('Deploy QA') {
         	echo "####################->Init Deploy into QA<-####################"        
-            // Desplegar en  QA  
+            env.etapa = "Deploy QA" 
             echo "####################->End Deploy into QA<-####################"
         }
 
         stage('Testing into QA') { 
-        	echo "####################->Init Testing into QA<-####################"       
+        	echo "####################->Init Testing into QA<-####################"
+        	env.etapa = "Testing into QA"       
             try{
                 if(testQA==false){
                     error("fallaron los test en el ambiente de QA")
@@ -153,29 +212,33 @@ node('Slave_Induccion') {
         }
 
         stage('Publish Release Candidate') {
-        	echo "####################->Init Publish Release Candidate<-####################"        
-            publicarArtefacto("release-candidate")
+        	echo "####################->Init Publish Release Candidate<-####################"
+        	env.etapa = "Publish Release Candidate"        
+            publicarArtefacto(env.CarpetaReleaseCandidate)
             echo "####################->End Publish Release Candidate<-####################"        
         }
 
         stage('Deploy Production') {    
             echo "####################->Init Deploy Production<-####################"
-            // Desplegar en  Produccion  
+            env.etapa = "Deploy Production"
+            // Desplegar en  Produccion
+              
             echo "####################->End Deploy Production<-####################"
         }
 
         stage('Testing into Production') {
         	echo "####################->Init Testing into Production<-####################"
+        	env.etapa = "Testing into Production"
             try{
                 if(testProduccion==false){
-                    error("fallaron los test en el ambiente de Producción")
+                    error("fallaron los test en el ambiente de Produccin")
                 }
             }catch(err) {
-                descargarUltimaVersionAlJenkins("release/estable")
+                /// SE DEBE REALIZAR ROLLBACK EN CASO DE ERROR Y TRAER ULTIMO ESTABLE
                 println(err.getMessage());
                 dir("artefactos/release/"){
                     echo "estos son los archivos en artefactos/release en jenkins"
-                    bat 'dir'
+                    sh 'ls -l'
                 }
                 // enviar notificacion warning
                 throw err
@@ -183,11 +246,31 @@ node('Slave_Induccion') {
             echo "####################->End Testing into Production<-####################"        
         }
 
-        stage('Publish Release') {        
+		stage('Send Email for get approval of deploy in production '){
+            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobacin para hacer el despliegue en produccin','Desea aprobar el despliegue a produccin del sistema?')
+            //input id: 'DeployProd', message: 'Aprobacin de paso a despliegue en produccin', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobacin', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
+           	env.resultadoAprobacion = "'${env.isApprove}'"
+         //   println('resultado variable de resultado aprobacion ${env.isApprove}')
+            if(env.resultadoAprobacion == 'Rechazar'){
+            	echo '###------------------- La tarea de despliegue fue rechazada-----#######'
+            }else{
+                echo '######------- La tarea de despliegue fue aprobada----############'
+            }
+            
+        }
+
+        stage('Publish Release') {
         	echo "####################->Init Publish Release<-####################"
-            publicarArtefacto("release")
-            publicarArtefactoEstableRelease()
+            env.etapa = "Publish Release"
+            publicarArtefacto(env.CarpetaRelease)
             echo "####################->End Publish Release<-####################"       
+        }
+        
+         stage('Publish Release-Estable') {
+        	echo "####################->Init Publish Release-Estable<-####################"
+            env.etapa = "Publish Release/estable"
+            publicarArtefacto(env.CarpetaReleaseUltimoEstable)
+            echo "####################->End Publish Release-Estable<-####################"       
         }
         
         /*
@@ -198,46 +281,38 @@ node('Slave_Induccion') {
         }
         */
         // fin stages
-
     }catch(err){
         echo "Hubo un error en el pipeline"
-
-    }finally{
-    	accionesPost()
+        env.errorEncontrado = err.getMessage()
+        currentBuild.result = 'FAILURE'
+    }finally{    	
+        jacoco classPattern:'**/build/classes/java', sourcePattern:'**/src/main/java', execPattern:'**/build/jacoco/*.exec'
+        notificar()
     }
-    
     
 }// fin node
 
 def checkout(){
     checkout([
-                $class: 'GitSCM',
-                branches: [[
-                    name: '*/master'
-                ]],
+                $class: 'GitSCM', branches: [[name: '*/master']],
                 doGenerateSubmoduleConfigurations: false, 
                 extensions: [],
                 // [ $class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[ path: '']]] 
-                gitTool: 'Git_Centos', 
-                submoduleCfg: [], 
-                userRemoteConfigs: [[
-                    credentialsId: 'GitHub_juliancho923', 
+                gitTool: 'Git_Centos', submoduleCfg: [], 
+                userRemoteConfigs: [[ credentialsId: 'GitHub_juliancho923', 
                     url: 'https://github.com/JULIANCHO923/Ceiba-Estacionamiento-julian.henao-'
                 ]]
             ])
 }
 
 def descargarUltimaVersionAlJenkins(carpeta){
-	
-    def server = Artifactory.server 'Artifactory_Version_6.5.9'
-    
+    def server = Artifactory.server 'ar7if4c70ry@c318a'
     env.targetString = "${carpeta}"
-    
     def downloadSpec = '''{
                             "files": [
                                 {
                                 	"pattern": "jenkins-snapshot/CoachEPM/Java/Parqueadero/${targetString}/${versionamiento}",
-                  					"target": "artefactos/${targetString}/"                                                                                             
+                  					"target": "artefactos/${targetString}/",                                                                                             
                                     "flat": "true",
                                     "recursive": "true"
                                 }
@@ -247,13 +322,23 @@ def descargarUltimaVersionAlJenkins(carpeta){
 }
 
 def publicarArtefacto(carpeta){
-    def server = Artifactory.server 'Artifactory_Version_6.5.9'
-    env.targetString = "${carpeta}"
+    def server = Artifactory.server 'ar7if4c70ry@c318a'    
+    
+    echo "##############Condicional####################"
+    print("${carpeta}" == env.CarpetaReleaseUltimoEstable)
+    
+    if("${carpeta}" == env.CarpetaReleaseUltimoEstable){
+        echo "Primer condicional"
+		env.targetString = "${carpeta}"                        
+	}else{
+	    echo "Segundo condicional"
+		env.targetString = "${carpeta}/${versionamiento}"
+    }                                                    
     def uploadSpec = '''{
-                            "files": [
-                                    {
-                                        "pattern": "build/libs/adnjulianhenao-(*).war",
-                                        "target": "jenkins-snapshot/CoachEPM/Java/Parqueadero/${targetString}/${versionamiento}/adnjulianhenao.war"
+                         "files": [
+                                   {
+                                        "pattern": "build/libs/adnjulianhenao.war",
+                                        "target": "jenkins-snapshot/CoachEPM/Java/Parqueadero/${targetString}/adnjulianhenao.war"
                                     }
                             ]
                         }'''
@@ -265,31 +350,11 @@ def publicarArtefacto(carpeta){
         server.publishBuildInfo buildInfo    
 }
 
-def publicarArtefactoEstableRelease(){
-    def server = Artifactory.server 'Artifactory_Version_6.5.9'
-    def uploadSpec = '''{
-                            "files": [
-                                    {
-                                        "pattern": "build/libs/adnjulianhenao-(*).war",
-                                        "target": "jenkins-snapshot/CoachEPM/Java/Parqueadero/release/estable/adnjulianhenao.jar"
-                                    }
-                            ]
-                        }'''
-    
-    def buildInfo = Artifactory.newBuildInfo()
-        buildInfo.env.capture = true
-        buildInfo.number = "release-estable-${versionamiento}"
-        server.upload spec: uploadSpec, buildInfo: buildInfo
-        server.publishBuildInfo buildInfo    
-}
-
 def eliminarCarpetaArtefactosEnJenkins(){
     dir("artefactos/"){
         deleteDir()
     }
 }
-
-
 
 def deploy(){
 
@@ -326,21 +391,18 @@ def deploy(){
     )
 }
 
-def accionesPost(){
-    post{
-        always{
-            jacoco classPattern:'**/build/classes/java', sourcePattern:'**/src/main/java', execPattern:'**/build/jacoco/*.exec'
-        }
-        failure{
-                notificar()       
-    	}       
-    }
-}
 
 def notificar(){
     if(currentBuild.result == 'FAILURE'){    	
         mail to: 'julian.henao@ceiba.com.co',
-            subject: "El pipeline ha fallado: ${currentBuild.fullDisplayName}",
-            body: "para verlo puede dar clic en  ${env.BUILD_URL}"        
+            subject: "El pipeline ha fallado en la etapa: #<- ${env.etapa} -># ",
+            body: "Puede acceder a la informacin de la consola en el siguiente enlace:  ${env.BUILD_URL} \n############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
     }    
+}
+
+def sendEmailApprovalEmail(bodyEmail,bodyInput){
+    mail (to: 'julian.henao@ceiba.com.co',
+    subject: "JENKINS: Aprobacin Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
+    body: "${bodyEmail}, y aprobar la tarea de despliegue a produccion para continuar con el pipeline. gracias \nPor favor ir a la siguiente direccin ${env.BUILD_URL}input/");    
+    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobacion', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
 }

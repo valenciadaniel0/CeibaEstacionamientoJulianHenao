@@ -403,4 +403,3 @@ def sendEmailApprovalEmail(bodyEmail,bodyInput){
     body: "${bodyEmail}, y aprobar la tarea de despliegue a producción para continuar con el pipeline. gracias \nPor favor ir a la siguiente dirección ${env.BUILD_URL}input/");    
     input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
 }
-		
