@@ -325,7 +325,7 @@ def descargarUltimaVersionAlJenkins(carpeta){
     def downloadSpec = '''{
                             "files": [
                                 {
-                                	"pattern": "jenkins-snapshot/CoachEPM/Java/Parqueadero/${targetString}/${versionamiento}",
+                                	"pattern": "libs-snapshot/CoachEPM/Java/Parqueadero/${targetString}/${versionamiento}",
                   					"target": "artefactos/${targetString}/",                                                                                             
                                     "flat": "true",
                                     "recursive": "true"
@@ -352,7 +352,7 @@ def publicarArtefacto(carpeta){
                          "files": [
                                    {
                                         "pattern": "build/libs/adnjulianhenao.war",
-                                        "target": "jenkins-snapshot/CoachEPM/Java/Parqueadero/${targetString}/adnjulianhenao.war"
+                                        "target": "libs-snapshot/CoachEPM/Java/Parqueadero/${targetString}/adnjulianhenao.war"
                                     }
                             ]
                         }'''

@@ -23,7 +23,7 @@ public class PasoCrearVehiculo {
 
 	private static WebDriver driver;
 	private IngresarVehiculo ingresarVehiculo;
-	
+	/*
 	@Before
 	public void setUp(){
 		System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
@@ -70,7 +70,7 @@ public class PasoCrearVehiculo {
 		System.out.println(mensajeExitoso);
 		assertTrue(mensajeExitoso.contains("Vehiculo Ingresado exitosamente"));
 	}
-
+*/
 	/*
 	 * @When("the user enters bad credentials") public void
 	 * user_enter_bad_credentials(){
