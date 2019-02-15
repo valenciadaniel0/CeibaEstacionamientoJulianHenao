@@ -47,7 +47,7 @@ node('Slave_Induccion') {
     
 
         // INICIO STAGES
-
+/*
        stage('GET Ultimo Build Estable'){
             echo "####################->Init Get<-####################"        
      
@@ -73,7 +73,7 @@ node('Slave_Induccion') {
      
  		echo "####################->End Get<-####################"        
         }
-
+*/
         stage('Checkout') {
         	echo "####################->Init Checkout<-####################"
         	env.etapa = "Checkout"
