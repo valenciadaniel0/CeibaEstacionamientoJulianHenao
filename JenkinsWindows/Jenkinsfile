@@ -119,7 +119,7 @@ node('Slave_Induccion') {
             timeout(time: 15, unit: 'MINUTES') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
-                    error "Pipeline abortado porque el quality gate del an醠isis del sonar no es OK: ${qg.status}"
+                    error "Pipeline abortado porque el quality gate del an谩lisis del sonar no es OK: ${qg.status}"
                 }
             }
             echo "####################->End Quality Gate<-####################"
@@ -223,7 +223,7 @@ node('Slave_Induccion') {
         	env.etapa = "Testing into Production"
             try{
                 if(testProduccion==false){
-                    error("fallaron los test en el ambiente de Producci髇")
+                    error("fallaron los test en el ambiente de Producci贸n")
                 }
             }catch(err) {
                 /// SE DEBE REALIZAR ROLLBACK EN CASO DE ERROR Y TRAER ULTIMO ESTABLE
@@ -239,8 +239,8 @@ node('Slave_Induccion') {
         }
 
 		stage('Send Email for get approval of deploy in production '){
-            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobaci髇 para hacer el despliegue en producci髇','緿esea aprobar el despliegue a producci髇 del sistema?')
-            //input id: 'DeployProd', message: 'Aprobaci髇 de paso a despliegue en producci髇', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobaci髇', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
+            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobaci贸n para hacer el despliegue en producci贸n','驴Desea aprobar el despliegue a producci贸n del sistema?')
+            //input id: 'DeployProd', message: 'Aprobaci贸n de paso a despliegue en producci贸n', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobaci贸n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
            	env.resultadoAprobacion = "'${env.isApprove}'"
          //   println('resultado variable de resultado aprobacion ${env.isApprove}')
             if(env.resultadoAprobacion == 'Rechazar'){
@@ -393,13 +393,13 @@ def notificar(){
     if(currentBuild.result == 'FAILURE'){    	
         mail to: 'julian.henao@ceiba.com.co',
             subject: "El pipeline ha fallado en la etapa: #<- ${env.etapa} -># ",
-            body: "Puede acceder a la informaci髇 de la consola en el siguiente enlace:  ${env.BUILD_URL} \n############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
+            body: "Puede acceder a la informaci贸n de la consola en el siguiente enlace:  ${env.BUILD_URL} \n############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
     }    
 }
 
 def sendEmailApprovalEmail(bodyEmail,bodyInput){
     mail (to: 'julian.henao@ceiba.com.co',
-    subject: "JENKINS: Aprobaci髇 Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
-    body: "${bodyEmail}, y aprobar la tarea de despliegue a producci髇 para continuar con el pipeline. gracias \nPor favor ir a la siguiente direcci髇 ${env.BUILD_URL}input/");    
-    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobaci髇', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
+    subject: "JENKINS: Aprobaci贸n Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
+    body: "${bodyEmail}, y aprobar la tarea de despliegue a producci贸n para continuar con el pipeline. gracias \nPor favor ir a la siguiente direcci贸n ${env.BUILD_URL}input/");    
+    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobaci贸n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
 }
