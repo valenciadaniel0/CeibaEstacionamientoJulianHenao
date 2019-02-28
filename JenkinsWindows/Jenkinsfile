@@ -95,7 +95,7 @@ node('Slave_Induccion') {
             echo "####################->End Compile<-####################"
         }
 			
-		stage('Unit Test') {
+	stage('Unit Test') {
         	echo "####################->Init Unit Test<-####################"
         	env.etapa = "Unit Test"
             bat './gradlew test'
@@ -103,6 +103,14 @@ node('Slave_Induccion') {
             echo "####################->End Unit Test<-####################"
         }
       
+	    stage('Integration Test') {
+        	echo "####################->Init Integration Test<-####################"
+            env.etapa = "Integration Test"
+            bat './gradlew iTest'
+            junit '**/build/test-results/iTest/*.xml'                                
+            echo "####################->End Integration Test<-####################"
+        }
+	    
         stage('Sonar'){
         	echo "####################->Init Sonar<-####################"
         	env.etapa = "Sonar"
@@ -112,19 +120,13 @@ node('Slave_Induccion') {
             echo "####################->End Sonar<-####################"
         }
         
-        stage('Integration Test') {
-        	echo "####################->Init Integration Test<-####################"
-            env.etapa = "Integration Test"
-            bat './gradlew iTest'
-            junit '**/build/test-results/iTest/*.xml'                                
-            echo "####################->End Integration Test<-####################"
-        }
+        
         
         stage("Quality Gate"){
         	echo "####################->Init Quality Gate<-####################"
         	env.etapa = "Quality Gate"
         	sleep 5
-            timeout(time: 15, unit: 'MINUTES') {
+            timeout(time: 5, unit: 'MINUTES') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
                     error "Pipeline abortado porque el quality gate del análisis del sonar no es OK: ${qg.status}"
