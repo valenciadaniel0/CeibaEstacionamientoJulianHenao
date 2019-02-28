@@ -142,7 +142,7 @@ node('Slave_Induccion') {
             bat './gradlew build -x test'
             echo "####################->End Build<-####################"
         }
-     
+     /*
         stage('Publish Alpha') {
 	        echo "####################->Init Publish Alpha<-####################"
 	        env.etapa = "Publish Alpha"
@@ -268,7 +268,7 @@ node('Slave_Induccion') {
             publicarArtefacto(env.CarpetaReleaseUltimoEstable)
             echo "####################->End Publish Release-Estable<-####################"       
         }
-        
+        */
         /*
         stage('Clean Workspace') {
         	echo "####################->Init Clean Workspace<-####################"        
