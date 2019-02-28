@@ -107,9 +107,17 @@ node('Slave_Induccion') {
         	echo "####################->Init Sonar<-####################"
         	env.etapa = "Sonar"
             withSonarQubeEnv('Sonar') {
-                bat "..\\..\\..\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner -Dproject.settings=sonar-project.properties"
+                bat "..\\..\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner -Dproject.settings=sonar-project.properties"
             }  
             echo "####################->End Sonar<-####################"
+        }
+        
+        stage('Integration Test') {
+        	echo "####################->Init Integration Test<-####################"
+            env.etapa = "Integration Test"
+            bat './gradlew iTest'
+            junit '**/build/test-results/iTest/*.xml'                                
+            echo "####################->End Integration Test<-####################"
         }
         
         stage("Quality Gate"){
@@ -125,13 +133,7 @@ node('Slave_Induccion') {
             echo "####################->End Quality Gate<-####################"
         }
 
-		stage('Integration Test') {
-        	echo "####################->Init Integration Test<-####################"
-            env.etapa = "Integration Test"
-            bat './gradlew iTest'
-            junit '**/build/test-results/iTest/*.xml'                                
-            echo "####################->End Integration Test<-####################"
-        }
+		
         stage('Build') {
         	echo "####################->Init Build<-####################"
             env.etapa = "Build"
@@ -223,7 +225,7 @@ node('Slave_Induccion') {
         	env.etapa = "Testing into Production"
             try{
                 if(testProduccion==false){
-                    error("fallaron los test en el ambiente de Producción")
+                    error("fallaron los test en el ambiente de ProducciÃ³n")
                 }
             }catch(err) {
                 /// SE DEBE REALIZAR ROLLBACK EN CASO DE ERROR Y TRAER ULTIMO ESTABLE
@@ -239,8 +241,8 @@ node('Slave_Induccion') {
         }
 
 		stage('Send Email for get approval of deploy in production '){
-            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobación para hacer el despliegue en producción','¿Desea aprobar el despliegue a producción del sistema?')
-            //input id: 'DeployProd', message: 'Aprobación de paso a despliegue en producción', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
+            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobaciÃ³n para hacer el despliegue en producciÃ³n','Â¿Desea aprobar el despliegue a producciÃ³n del sistema?')
+            //input id: 'DeployProd', message: 'AprobaciÃ³n de paso a despliegue en producciÃ³n', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobaciÃ³n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
            	env.resultadoAprobacion = "'${env.isApprove}'"
          //   println('resultado variable de resultado aprobacion ${env.isApprove}')
             if(env.resultadoAprobacion == 'Rechazar'){
@@ -276,6 +278,7 @@ node('Slave_Induccion') {
     }catch(err){
         echo "Hubo un error en el pipeline"
         env.errorEncontrado = err.getMessage()
+        echo env.errorEncontrado
         currentBuild.result = 'FAILURE'
     }finally{    	
         jacoco classPattern:'**/build/classes/java', sourcePattern:'**/src/main/java', execPattern:'**/build/jacoco/*.exec'
@@ -393,13 +396,13 @@ def notificar(){
     if(currentBuild.result == 'FAILURE'){    	
         mail to: 'julian.henao@ceiba.com.co',
             subject: "El pipeline ha fallado en la etapa: #<- ${env.etapa} -># ",
-            body: "Puede acceder a la información de la consola en el siguiente enlace:  ${env.BUILD_URL} \n############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
+            body: "Puede acceder a la informaciÃ³n de la consola en el siguiente enlace:  ${env.BUILD_URL} \n############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
     }    
 }
 
 def sendEmailApprovalEmail(bodyEmail,bodyInput){
     mail (to: 'julian.henao@ceiba.com.co',
-    subject: "JENKINS: Aprobación Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
-    body: "${bodyEmail}, y aprobar la tarea de despliegue a producción para continuar con el pipeline. gracias \nPor favor ir a la siguiente dirección ${env.BUILD_URL}input/");    
-    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobación', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
+    subject: "JENKINS: AprobaciÃ³n Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
+    body: "${bodyEmail}, y aprobar la tarea de despliegue a producciÃ³n para continuar con el pipeline. gracias \nPor favor ir a la siguiente direcciÃ³n ${env.BUILD_URL}input/");    
+    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobaciÃ³n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
 }
