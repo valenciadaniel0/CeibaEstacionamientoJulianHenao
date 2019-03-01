@@ -1,6 +1,5 @@
-pipeline {  
-   
- agent { //Donde se va a ejecutar el Pipeline
+pipeline {     
+ agent { //Nodo donde se va a ejecutar el Pipeline
      label 'Slave_Induccion'
    }
 
