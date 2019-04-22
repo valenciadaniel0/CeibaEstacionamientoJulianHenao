@@ -129,7 +129,7 @@ node('Slave_Induccion') {
             timeout(time: 5, unit: 'MINUTES') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
-                    error "Pipeline abortado porque el quality gate del análisis del sonar no es OK: ${qg.status}"
+                    error "Pipeline abortado porque el quality gate del anÃ¡lisis del sonar no es OK: ${qg.status}"
                 }
             }
             echo "####################->End Quality Gate<-####################"
@@ -142,12 +142,22 @@ node('Slave_Induccion') {
             bat './gradlew build -x test'
             echo "####################->End Build<-####################"
         }
-	    
-	stage('resultados-hygieia'){
+        
+        stage('resultados-hygieia'){
+            echo "####################->Init resultados-hygieia<-####################"
+            echo "####################->Build PublishStep<-####################"
             hygieiaBuildPublishStep buildStatus: 'InProgress'
-            hygieiaDeployPublishStep applicationName: 'adnjulianhenao', artifactDirectory: '/build/libs', artifactGroup: 'co.com.ceiba.julian.henao', artifactName: 'adnjulianhenao.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
+            
+            echo "####################->CodeQuality PublishStep<-####################"
+            hygieiaCodeQualityPublishStep checkstyleFilePattern: '', findbugsFilePattern: '', jacocoFilePattern: '**/build/jacoco/*.exec', junitFilePattern: '**/build/test-results/*est/*.xml', pmdFilePattern: ''
+            
+            echo "####################->Artifact PublishStep<-####################"
             hygieiaArtifactPublishStep artifactDirectory: 'build/libs', artifactGroup: 'co.com.ceiba.julian.henao', artifactName: 'adnjulianhenao.war', artifactVersion: ''
-            hygieiaCodeQualityPublishStep checkstyleFilePattern: '', findbugsFilePattern: '', jacocoFilePattern: '**/build/jacoco/iTest.exec,**/build/jacoco/test.exec', junitFilePattern: '**/build/test-results/iTest/*.xml,**/build/test-results/test/*.xml', pmdFilePattern: ''
+            
+            
+            echo "####################->Deploy PublishStep<-####################"
+            hygieiaDeployPublishStep applicationName: 'adnjulianhenao', artifactDirectory: '/build/libs', artifactGroup: 'co.com.ceiba.julian.henao', artifactName: 'adnjulianhenao.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
+            echo "####################->End resultados-hygieia<-####################"
         }
      /*
         stage('Publish Alpha') {
@@ -234,7 +244,7 @@ node('Slave_Induccion') {
         	env.etapa = "Testing into Production"
             try{
                 if(testProduccion==false){
-                    error("fallaron los test en el ambiente de ProducciÃ³n")
+                    error("fallaron los test en el ambiente de ProducciÃƒÂ³n")
                 }
             }catch(err) {
                 /// SE DEBE REALIZAR ROLLBACK EN CASO DE ERROR Y TRAER ULTIMO ESTABLE
@@ -250,8 +260,8 @@ node('Slave_Induccion') {
         }
 
 		stage('Send Email for get approval of deploy in production '){
-            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobaciÃ³n para hacer el despliegue en producciÃ³n','Â¿Desea aprobar el despliegue a producciÃ³n del sistema?')
-            //input id: 'DeployProd', message: 'AprobaciÃ³n de paso a despliegue en producciÃ³n', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobaciÃ³n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
+            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobaciÃƒÂ³n para hacer el despliegue en producciÃƒÂ³n','Ã‚Â¿Desea aprobar el despliegue a producciÃƒÂ³n del sistema?')
+            //input id: 'DeployProd', message: 'AprobaciÃƒÂ³n de paso a despliegue en producciÃƒÂ³n', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobaciÃƒÂ³n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
            	env.resultadoAprobacion = "'${env.isApprove}'"
          //   println('resultado variable de resultado aprobacion ${env.isApprove}')
             if(env.resultadoAprobacion == 'Rechazar'){
@@ -405,13 +415,13 @@ def notificar(){
     if(currentBuild.result == 'FAILURE'){    	
         mail to: 'julian.henao@ceiba.com.co',
             subject: "El pipeline ha fallado en la etapa: #<- ${env.etapa} -># ",
-            body: "Puede acceder a la informaciÃ³n de la consola en el siguiente enlace:  ${env.BUILD_URL} \n############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
+            body: "Puede acceder a la informaciÃƒÂ³n de la consola en el siguiente enlace:  ${env.BUILD_URL} \n############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
     }    
 }
 
 def sendEmailApprovalEmail(bodyEmail,bodyInput){
     mail (to: 'julian.henao@ceiba.com.co',
-    subject: "JENKINS: AprobaciÃ³n Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
-    body: "${bodyEmail}, y aprobar la tarea de despliegue a producciÃ³n para continuar con el pipeline. gracias \nPor favor ir a la siguiente direcciÃ³n ${env.BUILD_URL}input/");    
-    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobaciÃ³n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
+    subject: "JENKINS: Aprobacion Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
+    body: "${bodyEmail}, y aprobar la tarea de despliegue a producciÃƒÂ³n para continuar con el pipeline. gracias \nPor favor ir a la siguiente direcciÃƒÂ³n ${env.BUILD_URL}input/");    
+    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobaciÃƒÂ³n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
 }
