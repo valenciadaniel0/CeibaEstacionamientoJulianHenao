@@ -142,6 +142,13 @@ node('Slave_Induccion') {
             bat './gradlew build -x test'
             echo "####################->End Build<-####################"
         }
+	    
+	stage('resultados-hygieia'){
+            hygieiaBuildPublishStep buildStatus: 'InProgress'
+            hygieiaDeployPublishStep applicationName: 'adnjulianhenao', artifactDirectory: '/build/libs', artifactGroup: 'co.com.ceiba.julian.henao', artifactName: 'adnjulianhenao.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
+            hygieiaArtifactPublishStep artifactDirectory: 'build/libs', artifactGroup: 'co.com.ceiba.julian.henao', artifactName: 'adnjulianhenao.war', artifactVersion: ''
+            hygieiaCodeQualityPublishStep checkstyleFilePattern: '', findbugsFilePattern: '', jacocoFilePattern: '**/build/jacoco/iTest.exec,**/build/jacoco/test.exec', junitFilePattern: '**/build/test-results/iTest/*.xml,**/build/test-results/test/*.xml', pmdFilePattern: ''
+        }
      /*
         stage('Publish Alpha') {
 	        echo "####################->Init Publish Alpha<-####################"
