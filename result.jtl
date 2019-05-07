@@ -1,0 +1,5 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1554224108503,29,HTTP Request,200,,Thread Group 1-1,text,true,,623,145,1,1,http://localhost:8081/estacionamiento/registros/2,29,0,16
+1554224108534,2,HTTP Request,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,Thread Group 1-1,text,false,,1110,0,1,1,http:/,0,0,0
+1554224129235,31,HTTP Request,200,,Thread Group 1-1,text,true,,623,145,1,1,http://localhost:8081/estacionamiento/registros/2,31,0,18
+1554224129275,2,HTTP Request,Non HTTP response code: org.apache.http.client.ClientProtocolException,Non HTTP response message: URI does not specify a valid host name: http:/,Thread Group 1-1,text,false,,1110,0,1,1,http:/,0,0,0
