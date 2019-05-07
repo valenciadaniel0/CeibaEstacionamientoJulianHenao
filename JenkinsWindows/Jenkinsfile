@@ -47,7 +47,7 @@ node('Slave_Induccion') {
     
 
         // INICIO STAGES
-
+/*
        stage('GET Ultimo Build Estable'){
             echo "####################->Init Get<-####################"        
      
@@ -73,7 +73,7 @@ node('Slave_Induccion') {
      
  		echo "####################->End Get<-####################"        
         }
-
+*/
         stage('Checkout') {
         	echo "####################->Init Checkout<-####################"
         	env.etapa = "Checkout"
@@ -95,7 +95,7 @@ node('Slave_Induccion') {
             echo "####################->End Compile<-####################"
         }
 			
-		stage('Unit Test') {
+	stage('Unit Test') {
         	echo "####################->Init Unit Test<-####################"
         	env.etapa = "Unit Test"
             bat './gradlew test'
@@ -103,42 +103,63 @@ node('Slave_Induccion') {
             echo "####################->End Unit Test<-####################"
         }
       
-        stage('Sonar'){
-        	echo "####################->Init Sonar<-####################"
-        	env.etapa = "Sonar"
-            withSonarQubeEnv('Sonar') {
-                bat "..\\..\\..\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner -Dproject.settings=sonar-project.properties"
-            }  
-            echo "####################->End Sonar<-####################"
-        }
-        
-        stage("Quality Gate"){
-        	echo "####################->Init Quality Gate<-####################"
-        	env.etapa = "Quality Gate"
-        	sleep 5
-            timeout(time: 15, unit: 'MINUTES') {
-                def qg = waitForQualityGate()
-                if (qg.status != 'OK') {
-                    error "Pipeline abortado porque el quality gate del an�lisis del sonar no es OK: ${qg.status}"
-                }
-            }
-            echo "####################->End Quality Gate<-####################"
-        }
-
-		stage('Integration Test') {
+	    stage('Integration Test') {
         	echo "####################->Init Integration Test<-####################"
             env.etapa = "Integration Test"
             bat './gradlew iTest'
             junit '**/build/test-results/iTest/*.xml'                                
             echo "####################->End Integration Test<-####################"
         }
+	    
+        stage('Sonar'){
+        	echo "####################->Init Sonar<-####################"
+        	env.etapa = "Sonar"
+            withSonarQubeEnv('Sonar') {
+                bat "..\\..\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner -Dproject.settings=sonar-project.properties"
+            }  
+            echo "####################->End Sonar<-####################"
+        }
+        
+        
+        
+        stage("Quality Gate"){
+        	echo "####################->Init Quality Gate<-####################"
+        	env.etapa = "Quality Gate"
+        	sleep 5
+            timeout(time: 5, unit: 'MINUTES') {
+                def qg = waitForQualityGate()
+                if (qg.status != 'OK') {
+                    error "Pipeline abortado porque el quality gate del anÃ¡lisis del sonar no es OK: ${qg.status}"
+                }
+            }
+            echo "####################->End Quality Gate<-####################"
+        }
+
+		
         stage('Build') {
         	echo "####################->Init Build<-####################"
             env.etapa = "Build"
             bat './gradlew build -x test'
             echo "####################->End Build<-####################"
         }
-     
+        
+        stage('resultados-hygieia'){
+            echo "####################->Init resultados-hygieia<-####################"
+            echo "####################->Build PublishStep<-####################"
+            hygieiaBuildPublishStep buildStatus: 'InProgress'
+            
+            echo "####################->CodeQuality PublishStep<-####################"
+            hygieiaCodeQualityPublishStep checkstyleFilePattern: '', findbugsFilePattern: '', jacocoFilePattern: '**/build/jacoco/*.exec', junitFilePattern: '**/build/test-results/*est/*.xml', pmdFilePattern: ''
+            
+            echo "####################->Artifact PublishStep<-####################"
+            hygieiaArtifactPublishStep artifactDirectory: 'build/libs', artifactGroup: 'co.com.ceiba.julian.henao', artifactName: 'adnjulianhenao.war', artifactVersion: ''
+            
+            
+            echo "####################->Deploy PublishStep<-####################"
+            hygieiaDeployPublishStep applicationName: 'adnjulianhenao', artifactDirectory: '/build/libs', artifactGroup: 'co.com.ceiba.julian.henao', artifactName: 'adnjulianhenao.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
+            echo "####################->End resultados-hygieia<-####################"
+        }
+     /*
         stage('Publish Alpha') {
 	        echo "####################->Init Publish Alpha<-####################"
 	        env.etapa = "Publish Alpha"
@@ -223,7 +244,7 @@ node('Slave_Induccion') {
         	env.etapa = "Testing into Production"
             try{
                 if(testProduccion==false){
-                    error("fallaron los test en el ambiente de Producci�n")
+                    error("fallaron los test en el ambiente de ProducciÃƒÂ³n")
                 }
             }catch(err) {
                 /// SE DEBE REALIZAR ROLLBACK EN CASO DE ERROR Y TRAER ULTIMO ESTABLE
@@ -239,8 +260,8 @@ node('Slave_Induccion') {
         }
 
 		stage('Send Email for get approval of deploy in production '){
-            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobaci�n para hacer el despliegue en producci�n','�Desea aprobar el despliegue a producci�n del sistema?')
-            //input id: 'DeployProd', message: 'Aprobaci�n de paso a despliegue en producci�n', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobaci�n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
+            sendEmailApprovalEmail('\n Todas las pruebas funcionales pasaron, se requiere su aprobaciÃƒÂ³n para hacer el despliegue en producciÃƒÂ³n','Ã‚Â¿Desea aprobar el despliegue a producciÃƒÂ³n del sistema?')
+            //input id: 'DeployProd', message: 'AprobaciÃƒÂ³n de paso a despliegue en producciÃƒÂ³n', ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'lista de opciones de aprobaciÃƒÂ³n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove'
            	env.resultadoAprobacion = "'${env.isApprove}'"
          //   println('resultado variable de resultado aprobacion ${env.isApprove}')
             if(env.resultadoAprobacion == 'Rechazar'){
@@ -264,7 +285,7 @@ node('Slave_Induccion') {
             publicarArtefacto(env.CarpetaReleaseUltimoEstable)
             echo "####################->End Publish Release-Estable<-####################"       
         }
-        
+        */
         /*
         stage('Clean Workspace') {
         	echo "####################->Init Clean Workspace<-####################"        
@@ -276,6 +297,7 @@ node('Slave_Induccion') {
     }catch(err){
         echo "Hubo un error en el pipeline"
         env.errorEncontrado = err.getMessage()
+        echo env.errorEncontrado
         currentBuild.result = 'FAILURE'
     }finally{    	
         jacoco classPattern:'**/build/classes/java', sourcePattern:'**/src/main/java', execPattern:'**/build/jacoco/*.exec'
@@ -393,13 +415,13 @@ def notificar(){
     if(currentBuild.result == 'FAILURE'){    	
         mail to: 'julian.henao@ceiba.com.co',
             subject: "El pipeline ha fallado en la etapa: #<- ${env.etapa} -># ",
-            body: "Puede acceder a la informaci�n de la consola en el siguiente enlace:  ${env.BUILD_URL} \n############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
+            body: "Puede acceder a la informaciÃƒÂ³n de la consola en el siguiente enlace:  ${env.BUILD_URL} \n############# El error encontrado fue: ############# \n ${env.errorEncontrado}"
     }    
 }
 
 def sendEmailApprovalEmail(bodyEmail,bodyInput){
     mail (to: 'julian.henao@ceiba.com.co',
-    subject: "JENKINS: Aprobaci�n Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
-    body: "${bodyEmail}, y aprobar la tarea de despliegue a producci�n para continuar con el pipeline. gracias \nPor favor ir a la siguiente direcci�n ${env.BUILD_URL}input/");    
-    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobaci�n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
+    subject: "JENKINS: Aprobacion Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}):",
+    body: "${bodyEmail}, y aprobar la tarea de despliegue a producciÃƒÂ³n para continuar con el pipeline. gracias \nPor favor ir a la siguiente direcciÃƒÂ³n ${env.BUILD_URL}input/");    
+    input id: 'DeployProd', message: "${bodyInput}", ok: 'OK', parameters: [choice(choices: ['Aprobar', 'Rechazar'], description: 'Lista de opciones de aprobaciÃƒÂ³n', name: 'Estados aprobaciones')], submitterParameter: 'isApprove';
 }
