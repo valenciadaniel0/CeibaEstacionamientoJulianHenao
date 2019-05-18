@@ -318,7 +318,7 @@ def checkout(){
                 gitTool: 'Git_Centos', 
                 submoduleCfg: [], 
                 userRemoteConfigs: [[
-                    credentialsId: 'GitHub_juliancho923', 
+                    credentialsId: 'github_personal', 
                     url: 'https://github.com/JULIANCHO923/Ceiba-Estacionamiento-julian.henao-'
                 ]]
             ])
